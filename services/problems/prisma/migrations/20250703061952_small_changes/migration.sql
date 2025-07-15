@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "Submit" ALTER COLUMN "status" SET DATA TYPE TEXT;

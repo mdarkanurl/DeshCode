@@ -1,0 +1,73 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum DifficultyLevel {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum SubmitStatus {
+  PENDING
+  ACCEPTED
+  WRONG_ANSWER
+  EXECUTION_ERROR
+  TIME_OUT
+  Failed
+  INTERNAL_ERROR
+  INVALID_FUNCTION_SIGNATURE
+  LANGUAGE_NOT_SUPPORTED
+}
+
+model Problem {
+  id          String         @id
+  title       String
+  description String
+  functionName String
+  language     String[]
+  difficulty  DifficultyLevel
+  testCases   Json[]
+  tags        String[]
+  isSolved    Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  submissions Submit[]
+  discussions Discussion[]
+}
+
+model Submit {
+  id         Int      @id @default(autoincrement())
+  userId     Int
+  problemId  String
+  problem    Problem  @relation(fields: [problemId], references: [id])
+  status     SubmitStatus
+  language   String
+  code   String
+  output String?
+  runtimeMs  Int?
+  memoryKb   Int?
+  createdAt  DateTime @default(now())
+}
+
+model Discussion {
+  id         Int      @id @default(autoincrement())
+  userId     String
+  problemId  String
+  problem    Problem  @relation(fields: [problemId], references: [id])
+  content    String
+  createdAt  DateTime @default(now())
+}

@@ -1,0 +1,37 @@
+{
+  "name": "problems",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node src/app.ts",
+    "run:worker": "ts-node src/worker/index.ts",
+    "migrate:dev": "prisma migrate dev"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@prisma/client": "^6.10.1",
+    "@types/amqplib": "^0.10.7",
+    "amqplib": "^0.10.8",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "p-limit": "^6.2.0",
+    "prisma": "^6.10.1",
+    "uuid": "^11.1.0",
+    "zod": "^3.25.67"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.0",
+    "@babel/generator": "^7.28.0",
+    "@babel/parser": "^7.28.0",
+    "@types/babel__core": "^7.20.5",
+    "@types/babel__generator": "^7.27.0",
+    "@types/babel__parser": "^7.0.0",
+    "@types/babel__traverse": "^7.20.7",
+    "@types/express": "^5.0.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
