@@ -45,15 +45,20 @@ export const JavaScript = async (
   
 for (const testCase of data.testCases) {
   try {
-    const input: any[] = JSON.parse(testCase.input);
+    console.log("Running test case:", testCase);
+    const input = JSON.parse(testCase.input);
     const expected = JSON.parse(testCase.expected);
-
+    console.log("Running test case:", {
+      input,
+      expected,
+      functionName: data.functionName
+    });
     const result = runDocker({
       image: "leetcode-js",
       command: ["timeout", "8s", "node", "runner.js", JSON.stringify(input)],
       mountDir: tempDir,
     });
-console.log(result);
+
     const actualRaw = result.stdout?.trim() || '';
     const stderr = result.stderr?.trim() || '';
     let status = "PASSED";
@@ -67,6 +72,7 @@ console.log(result);
       try {
         // Parse the actual result from stdout
         const actual = JSON.parse(actualRaw);
+        console.log("Actual Output:", actual);
 
         // Use deep comparison to handle numbers, arrays, objects
         passed = isDeepStrictEqual(actual, expected);
