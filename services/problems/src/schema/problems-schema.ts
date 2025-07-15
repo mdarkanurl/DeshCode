@@ -1,18 +1,17 @@
 import { z } from "zod";
-import { DifficultyLevel } from '../generated/prisma';
 
 export const createProblemsSchema = z.object({
-    id: z.string(),
-    title: z.string().min(5),
-    description: z.string().min(10),
-    functionName: z.string(),
-    language: z.array(z.string().toLowerCase()).min(1),
-    difficulty: z.enum([...Object.values(DifficultyLevel) as [string, ...string[]]]),
-    testCases: z.array(z.object({
-        input: z.string().min(1),
-        expected: z.string().min(1)
-    })),
-    tags: z.array(z.string()).optional()
+  id: z.string(),
+  title: z.string().min(5),
+  description: z.string().min(10),
+  functionName: z.string(),
+  language: z.array(z.string().toLowerCase()).min(1),
+  difficulty: z.enum(["EASY", "MEDIUM", "HARD"]),
+  testCases: z.array(z.object({
+    input: z.record(z.any()),        // accepts object like { nums: [...], m: 2 }
+    expected: z.union([z.number(), z.string()])  // allow either 18 or "18"
+  })),
+  tags: z.array(z.string()).optional()
 });
 
 export const getProblemSchema = z.object({
