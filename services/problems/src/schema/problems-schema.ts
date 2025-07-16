@@ -8,8 +8,8 @@ export const createProblemsSchema = z.object({
   language: z.array(z.string().toLowerCase()).min(1),
   difficulty: z.enum(["EASY", "MEDIUM", "HARD"]),
   testCases: z.array(z.object({
-    input: z.record(z.any()),        // accepts object like { nums: [...], m: 2 }
-    expected: z.union([z.number(), z.string()])  // allow either 18 or "18"
+    input: z.record(z.any()),
+    expected: z.any()
   })),
   tags: z.array(z.string()).optional()
 });

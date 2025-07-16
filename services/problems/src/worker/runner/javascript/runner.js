@@ -28,40 +28,41 @@ try {
   process.exit(1);
 }
 
-try {
-  const input = JSON.parse(process.argv[2]);
-  const args = Array.isArray(input) ? input : [input];
+(async () => {
+  try {
+    const input = JSON.parse(process.argv[2]);
 
-  if (typeof global[functionName] !== 'function') {
-    throw new Error(`Function "${functionName}" is not defined properly.`);
+    let args;
+    if (Array.isArray(input)) {
+      args = input;
+    } else if (typeof input === 'object' && input !== null) {
+      args = Object.values(input);
+    } else {
+      args = [input];
+    }
+
+    const fn = global[functionName];
+
+    if (typeof fn !== 'function') {
+      throw new Error(`Function "${functionName}" is not defined.`);
+    }
+
+    const result = fn(...args);
+
+    if (result instanceof Promise) {
+      const awaited = await result;
+      console.log(JSON.stringify(awaited));
+    } else {
+      console.log(JSON.stringify(result));
+    }
+
+  } catch (e) {
+    const error = {
+      type: "RUNTIME_ERROR",
+      message: e.message,
+      stack: e.stack
+    };
+    console.error(JSON.stringify(error));
+    process.exit(1);
   }
-
-  const result = global[functionName](...args);
-
-  // Handle Promise-returning functions
-  if (result instanceof Promise) {
-    result
-      .then(res => {
-        console.log(JSON.stringify(res));
-      })
-      .catch(err => {
-        const error = {
-          type: "ASYNC_RUNTIME_ERROR",
-          message: err.message,
-          stack: err.stack
-        };
-        console.error(JSON.stringify(error));
-        process.exit(1);
-      });
-  } else {
-    console.log(JSON.stringify(result));
-  }
-} catch (e) {
-  const error = {
-    type: "RUNTIME_ERROR",
-    message: e.message,
-    stack: e.stack
-  };
-  console.error(JSON.stringify(error));
-  process.exit(1);
-}
+})();

@@ -34,7 +34,6 @@ export async function sendMessage() {
         code: data.code,
       });
     } catch (e: any) {
-      console.log('Is it here');
       await submitRepo.update(parseInt(data.submissionId), {
         status: "INTERNAL_ERROR",
         output: JSON.stringify({ error: e.message }),

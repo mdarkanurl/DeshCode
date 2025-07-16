@@ -45,14 +45,9 @@ export const JavaScript = async (
   
 for (const testCase of data.testCases) {
   try {
-    console.log("Running test case:", testCase);
-    const input = JSON.parse(testCase.input);
-    const expected = JSON.parse(testCase.expected);
-    console.log("Running test case:", {
-      input,
-      expected,
-      functionName: data.functionName
-    });
+    const input = typeof testCase.input === "string" ? JSON.parse(testCase.input) : testCase.input;
+    const expected = typeof testCase.expected === "string" ? JSON.parse(testCase.expected) : testCase.expected;
+    
     const result = runDocker({
       image: "leetcode-js",
       command: ["timeout", "8s", "node", "runner.js", JSON.stringify(input)],
@@ -72,7 +67,6 @@ for (const testCase of data.testCases) {
       try {
         // Parse the actual result from stdout
         const actual = JSON.parse(actualRaw);
-        console.log("Actual Output:", actual);
 
         // Use deep comparison to handle numbers, arrays, objects
         passed = isDeepStrictEqual(actual, expected);
@@ -111,6 +105,6 @@ for (const testCase of data.testCases) {
     output: JSON.stringify(testResults),
   });
 
-  fs.rmSync(tempDir, { recursive: true, force: true });
+  // fs.rmSync(tempDir, { recursive: true, force: true });
   channel.ack(msg);
 };
