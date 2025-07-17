@@ -42,10 +42,11 @@ async function submitSolution(data: {
             language: data.language,
             functionName: problem.functionName,
             testCases: problem.testCases,
+            problemType: problem.problemTypes,
             code: data.code
         };
 
-        await sendData(message);
+        await sendData(problem.problemTypes, message);
         
         return {
             submitId: submits.id,
