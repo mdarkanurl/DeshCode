@@ -32,6 +32,14 @@ enum SubmitStatus {
   LANGUAGE_NOT_SUPPORTED
 }
 
+enum ProblemTypes {
+  Arrays_and_Strings
+  Linked_Lists
+  Trees_and_Graphs
+  Dynamic_Programming
+  Sorting_and_Searching
+}
+
 model Problem {
   id          String         @id
   title       String
@@ -40,6 +48,7 @@ model Problem {
   language     String[]
   difficulty  DifficultyLevel
   testCases   Json[]
+  problemTypes ProblemTypes
   tags        String[]
   isSolved    Boolean     @default(false)
   createdAt   DateTime    @default(now())
