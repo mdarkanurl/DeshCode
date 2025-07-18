@@ -2,6 +2,9 @@
 import { ProblemTypes } from '../../../generated/prisma';
 import { ArrayString } from './queue/array-string/array-string';
 import { TreeGraph } from './queue/tree-graph/tree-graph';
+import { LinkedLists } from "./queue/linked-lists/linked-lists";
+import { DynamicProgramming } from "./queue/dynamic-programming/dynamic-programming";
+import { SortingSearching } from "./queue/sorting-searching/sorting-searching";
 import amqplib from "amqplib";
 import { SubmitRepo } from "../../../repo";
 
@@ -9,8 +12,10 @@ const submitRepo = new SubmitRepo();
 
 const problemTypeExecutors = {
   Arrays_and_Strings: ArrayString,
-  Trees_and_Graphs: TreeGraph
-  
+  Trees_and_Graphs: TreeGraph,
+  Linked_Lists: LinkedLists,
+  Dynamic_Programming: DynamicProgramming,
+  Sorting_and_Searching: SortingSearching
 };
 
 export const JavaScript = async (
@@ -37,7 +42,7 @@ export const JavaScript = async (
   }
 
   try {
-    await executorFn({
+    await executorFn(channel, msg, {
       code: data.code,
       functionName: data.functionName,
       testCases: data.testCases,
