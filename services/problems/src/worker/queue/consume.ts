@@ -1,6 +1,6 @@
 import amqplib from "amqplib";
-import { ProblemTypes } from "../../generated/prisma";
-import { executors } from "../language/languageExecutors";
+import { ProblemTypes } from "../../generated/prisma"; // Assuming this is an enum
+import { languageExecutors } from "../language/languageExecutors";
 import { SubmitRepo } from "../../repo/index";
 
 const submitRepo = new SubmitRepo();
@@ -15,10 +15,10 @@ export async function consume(problemType: ProblemTypes) {
   const queueName = problemType;
   const routingKey = problemType;
 
-  await channel.assertExchange(EXCHANGE, EXCHANGE_TYPE, { durable: true });
-  await channel.assertQueue(queueName, { durable: true });
+  await channel.assertExchange(EXCHANGE, EXCHANGE_TYPE, { durable: false });
+  await channel.assertQueue(queueName, { durable: false });
   await channel.bindQueue(queueName, EXCHANGE, routingKey);
-  await channel.prefetch(1); // Prevent overload, one message at a time
+  await channel.prefetch(1);
 
   console.log(`🟢 [${problemType}] Waiting for submissions...`);
 
@@ -27,23 +27,20 @@ export async function consume(problemType: ProblemTypes) {
     async (msg) => {
       if (!msg) return;
 
-      let data;
+      let data: any;
       try {
         data = JSON.parse(msg.content.toString());
       } catch (e) {
         console.error("❌ Invalid JSON format:", e);
-        channel.ack(msg); // Acknowledge to avoid message lock
+        channel.ack(msg);
         return;
       }
 
-      const language = data.language?.toLowerCase();
-      const problemType = data.problemType;
-      const languageExecutors = executors[language];
-      const executor = languageExecutors && languageExecutors[problemType];
+      const executor = languageExecutors[data.language?.toLowerCase()];
       if (!executor) {
         await submitRepo.update(data.submissionId, {
-          status: !languageExecutors ? "LANGUAGE_NOT_SUPPORTED" : "PROBLEM_TYPE_NOT_SUPPORTED",
-          output: JSON.stringify({ error: !languageExecutors ? "Unsupported language" : "Unsupported problem type" }),
+          status: "LANGUAGE_NOT_SUPPORTED",
+          output: JSON.stringify({ error: "Unsupported language" }),
         });
         channel.ack(msg);
         return;
@@ -55,6 +52,7 @@ export async function consume(problemType: ProblemTypes) {
           functionName: data.functionName,
           testCases: data.testCases,
           code: data.code,
+          ProblemType: problemType,
         });
       } catch (e: any) {
         console.error(`❌ Executor failed (ID: ${data.submissionId}):`, e);

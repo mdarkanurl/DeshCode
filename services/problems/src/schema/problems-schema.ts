@@ -11,6 +11,7 @@ export const createProblemsSchema = z.object({
     input: z.record(z.any()),
     expected: z.any()
   })),
+  problemTypes: z.enum(["Arrays_and_Strings", "Linked_Lists", "Trees_and_Graphs", "Dynamic_Programming", "Sorting_and_Searching"]),
   tags: z.array(z.string()).optional()
 });
 

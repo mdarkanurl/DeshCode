@@ -9,7 +9,7 @@ async function connect() {
   const conn = await amqplib.connect('amqp://localhost');
   channel = await conn.createChannel();
 
-  await channel.assertExchange(EXCHANGE, EXCHANGE_TYPE, { durable: true });
+  await channel.assertExchange(EXCHANGE, EXCHANGE_TYPE, { durable: false });
 }
 
 async function sendData(problemType: ProblemTypes, data: any) {
@@ -18,7 +18,7 @@ async function sendData(problemType: ProblemTypes, data: any) {
   const queueName = problemType;
   const routingKey = problemType;
 
-  await channel.assertQueue(queueName, { durable: true });
+  await channel.assertQueue(queueName, { durable: false });
   await channel.bindQueue(queueName, EXCHANGE, routingKey);
 
   channel.publish(
@@ -28,7 +28,7 @@ async function sendData(problemType: ProblemTypes, data: any) {
     { persistent: true }
   );
 
-  console.log(`✅ Sent submission ${data.submitId} to queue "${queueName}"`);
+  console.log(`✅ Sent submission ${data.submissionId} to queue "${queueName}"`);
 }
 
 export {
