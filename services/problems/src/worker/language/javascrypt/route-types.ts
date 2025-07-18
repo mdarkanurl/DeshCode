@@ -54,7 +54,6 @@ export const JavaScript = async (
       status: "INTERNAL_ERROR",
       output: JSON.stringify({ error: (e as Error).message }),
     });
+    return channel.ack(msg);
   }
-
-  channel.ack(msg);
 };
