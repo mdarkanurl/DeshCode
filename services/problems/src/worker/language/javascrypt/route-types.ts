@@ -1,4 +1,3 @@
-// javascript/route-types.ts
 import { ProblemTypes } from '../../../generated/prisma';
 import { ArrayString } from './queue/array-string/array-string';
 import { TreeGraph } from './queue/tree-graph/tree-graph';
@@ -42,7 +41,7 @@ export const JavaScript = async (
   }
 
   try {
-    await executorFn(channel, msg, {
+    executorFn(channel, msg, {
       code: data.code,
       functionName: data.functionName,
       testCases: data.testCases,

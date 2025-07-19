@@ -65,7 +65,7 @@ async function getSubmission(
             [SubmitStatus.WRONG_ANSWER]: 'Submission returned wrong answer.',
             [SubmitStatus.EXECUTION_ERROR]: 'Submission encountered a runtime error.',
             [SubmitStatus.TIME_OUT]: 'Submission timed out.',
-            [SubmitStatus.Failed]: 'Submission failed.',
+            [SubmitStatus.FAILED]: 'Submission failed.',
             [SubmitStatus.INTERNAL_ERROR]: 'Submission encountered an internal error.',
             [SubmitStatus.INVALID_FUNCTION_SIGNATURE]: 'Submission has an invalid function signature.',
             [SubmitStatus.LANGUAGE_NOT_SUPPORTED]: 'Submission language is not supported.',

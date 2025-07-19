@@ -6,6 +6,7 @@ import { SubmitRepo } from "../../../../../repo";
 import { prepareCodeWithBabel } from "../../babel/prepareCodeWithBabel";
 import { runDocker } from "../../../../utils/dockerRunner";
 import { isDeepStrictEqual } from "util";
+import { SubmitStatus } from "../../../../../generated/prisma";
 
 const submitRepo = new SubmitRepo();
 
@@ -39,7 +40,7 @@ export const ArrayString = async (
     fs.writeFileSync(userCodePath, rewrittenCode);
   } catch (e: any) {
     await submitRepo.update(data.submissionId, {
-      status: "INVALID_FUNCTION_SIGNATURE",
+      status: SubmitStatus.INVALID_FUNCTION_SIGNATURE,
       output: JSON.stringify({ error: e.message }),
     });
     channel.ack(msg);
@@ -73,13 +74,13 @@ export const ArrayString = async (
 
       const actualRaw = result.stdout?.trim() || "";
       const stderr = result.stderr?.trim() || "";
-      let status = "PASSED";
+      let status: SubmitStatus = SubmitStatus.ACCEPTED;
       let passed = false;
 
       if (result.error) {
-        status = "EXECUTION_ERROR";
+        status = SubmitStatus.EXECUTION_ERROR;
       } else if (result.signal === "SIGTERM") {
-        status = "TIME_OUT";
+        status = SubmitStatus.TIME_OUT;
       } else {
         try {
           // Parse the actual result from stdout
@@ -87,9 +88,9 @@ export const ArrayString = async (
 
           // Use deep comparison to handle numbers, arrays, objects
           passed = isDeepStrictEqual(actual, expected);
-          status = passed ? "PASSED" : "FAILED";
+          status = passed ? SubmitStatus.ACCEPTED : SubmitStatus.WRONG_ANSWER;
         } catch (e) {
-          status = "INVALID_JSON_OUTPUT";
+          status = SubmitStatus.INTERNAL_ERROR;
         }
       }
 
@@ -98,7 +99,7 @@ export const ArrayString = async (
         expected: testCase.expected,
         actual: actualRaw,
         error: stderr,
-        status,
+        status: status as SubmitStatus,
         passed,
       });
     } catch (e: any) {
@@ -107,7 +108,7 @@ export const ArrayString = async (
         expected: testCase.expected,
         actual: null,
         error: e.message,
-        status: "INTERNAL_ERROR",
+        status: SubmitStatus.INTERNAL_ERROR,
         passed: false,
       });
     }
@@ -115,11 +116,15 @@ export const ArrayString = async (
 
   const allPassed = testResults.every((t) => t.passed);
   const hasFatal = testResults.some((t) =>
-    ["EXECUTION_ERROR", "TIME_OUT", "INVALID_JSON_OUTPUT"].includes(t.status)
+    [
+      SubmitStatus.EXECUTION_ERROR as string,
+      SubmitStatus.TIME_OUT as string,
+      SubmitStatus.INTERNAL_ERROR as string
+    ].includes(t.status as string)
   );
 
   await submitRepo.update(data.submissionId, {
-    status: allPassed ? "ACCEPTED" : hasFatal ? "FAILED" : "WRONG_ANSWER",
+    status: allPassed ? SubmitStatus.ACCEPTED : hasFatal ? SubmitStatus.FAILED : SubmitStatus.WRONG_ANSWER,
     output: JSON.stringify(testResults),
   });
 
