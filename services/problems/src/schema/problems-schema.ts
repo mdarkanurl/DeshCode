@@ -1,4 +1,7 @@
 import { z } from "zod";
+import { ProblemTypes } from "../generated/prisma";
+
+const problemTypesEnum = z.enum([...(Object.values(ProblemTypes) as [string, ...string[]])]);
 
 export const createProblemsSchema = z.object({
   id: z.string(),
@@ -11,7 +14,7 @@ export const createProblemsSchema = z.object({
     input: z.record(z.any()),
     expected: z.any()
   })),
-  problemTypes: z.enum(["Arrays_and_Strings", "Linked_Lists", "Trees_and_Graphs", "Dynamic_Programming", "Sorting_and_Searching"]),
+  problemTypes: problemTypesEnum,
   tags: z.array(z.string()).optional()
 });
 
