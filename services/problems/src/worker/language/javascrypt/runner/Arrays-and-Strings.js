@@ -47,15 +47,18 @@ try {
       throw new Error(`Function "${functionName}" is not defined.`);
     }
 
-    const result = fn(...args);
+    let result = fn(...args);
+
 
     if (result instanceof Promise) {
-      const awaited = await result;
-      console.log(JSON.stringify(awaited));
-    } else {
-      console.log(JSON.stringify(result));
+      result = await result;
     }
 
+    if (typeof result === 'undefined') {
+      result = args[0];
+    }
+
+    console.log(JSON.stringify(result));
   } catch (e) {
     const error = {
       type: "RUNTIME_ERROR",
