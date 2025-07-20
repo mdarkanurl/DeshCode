@@ -11,7 +11,7 @@ export const createProblemsSchema = z.object({
   language: z.array(z.string().toLowerCase()).min(1),
   difficulty: z.enum(["EASY", "MEDIUM", "HARD"]),
   testCases: z.array(z.object({
-    input: z.record(z.any()),
+    input: z.array(z.any()),
     expected: z.any()
   })),
   problemTypes: problemTypesEnum,

@@ -57,14 +57,25 @@ export const ArrayString = async (
 
   for (const testCase of data.testCases) {
     try {
-      const input =
+      let input =
         typeof testCase.input === "string"
           ? JSON.parse(testCase.input)
           : testCase.input;
       const expected =
-        typeof testCase.expected === "string"
-          ? JSON.parse(testCase.expected)
+        typeof testCase.expected === "object"
+          ? JSON.stringify(testCase.expected)
           : testCase.expected;
+
+      
+      // Only transform object input
+      if (!Array.isArray(input)) {
+        input = Object.fromEntries(
+          Object.entries(input).map(([key, value]) => [
+            key,
+            Array.isArray(value) ? value : [value],
+          ])
+        );
+      }
 
       const result = runDocker({
         image: "leetcode-js",
@@ -83,10 +94,8 @@ export const ArrayString = async (
         status = SubmitStatus.TIME_OUT;
       } else {
         try {
-          // Parse the actual result from stdout
-          const actual = JSON.parse(actualRaw);
-
-          // Use deep comparison to handle numbers, arrays, objects
+          let actual = JSON.parse(actualRaw);
+          if (typeof actual === 'object') actual = JSON.stringify(actual);
           passed = isDeepStrictEqual(actual, expected);
           status = passed ? SubmitStatus.ACCEPTED : SubmitStatus.WRONG_ANSWER;
         } catch (e) {
@@ -119,15 +128,19 @@ export const ArrayString = async (
     [
       SubmitStatus.EXECUTION_ERROR as string,
       SubmitStatus.TIME_OUT as string,
-      SubmitStatus.INTERNAL_ERROR as string
-    ].includes(t.status as string)
+      SubmitStatus.INTERNAL_ERROR as string,
+    ].includes(t.status)
   );
 
   await submitRepo.update(data.submissionId, {
-    status: allPassed ? SubmitStatus.ACCEPTED : hasFatal ? SubmitStatus.FAILED : SubmitStatus.WRONG_ANSWER,
+    status: allPassed
+      ? SubmitStatus.ACCEPTED
+      : hasFatal
+      ? SubmitStatus.FAILED
+      : SubmitStatus.WRONG_ANSWER,
     output: JSON.stringify(testResults),
   });
 
-  // fs.rmSync(tempDir, { recursive: true, force: true });
+  fs.rmSync(tempDir, { recursive: true, force: true });
   channel.ack(msg);
 };

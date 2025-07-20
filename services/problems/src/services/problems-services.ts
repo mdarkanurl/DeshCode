@@ -121,6 +121,7 @@ async function getProblem(data: { id: string }) {
             language: problem.language,
             difficulty: problem.difficulty,
             testCases: problem.testCases,
+            problemTypes: problem.problemTypes,
             tags: problem.tags
         };
     } catch (error) {
