@@ -33,6 +33,7 @@ enum SubmitStatus {
 }
 
 enum ProblemTypes {
+  NORMAL_PROBLEM
   Arrays_and_Strings
   Linked_Lists
   Trees_and_Graphs
