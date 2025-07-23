@@ -19,7 +19,7 @@ type TestResult = {
   passed: boolean;
 };
 
-export const ArrayString = async (
+export const NormalProblem = async (
   channel: amqplib.Channel,
   msg: amqplib.ConsumeMessage,
   data: {

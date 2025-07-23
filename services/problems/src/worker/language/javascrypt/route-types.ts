@@ -1,5 +1,5 @@
 import { ProblemTypes } from '../../../generated/prisma';
-import { ArrayString } from './queue/array-string/array-string';
+import { NormalProblem } from './queue/array-string/normal-problem';
 import { TreeGraph } from './queue/tree-graph/tree-graph';
 import { LinkedLists } from "./queue/linked-lists/linked-lists";
 import { DynamicProgramming } from "./queue/dynamic-programming/dynamic-programming";
@@ -10,7 +10,8 @@ import { SubmitRepo } from "../../../repo";
 const submitRepo = new SubmitRepo();
 
 const problemTypeExecutors = {
-  Arrays_and_Strings: ArrayString,
+  Arrays_and_Strings: NormalProblem,
+  NORMAL_PROBLEM: NormalProblem,
   Trees_and_Graphs: TreeGraph,
   Linked_Lists: LinkedLists,
   Dynamic_Programming: DynamicProgramming,
