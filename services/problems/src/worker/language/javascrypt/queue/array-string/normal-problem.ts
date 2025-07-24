@@ -49,7 +49,7 @@ export const NormalProblem = async (
 
   fs.writeFileSync(path.join(tempDir, "function_name.txt"), data.functionName);
   fs.copyFileSync(
-    path.resolve(__dirname, "../../runner/Arrays-and-Strings.js"),
+    path.resolve(__dirname, "../../runner/Normal-problems.js"),
     path.join(tempDir, "runner.js")
   );
 
