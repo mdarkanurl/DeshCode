@@ -2,10 +2,11 @@ import fs from "fs";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import amqplib from "amqplib";
-import { SubmitRepo } from "../../../../../repo";
-import { prepareCodeWithBabel } from "../../babel/prepareCodeWithBabel";
-import { runDocker } from "../../../../utils/dockerRunner";
+import { SubmitRepo } from "../../../repo";
+import { prepareCodeWithBabel } from "./babel/prepareCodeWithBabel";
+import { runDocker } from "../../utils/dockerRunner";
 import { isDeepStrictEqual } from "util";
+import { SubmitStatus } from "../../../generated/prisma";
 
 const submitRepo = new SubmitRepo();
 
@@ -18,13 +19,14 @@ type TestResult = {
   passed: boolean;
 };
 
-export const SortingSearching = async (
+export const JavaScript = async (
   channel: amqplib.Channel,
   msg: amqplib.ConsumeMessage,
   data: {
     submissionId: number;
     functionName: string;
     testCases: any[];
+    ProblemTypes: string
     code: string;
   }
 ) => {
@@ -39,16 +41,25 @@ export const SortingSearching = async (
     fs.writeFileSync(userCodePath, rewrittenCode);
   } catch (e: any) {
     await submitRepo.update(data.submissionId, {
-      status: "INVALID_FUNCTION_SIGNATURE",
+      status: SubmitStatus.INVALID_FUNCTION_SIGNATURE,
       output: JSON.stringify({ error: e.message }),
     });
     channel.ack(msg);
     return;
   }
 
+  let runnerFile: string;
+  if(data.ProblemTypes === "Linked_Lists") {
+    runnerFile = "./runner/Linked-List.js";
+  } else if(data.ProblemTypes === "Trees_and_Graphs") {
+    runnerFile = "./runner/Trees-and-Graphs.js";
+  } else {
+    runnerFile = "./runner/Normal-problems.js";
+  }
+
   fs.writeFileSync(path.join(tempDir, "function_name.txt"), data.functionName);
   fs.copyFileSync(
-    path.resolve(__dirname, "../../runner/Sorting-and-Searching.js"),
+    path.resolve(__dirname, runnerFile),
     path.join(tempDir, "runner.js")
   );
 
@@ -56,14 +67,25 @@ export const SortingSearching = async (
 
   for (const testCase of data.testCases) {
     try {
-      const input =
+      let input =
         typeof testCase.input === "string"
           ? JSON.parse(testCase.input)
           : testCase.input;
       const expected =
-        typeof testCase.expected === "string"
-          ? JSON.parse(testCase.expected)
+        typeof testCase.expected === "object"
+          ? JSON.stringify(testCase.expected)
           : testCase.expected;
+
+      
+      // Only transform object input
+      if (!Array.isArray(input)) {
+        input = Object.fromEntries(
+          Object.entries(input).map(([key, value]) => [
+            key,
+            Array.isArray(value) ? value : [value],
+          ])
+        );
+      }
 
       const result = runDocker({
         image: "leetcode-js",
@@ -73,23 +95,21 @@ export const SortingSearching = async (
 
       const actualRaw = result.stdout?.trim() || "";
       const stderr = result.stderr?.trim() || "";
-      let status = "PASSED";
+      let status: SubmitStatus = SubmitStatus.ACCEPTED;
       let passed = false;
 
       if (result.error) {
-        status = "EXECUTION_ERROR";
+        status = SubmitStatus.EXECUTION_ERROR;
       } else if (result.signal === "SIGTERM") {
-        status = "TIME_OUT";
+        status = SubmitStatus.TIME_OUT;
       } else {
         try {
-          // Parse the actual result from stdout
-          const actual = JSON.parse(actualRaw);
-
-          // Use deep comparison to handle numbers, arrays, objects
+          let actual = JSON.parse(actualRaw);
+          if (typeof actual === 'object') actual = JSON.stringify(actual);
           passed = isDeepStrictEqual(actual, expected);
-          status = passed ? "PASSED" : "FAILED";
+          status = passed ? SubmitStatus.ACCEPTED : SubmitStatus.WRONG_ANSWER;
         } catch (e) {
-          status = "INVALID_JSON_OUTPUT";
+          status = SubmitStatus.INTERNAL_ERROR;
         }
       }
 
@@ -98,7 +118,7 @@ export const SortingSearching = async (
         expected: testCase.expected,
         actual: actualRaw,
         error: stderr,
-        status,
+        status: status as SubmitStatus,
         passed,
       });
     } catch (e: any) {
@@ -107,7 +127,7 @@ export const SortingSearching = async (
         expected: testCase.expected,
         actual: null,
         error: e.message,
-        status: "INTERNAL_ERROR",
+        status: SubmitStatus.INTERNAL_ERROR,
         passed: false,
       });
     }
@@ -115,14 +135,22 @@ export const SortingSearching = async (
 
   const allPassed = testResults.every((t) => t.passed);
   const hasFatal = testResults.some((t) =>
-    ["EXECUTION_ERROR", "TIME_OUT", "INVALID_JSON_OUTPUT"].includes(t.status)
+    [
+      SubmitStatus.EXECUTION_ERROR as string,
+      SubmitStatus.TIME_OUT as string,
+      SubmitStatus.INTERNAL_ERROR as string,
+    ].includes(t.status)
   );
 
   await submitRepo.update(data.submissionId, {
-    status: allPassed ? "ACCEPTED" : hasFatal ? "FAILED" : "WRONG_ANSWER",
+    status: allPassed
+      ? SubmitStatus.ACCEPTED
+      : hasFatal
+      ? SubmitStatus.FAILED
+      : SubmitStatus.WRONG_ANSWER,
     output: JSON.stringify(testResults),
   });
 
-  // fs.rmSync(tempDir, { recursive: true, force: true });
+  fs.rmSync(tempDir, { recursive: true, force: true });
   channel.ack(msg);
 };

@@ -52,7 +52,7 @@ export async function consume(problemType: ProblemTypes) {
           functionName: data.functionName,
           testCases: data.testCases,
           code: data.code,
-          ProblemType: problemType,
+          ProblemTypes: problemType,
         });
       } catch (e: any) {
         console.error(`❌ Executor failed (ID: ${data.submissionId}):`, e);
