@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node src/app.ts"
+    "dev": "ts-node src/app.ts",
+    "migrate:dev": "prisma migrate dev"
   },
   "keywords": [],
   "author": "",

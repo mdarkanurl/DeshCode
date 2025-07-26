@@ -14,3 +14,33 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Topic {
+  Career
+  Compensation
+  Feedback
+  Interview
+}
+
+model Disscuss {
+  id Int @id @default(autoincrement())
+  userId String
+  topic Topic @default(Career)
+  title String
+  content String
+
+  comments Comments[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Comments {
+  id Int @id @default(autoincrement())
+  discussId Int
+  userId String
+  content String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  discuss Disscuss @relation(fields: [discussId], references: [id])
+}
