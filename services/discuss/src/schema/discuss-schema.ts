@@ -3,7 +3,7 @@ import { Topic } from "../generated/prisma";
 
 export const createDiscuss = z.object({
     userId: z.string(),
-    topic: z.enum(Topic),
+    topic: z.enum([...(Object.values(Topic) as [string, ...string[]])]),
     title: z.string().min(5),
     content: z.string().min(10)
 });
