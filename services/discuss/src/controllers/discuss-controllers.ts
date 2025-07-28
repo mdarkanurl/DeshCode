@@ -103,7 +103,8 @@ async function updateDiscuss(
 ) {
     try {
         const { id } = req.params;
-        const parseData: any = discussSchema.updateDiscuss.safeParse((req.body, { id: parseInt(id) }));
+        req.body.discussId = parseInt(id);
+        const parseData: any = discussSchema.updateDiscuss.safeParse((req.body));
 
         if (!parseData.success) {
             res.status(400).json({
