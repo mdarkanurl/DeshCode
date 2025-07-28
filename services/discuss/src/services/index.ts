@@ -1,8 +1,10 @@
-import { createDiscuss, getAllDiscuss } from "./discuss-services";
+import { createDiscuss, getAllDiscuss, getDiscussById, updateDiscuss } from "./discuss-services";
 
 const discussServices = {
     createDiscuss,
-    getAllDiscuss
+    getAllDiscuss,
+    getDiscussById,
+    updateDiscuss
 }
 
 export {

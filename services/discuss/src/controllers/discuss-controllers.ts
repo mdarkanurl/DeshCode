@@ -74,7 +74,66 @@ async function getAllDiscuss(
     }
 }
 
+async function getDiscussById(
+    req: Request,
+    res: Response,
+    next: NextFunction
+) {
+    try {
+        const { id } = req.params;
+
+        const discuss = await discussServices.getDiscussById({ id: parseInt(id) });
+
+        res.status(200).json({
+            Success: true,
+            Message: 'Discuss fetched successfully',
+            Data: discuss,
+            Errors: {}
+        });
+        return;
+    } catch (error) {
+        if (error instanceof CustomError) return next(error);
+        return next(new CustomError('Internal Server Error', 500));
+    }
+}
+
+async function updateDiscuss(
+    req: Request,
+    res: Response,
+    next: NextFunction
+) {
+    try {
+        const { id } = req.params;
+        const parseData: any = discussSchema.updateDiscuss.safeParse((req.body, { id: parseInt(id) }));
+
+        if (!parseData.success) {
+            res.status(400).json({
+                Success: false,
+                Message: 'Invalid input',
+                Data: {},
+                Errors: parseData.error.errors
+            });
+            return;
+        }
+
+        const discuss = await discussServices.updateDiscuss({ id: parseInt(id), ...req.body });
+
+        res.status(200).json({
+            Success: true,
+            Message: 'Discuss updated successfully',
+            Data: discuss,
+            Errors: {}
+        });
+        return;
+    } catch (error) {
+        if (error instanceof CustomError) return next(error);
+        return next(new CustomError('Internal Server Error', 500));
+    }
+}
+
 export {
     createDiscuss,
-    getAllDiscuss
+    getAllDiscuss,
+    getDiscussById,
+    updateDiscuss
 }

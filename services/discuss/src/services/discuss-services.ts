@@ -50,7 +50,45 @@ async function getAllDiscuss(data: {
     }
 }
 
+async function getDiscussById(data: {
+    id: number
+}) {
+    try {
+        const discuss = await discussRepo.getById(data.id);
+
+        if (!discuss) throw new CustomError('Discuss not found', 404);
+        return discuss;
+    } catch (error) {
+        if (error instanceof CustomError) throw error;
+        throw new CustomError('Internal Server Error', 500);
+    }
+}
+
+async function updateDiscuss(data: {
+    id: number
+    title?: string
+    content?: string
+}) {
+    try {
+        const discuss = await discussRepo.update(data.id, {
+            title: data.title,
+            content: data.content
+        });
+
+        if (!discuss) {
+            const isDiscussExists = await discussRepo.getById(data.id);
+            if (!isDiscussExists) throw new CustomError('Discuss not found', 404);
+        }
+        return discuss;
+    } catch (error) {
+        if (error instanceof CustomError) throw error;
+        throw new CustomError('Internal Server Error', 500);
+    }
+}
+
 export {
     createDiscuss,
-    getAllDiscuss
+    getAllDiscuss,
+    getDiscussById,
+    updateDiscuss
 }

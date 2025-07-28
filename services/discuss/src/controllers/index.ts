@@ -1,8 +1,10 @@
-import { createDiscuss, getAllDiscuss } from "./discuss-controllers";
+import { createDiscuss, getAllDiscuss, getDiscussById, updateDiscuss } from "./discuss-controllers";
 
 const discussControllers = {
     createDiscuss,
-    getAllDiscuss
+    getAllDiscuss,
+    getDiscussById,
+    updateDiscuss
 };
 
 export {

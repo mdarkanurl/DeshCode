@@ -7,3 +7,9 @@ export const createDiscuss = z.object({
     title: z.string().min(5),
     content: z.string().min(10)
 });
+
+export const updateDiscuss = z.object({
+    discussId: z.number(),
+    title: z.string().min(5).optional(),
+    content: z.string().min(10).optional()
+});

@@ -1,7 +1,8 @@
-import { createDiscuss } from "./discuss-schema";
+import { createDiscuss, updateDiscuss } from "./discuss-schema";
 
 const discussSchema = {
-    createDiscuss
+    createDiscuss,
+    updateDiscuss
 }
 
 export {
