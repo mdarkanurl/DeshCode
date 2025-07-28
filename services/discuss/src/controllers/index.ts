@@ -1,5 +1,5 @@
 import { createDiscuss, getAllDiscuss, getDiscussById, updateDiscuss } from "./discuss-controllers";
-import { createComment } from "./comment-controllers";
+import { createComment, getAllComments } from "./comment-controllers";
 
 const discussControllers = {
     createDiscuss,
@@ -9,7 +9,8 @@ const discussControllers = {
 };
 
 const commentControllers = {
-    createComment
+    createComment,
+    getAllComments
 };
 
 export {
