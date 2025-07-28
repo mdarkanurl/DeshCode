@@ -1,5 +1,5 @@
 import { createDiscuss, getAllDiscuss, getDiscussById, updateDiscuss } from "./discuss-services";
-import { createComment } from "./comment-services";
+import { createComment, getAllComments } from "./comment-services";
 
 const discussServices = {
     createDiscuss,
@@ -9,7 +9,8 @@ const discussServices = {
 }
 
 const commentServices = {
-    createComment
+    createComment,
+    getAllComments
 }
 
 export {
