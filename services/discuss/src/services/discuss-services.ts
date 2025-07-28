@@ -32,6 +32,10 @@ async function getAllDiscuss(data: {
             whereClause.topic = data.topic;
         }
 
+        const total = await prisma.discuss.count({
+            where: whereClause
+        });
+
         const allDiscuss = await prisma.discuss.findMany({
             where: whereClause,
             select: {
@@ -43,7 +47,20 @@ async function getAllDiscuss(data: {
             skip: data.skip,
             take: data.limit
         });
-        return allDiscuss;
+
+        if(allDiscuss.length === 0) {
+            throw new CustomError('No discussions found', 404);
+        }
+
+        return {
+            discussions: allDiscuss,
+            pagination: {
+                totalDiscussions: total,
+                currentPage: Math.floor(data.skip / data.limit) + 1,
+                totalPages: Math.ceil(total / data.limit),
+                pageSize: data.limit
+            }
+        };
     } catch (error) {
         if(error instanceof CustomError) throw error;
         throw new CustomError('Internal Server Error', 500);

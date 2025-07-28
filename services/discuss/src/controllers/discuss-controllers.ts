@@ -22,7 +22,7 @@ async function createDiscuss(
             return;
         }
 
-        const discuss = discussServices.createDiscuss(req.body);
+        const discuss = await discussServices.createDiscuss(req.body);
 
         res.status(201).json({
             Success: true,
@@ -48,10 +48,9 @@ async function getAllDiscuss(
         const limitNumber = parseInt(limit as string) || 10;
         const pageNumber = parseInt(page as string) || 1;
         const skip = (pageNumber - 1) * limitNumber;
-        if (typeof topic !== 'string' || !(topic in Topic)) {
-            throw new Error("Invalid topic");
-        }
         const topicEnum = topic as Topic;
+        
+        if(topic && !Object.values(Topic).includes(topicEnum)) throw new CustomError('Invalid topic', 400);
 
         const allDiscuss = await discussServices.getAllDiscuss(
             {
