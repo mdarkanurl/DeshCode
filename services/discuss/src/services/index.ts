@@ -1,15 +1,9 @@
-import { createProblems, getAllProblems, getProblem, updateProblem } from "./problems-services";
-import { submitSolution, getSubmission } from "./submit-service";
+import { createDiscuss } from "./discuss-services";
 
-const problemsServices = {
-    createProblems,
-    getAllProblems,
-    getProblem,
-    submitSolution,
-    updateProblem,
-    getSubmission
+const discussServices = {
+    createDiscuss
 }
 
 export {
-    problemsServices
+    discussServices
 }
