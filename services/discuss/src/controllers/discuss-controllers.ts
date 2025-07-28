@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { discussSchema } from "../schema";
 import { discussServices } from "../services";
 import { CustomError } from "../utils/errors/app-error";
+import { Topic } from "../generated/prisma";
 
 async function createDiscuss(
     req: Request,
@@ -25,7 +26,7 @@ async function createDiscuss(
 
         res.status(201).json({
             Success: true,
-            Message: 'Problem created successfully',
+            Message: 'Discuss created successfully',
             Data: discuss,
             Errors: {}
         });
@@ -36,6 +37,44 @@ async function createDiscuss(
     }
 }
 
+async function getAllDiscuss(
+    req: Request,
+    res: Response,
+    next: NextFunction
+) {
+    try {
+        const { topic, page, limit } = req.query;
+
+        const limitNumber = parseInt(limit as string) || 10;
+        const pageNumber = parseInt(page as string) || 1;
+        const skip = (pageNumber - 1) * limitNumber;
+        if (typeof topic !== 'string' || !(topic in Topic)) {
+            throw new Error("Invalid topic");
+        }
+        const topicEnum = topic as Topic;
+
+        const allDiscuss = await discussServices.getAllDiscuss(
+            {
+                topic: topicEnum,
+                skip: skip,
+                limit: limitNumber
+            }
+        );
+
+        res.status(200).json({
+            Success: true,
+            Message: 'All Discuss fetched successfully',
+            Data: allDiscuss,
+            Errors: {}
+        });
+        return;
+    } catch (error) {
+        if (error instanceof CustomError) return next(error);
+        return next(new CustomError('Internal Server Error', 500));
+    }
+}
+
 export {
-    createDiscuss
+    createDiscuss,
+    getAllDiscuss
 }

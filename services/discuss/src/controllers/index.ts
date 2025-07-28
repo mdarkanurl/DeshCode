@@ -1,7 +1,8 @@
-import { createDiscuss } from "./discuss-controllers";
+import { createDiscuss, getAllDiscuss } from "./discuss-controllers";
 
 const discussControllers = {
-    createDiscuss
+    createDiscuss,
+    getAllDiscuss
 };
 
 export {
