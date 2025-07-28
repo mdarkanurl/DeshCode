@@ -22,7 +22,7 @@ async function createDiscuss(
             return;
         }
 
-        const discuss = await discussServices.createDiscuss(req.body);
+        const discuss = await discussServices.createDiscuss(parseData.data);
 
         res.status(201).json({
             Success: true,
@@ -116,7 +116,7 @@ async function updateDiscuss(
             return;
         }
 
-        const discuss = await discussServices.updateDiscuss({ id: parseInt(id), ...req.body });
+        const discuss = await discussServices.updateDiscuss(parseData.data);
 
         res.status(200).json({
             Success: true,
