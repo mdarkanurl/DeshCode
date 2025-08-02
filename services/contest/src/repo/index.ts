@@ -1,0 +1,1 @@
+export { ContestRepo } from './contest-repo';
