@@ -10,7 +10,18 @@ class ProblemRepo extends CrudRepo {
     async getByProblemId(id: string) {
         try {
             return prisma.problem.findUnique({
-                where: { id }
+                where: { id, isVisible: true },
+                select: {
+                    id: true,
+                    title: true,
+                    description: true,
+                    functionName: true,
+                    language: true,
+                    difficulty: true,
+                    testCases: true,
+                    problemTypes: true,
+                    tags: true
+                }
             });
         } catch (error) {
             throw new CustomError("Failed to create record", 500);
@@ -23,7 +34,7 @@ class ProblemRepo extends CrudRepo {
                 where: { id },
                 data: { ...data },
                 select: {
-                    isSolved: false
+                    isVisible: false
                 }
             });
         } catch (error) {

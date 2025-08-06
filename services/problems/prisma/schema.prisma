@@ -51,7 +51,7 @@ model Problem {
   testCases   Json[]
   problemTypes ProblemTypes
   tags        String[]
-  isSolved    Boolean     @default(false)
+  isVisible    Boolean     @default(false)
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 

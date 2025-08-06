@@ -52,19 +52,23 @@ async function getAllProblems(
     }
 ) {
     try {
-        const whereClause: any = {};
+        const whereClause: any = {
+            isVisible: true
+        };
 
         if (data.difficulty !== undefined) {
             whereClause.difficulty = data.difficulty;
         }
 
         if (data.tags && data.tags.length > 0) {
-            whereClause.tags = { hasSome: data.tags }; // tags is a string[]
+            whereClause.tags = { hasSome: data.tags };
         }
 
         if (data.language && data.language.length > 0) {
-            whereClause.language = { hasSome: data.language }; // language is a string[]
+            whereClause.language = { hasSome: data.language };
         }
+
+        
 
         // Get total count for pagination
         const total = await prisma.problem.count({
@@ -113,17 +117,7 @@ async function getProblem(data: { id: string }) {
             throw new CustomError('Problem not found', 404);
         }
 
-        return {
-            id: problem.id,
-            title: problem.title,
-            description: problem.description,
-            functionName: problem.functionName,
-            language: problem.language,
-            difficulty: problem.difficulty,
-            testCases: problem.testCases,
-            problemTypes: problem.problemTypes,
-            tags: problem.tags
-        };
+        return problem;
     } catch (error) {
         if(error instanceof CustomError) throw error;
         throw new CustomError('Internal Server Error', 500);
