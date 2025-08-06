@@ -1,10 +1,8 @@
 import { Router } from "express";
-// import discussRouter from "./discuss-route";
-// import commentRouter from "./comment-route";
+import contestRouter from "./contest-route";
 
 
 const router = Router();
-// router.use('/', discussRouter);
-// router.use('/', commentRouter);
+router.use('/', contestRouter);
 
 export default router;

@@ -3,7 +3,7 @@ import { prisma } from "../prisma";
 
 class ContestRepo extends CrudRepo {
     constructor() {
-        super(prisma)
+        super(prisma.contest)
     }
 }
 
