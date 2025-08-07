@@ -1,11 +1,13 @@
 import {
     createContest,
-    getContestById
+    getContestById,
+    getAllContest
 } from "./contest-service";
 
  const contestService = {
     createContest,
-    getContestById
+    getContestById,
+    getAllContest
 }
 
  export {

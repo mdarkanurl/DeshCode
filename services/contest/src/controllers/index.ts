@@ -1,11 +1,13 @@
 import {
     createContest,
-    getContestById
+    getContestById,
+    getAllContest
 } from "./contest-controllers";
 
 const contestControllers = {
     createContest,
-    getContestById
+    getContestById,
+    getAllContest
 }
 
 export {

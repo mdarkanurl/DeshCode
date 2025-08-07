@@ -25,6 +25,25 @@ class ContestRepo extends CrudRepo {
             throw new CustomError("Faild to fatch contest data", 500)
         }
     }
+
+    async getAllContestwithPagination(skip: number, take: number, select?: {}) {
+        try {
+            const contests = await prisma.contest.findMany({
+                skip,
+                take,
+                select: {
+                    ...select
+                }
+            });
+
+            if(contests.length == 0) throw new CustomError("No contest found", 404);
+
+            return contests;
+        } catch (error) {
+            if(error instanceof CustomError) throw error;
+            throw new CustomError("Faild to fatch contest data", 500)
+        }
+    }
 }
 
 export {

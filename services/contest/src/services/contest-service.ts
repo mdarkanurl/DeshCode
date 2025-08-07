@@ -33,7 +33,24 @@ async function getContestById(id: string) {
     }
 }
 
+async function getAllContest(data: {
+    skip: number,
+    limit: number
+}) {
+    try {
+        if (data.skip < 0 || data.limit <= 0) {
+            throw new CustomError("Invalid pagination parameters", 400);
+        }
+
+        return await contestRepo.getAllContestwithPagination(data.skip, data.limit);
+    } catch (error) {
+        if(error instanceof CustomError) throw error;
+        throw new CustomError("Internal server error", 500)
+    }
+}
+
 export {
     createContest,
-    getContestById
+    getContestById,
+    getAllContest
 }

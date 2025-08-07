@@ -58,7 +58,39 @@ async function getContestById(
     }
 }
 
+async function getAllContest(
+    req: Request,
+    res: Response,
+    next: NextFunction
+) {
+    try {
+        const {limit, page} = req.query;
+
+        const pageNumber = parseInt(page as string) || 1;
+        const limitNumber = parseInt(limit as string) || 10;
+
+        const skip = (pageNumber - 1) * limitNumber;
+
+        const contests = await contestService.getAllContest({
+            skip,
+            limit: limitNumber
+        });
+
+        res.status(200).json({
+            Success: true,
+            Message: 'Successfully fetched all contests',
+            Data: contests,
+            Errors: {}
+        });
+        return;
+    } catch (error) {
+        if(error instanceof CustomError) return next(error);
+        return next(new CustomError('Internal Server Error', 500));
+    }
+}
+
 export {
     createContest,
-    getContestById
+    getContestById,
+    getAllContest
 }
