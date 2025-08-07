@@ -36,6 +36,29 @@ async function createContest(
     }
 }
 
+async function getContestById(
+    req: Request,
+    res: Response,
+    next: NextFunction
+) {
+    try {
+        const id = req.params.id;
+        const contest = await contestService.getContestById(id);
+
+        res.status(201).json({
+            Success: true,
+            Message: 'Successfully fetched contest data',
+            Data: contest,
+            Errors: {}
+        });
+        return;
+    } catch (error) {
+        if(error instanceof CustomError) return next(error);
+        return next(new CustomError('Internal Server Error', 500));
+    }
+}
+
 export {
-    createContest
+    createContest,
+    getContestById
 }

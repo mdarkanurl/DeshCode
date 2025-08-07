@@ -1,9 +1,11 @@
 import {
-    createContest
+    createContest,
+    getContestById
 } from "./contest-controllers";
 
 const contestControllers = {
-    createContest
+    createContest,
+    getContestById
 }
 
 export {

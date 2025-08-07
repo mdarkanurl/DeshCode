@@ -1,9 +1,11 @@
 import {
-    createContest
+    createContest,
+    getContestById
 } from "./contest-service";
 
  const contestService = {
-    createContest
+    createContest,
+    getContestById
 }
 
  export {

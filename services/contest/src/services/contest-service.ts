@@ -23,7 +23,17 @@ async function createContest(data: {
     }
 }
 
-export {
-    createContest
+async function getContestById(id: string) {
+    try {
+        const contest = await contestRepo.getContestById(id);
+        return contest;
+    } catch (error) {
+        if(error instanceof CustomError) throw error;
+        throw new CustomError("Internal server error", 500)
+    }
+}
 
+export {
+    createContest,
+    getContestById
 }
