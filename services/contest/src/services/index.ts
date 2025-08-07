@@ -4,12 +4,21 @@ import {
     getAllContest
 } from "./contest-service";
 
+import {
+    createParticipant
+} from "./participant-service";
+
  const contestService = {
     createContest,
     getContestById,
     getAllContest
 }
 
+const participantService = {
+    createParticipant
+}
+
  export {
-    contestService
+    contestService,
+    participantService
 }

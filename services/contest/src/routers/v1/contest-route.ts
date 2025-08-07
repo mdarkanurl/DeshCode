@@ -2,8 +2,8 @@ import { Router } from "express";
 import { contestControllers } from "../../controllers";
 const router = Router();
 
-router.post('contest', contestControllers.createContest);
-router.get('contest/:id', contestControllers.getContestById);
-router.get('contest', contestControllers.getAllContest);
+router.post('contests', contestControllers.createContest);
+router.get('contests/:id', contestControllers.getContestById);
+router.get('contests', contestControllers.getAllContest);
 
 export default router;
