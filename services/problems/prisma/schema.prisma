@@ -68,7 +68,6 @@ model Submit {
   language   String
   code   String
   output String?
-  isContestSubmission Boolean @default(false)
   runtimeMs  Int?
   memoryKb   Int?
   createdAt  DateTime @default(now())
