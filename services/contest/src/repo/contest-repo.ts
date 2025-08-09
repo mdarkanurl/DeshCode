@@ -12,9 +12,6 @@ class ContestRepo extends CrudRepo {
             const contest = await prisma.contest.findUnique({
                 where: {
                     id
-                },
-                select: {
-                    ...select
                 }
             });
             
@@ -22,6 +19,7 @@ class ContestRepo extends CrudRepo {
             return contest;
         } catch (error) {
             if(error instanceof CustomError) throw error;
+            console.log(error);
             throw new CustomError("Faild to fatch contest data", 500)
         }
     }

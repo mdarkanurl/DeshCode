@@ -14,15 +14,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum ProblemTypes {
-  NORMAL_PROBLEM
-  Arrays_and_Strings
-  Linked_Lists
-  Trees_and_Graphs
-  Dynamic_Programming
-  Sorting_and_Searching
-}
-
 enum SubmitStatus {
   PENDING
   ACCEPTED

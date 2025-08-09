@@ -10,7 +10,7 @@ async function submitSolution(
     next: NextFunction
 ) {
     try {
-        const parseData = submitSchema.submitSolution.safeParse({ id: (req.params.id) });
+        const parseData = submitSchema.submitSolution.safeParse(req.body);
 
         if(!parseData.success) {
             res.status(400).json({
