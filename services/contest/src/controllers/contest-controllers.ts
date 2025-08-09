@@ -21,12 +21,12 @@ async function createContest(
             return;
         }
 
-        const contest = await contestService.createContest(parseData.data);
+        const contests = await contestService.createContest(parseData.data);
 
         res.status(201).json({
             Success: true,
             Message: 'Contest created successfully',
-            Data: contest,
+            Data: contests,
             Errors: {}
         });
         return;
@@ -43,12 +43,12 @@ async function getContestById(
 ) {
     try {
         const id = req.params.id;
-        const contest = await contestService.getContestById(id);
+        const contests = await contestService.getContestById(id);
 
         res.status(201).json({
             Success: true,
             Message: 'Successfully fetched contest data',
-            Data: contest,
+            Data: contests,
             Errors: {}
         });
         return;

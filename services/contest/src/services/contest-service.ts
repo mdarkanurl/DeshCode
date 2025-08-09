@@ -15,8 +15,8 @@ async function createContest(data: {
         const isValidTime = data.endDate > data.startDate;
         if (!isValidTime) throw new CustomError("Invalid time", 400);
 
-        const contest = await contestRepo.create(data);
-        return contest;
+        const contests = await contestRepo.create(data);
+        return contests;
     } catch (error: any) {
         if(error instanceof CustomError) throw error;
         throw new CustomError("Internal server error", 500)
@@ -25,8 +25,8 @@ async function createContest(data: {
 
 async function getContestById(id: string) {
     try {
-        const contest = await contestRepo.getContestById(id);
-        return contest;
+        const contests = await contestRepo.getContestById(id);
+        return contests;
     } catch (error) {
         if(error instanceof CustomError) throw error;
         throw new CustomError("Internal server error", 500)
