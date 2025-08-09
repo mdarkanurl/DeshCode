@@ -10,7 +10,7 @@ class ProblemRepo extends CrudRepo {
     async getByProblemId(id: string) {
         try {
             return prisma.problem.findUnique({
-                where: { id, isVisible: true },
+                where: { id },
                 select: {
                     id: true,
                     title: true,
@@ -28,13 +28,13 @@ class ProblemRepo extends CrudRepo {
         }
     }
 
-    async updateById(id: string, data: Object) {
+    async updateById(id: string, data: Object, select: {}) {
         try {
             return prisma.problem.update({
                 where: { id },
                 data: { ...data },
                 select: {
-                    isVisible: false
+                    ...select
                 }
             });
         } catch (error) {
