@@ -28,7 +28,7 @@ class ProblemRepo extends CrudRepo {
         }
     }
 
-    async updateById(id: string, data: Object, select: {}) {
+    async updateById(id: string, data: Object, select?: {}) {
         try {
             return prisma.problem.update({
                 where: { id },
