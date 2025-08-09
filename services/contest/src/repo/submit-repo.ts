@@ -3,7 +3,7 @@ import { prisma } from "../prisma";
 
 class SubmitRepo extends CrudRepo {
     constructor() {
-        super(prisma.submitData)
+        super(prisma.submit)
     }
 }
 

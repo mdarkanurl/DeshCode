@@ -8,6 +8,10 @@ import {
     createParticipant
 } from "./participant-service";
 
+import {
+    submitSolution
+} from "./submit-services";
+
  const contestService = {
     createContest,
     getContestById,
@@ -18,7 +22,12 @@ const participantService = {
     createParticipant
 }
 
+const submitService = {
+    submitSolution
+}
+
  export {
     contestService,
-    participantService
+    participantService,
+    submitService
 }
