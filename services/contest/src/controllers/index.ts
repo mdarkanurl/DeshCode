@@ -5,12 +5,12 @@ import {
 } from "./contest-controllers";
 
 import {
-    createPaticipant
+    createParticipant
 } from "./participant-controllers";
 
 import {
     submitSolution
-} from "./submit-controolers";
+} from "./submit-controllers";
 
 const contestControllers = {
     createContest,
@@ -19,7 +19,7 @@ const contestControllers = {
 }
 
 const participantControllers = {
-    createPaticipant
+    createParticipant
 }
 
 const submitControllers = {

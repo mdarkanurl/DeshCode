@@ -3,7 +3,7 @@ import { participantSchema } from "../schema";
 import { participantService } from "../services";
 import { CustomError } from "../utils/errors/app-error";
 
-async function createPaticipant(
+async function createParticipant(
     req: Request,
     res: Response,
     next: NextFunction
@@ -37,5 +37,5 @@ async function createPaticipant(
 }
 
 export {
-    createPaticipant
+    createParticipant
 }
