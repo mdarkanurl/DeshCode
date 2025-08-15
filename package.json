@@ -1,29 +1,38 @@
 {
-  "name": "problems",
+  "name": "devohh",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node src/app.ts",
-    "worker": "ts-node src/worker/index.ts",
-    "migrate:dev": "prisma migrate dev"
+    "dev:discussions": "ts-node app/discussions/src/app.ts",
+    "dev:problems": "ts-node app/problems/src/app.ts",
+    "dev:contests": "ts-node app/contests/src/app.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mdarkanurl/DevOhh.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mdarkanurl/DevOhh/issues"
+  },
+  "homepage": "https://github.com/mdarkanurl/DevOhh#readme",
   "description": "",
   "dependencies": {
     "@prisma/client": "^6.10.1",
-    "@types/amqplib": "^0.10.7",
     "amqplib": "^0.10.8",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "p-limit": "^6.2.0",
     "prisma": "^6.10.1",
     "uuid": "^11.1.0",
-    "zod": "^3.25.67"
+    "zod": "^3.25.67",
+    "axios": "^1.11.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.28.0",
+    "@types/amqplib": "^0.10.7",
+    "@babel/core": "^7.28.3",
     "@babel/generator": "^7.28.0",
     "@babel/parser": "^7.28.0",
     "@types/babel__core": "^7.20.5",
