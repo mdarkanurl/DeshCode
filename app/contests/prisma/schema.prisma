@@ -14,7 +14,7 @@ datasource db {
   url      = env("CONTESTS_DATABASE_URL")
 }
 
-enum SubmitStatus {
+enum SubmissionsStatus {
   PENDING
   ACCEPTED
   WRONG_ANSWER
@@ -31,7 +31,7 @@ model Contest {
   name        String
   description String?
   rules       String?
-  problemIds   String[]
+  problemsIds   String[]
   startTime   DateTime
   endTime     DateTime
 
@@ -41,12 +41,12 @@ model Contest {
   updatedAt   DateTime @updatedAt
 }
 
-model Submit {
+model Submissions {
   id         Int      @id @default(autoincrement())
   participantId     String
-  participant Participant @relation(fields: [participantId], references: [id])
-  problemId  String
-  status     SubmitStatus
+  participants Participant @relation(fields: [participantId], references: [id])
+  problemsId  String
+  status     SubmissionsStatus
   language   String
   code   String
   output String?
@@ -62,7 +62,7 @@ model Participant {
   userId    String
 
   contest   Contest  @relation(fields: [contestId], references: [id])
-  submit Submit[]
+  Submissions Submissions[]
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
