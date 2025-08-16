@@ -21,7 +21,7 @@ enum Topic {
   Interview
 }
 
-model Discuss {
+model Discussions {
   id Int @id @default(autoincrement())
   userId String
   topic Topic @default(Career)
@@ -36,11 +36,11 @@ model Discuss {
 
 model Comments {
   id Int @id @default(autoincrement())
-  discussId Int
+  discussionsId Int
   userId String
   content String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  discuss Discuss @relation(fields: [discussId], references: [id])
+  discussions Discussions @relation(fields: [discussionsId], references: [id])
 }
