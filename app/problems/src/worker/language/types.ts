@@ -1,5 +1,5 @@
 import amqplib from "amqplib";
-import { ProblemTypes } from "../../generated/prisma";
+import { ProblemsTypes } from "../../generated/prisma";
 
 export interface LanguageExecutor {
   (
@@ -10,7 +10,7 @@ export interface LanguageExecutor {
       functionName: string;
       testCases: any[];
       code: string;
-      ProblemTypes: ProblemTypes;
+      ProblemsTypes: ProblemsTypes;
     }
   ): Promise<void>;
 }

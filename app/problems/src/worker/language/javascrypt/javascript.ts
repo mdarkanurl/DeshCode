@@ -2,13 +2,13 @@ import fs from "fs";
 import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import amqplib from "amqplib";
-import { SubmitRepo } from "../../../repo";
+import { SubmissionsRepo } from "../../../repo";
 import { prepareCodeWithBabel } from "./babel/prepareCodeWithBabel";
 import { runDocker } from "../../utils/dockerRunner";
 import { isDeepStrictEqual } from "util";
-import { SubmitStatus } from "../../../generated/prisma";
+import { SubmissionsStatus } from "../../../generated/prisma";
 
-const submitRepo = new SubmitRepo();
+const submissionsRepo = new SubmissionsRepo();
 
 type TestResult = {
   input: any;
@@ -26,7 +26,7 @@ export const JavaScript = async (
     submissionId: number;
     functionName: string;
     testCases: any[];
-    ProblemTypes: string
+    ProblemsTypes: string
     code: string;
   }
 ) => {
@@ -40,8 +40,8 @@ export const JavaScript = async (
     const rewrittenCode = prepareCodeWithBabel(data.code, data.functionName);
     fs.writeFileSync(userCodePath, rewrittenCode);
   } catch (e: any) {
-    await submitRepo.update(data.submissionId, {
-      status: SubmitStatus.INVALID_FUNCTION_SIGNATURE,
+    await submissionsRepo.update(data.submissionId, {
+      status: SubmissionsStatus.INVALID_FUNCTION_SIGNATURE,
       output: JSON.stringify({ error: e.message }),
     });
     channel.ack(msg);
@@ -49,9 +49,9 @@ export const JavaScript = async (
   }
 
   let runnerFile: string;
-  if(data.ProblemTypes === "Linked_Lists") {
+  if(data.ProblemsTypes === "Linked_Lists") {
     runnerFile = "./runner/Linked-List.js";
-  } else if(data.ProblemTypes === "Trees_and_Graphs") {
+  } else if(data.ProblemsTypes === "Trees_and_Graphs") {
     runnerFile = "./runner/Trees-and-Graphs.js";
   } else {
     runnerFile = "./runner/Normal-problems.js";
@@ -95,21 +95,21 @@ export const JavaScript = async (
 
       const actualRaw = result.stdout?.trim() || "";
       const stderr = result.stderr?.trim() || "";
-      let status: SubmitStatus = SubmitStatus.ACCEPTED;
+      let status: SubmissionsStatus = SubmissionsStatus.ACCEPTED;
       let passed = false;
 
       if (result.error) {
-        status = SubmitStatus.EXECUTION_ERROR;
+        status = SubmissionsStatus.EXECUTION_ERROR;
       } else if (result.signal === "SIGTERM") {
-        status = SubmitStatus.TIME_OUT;
+        status = SubmissionsStatus.TIME_OUT;
       } else {
         try {
           let actual = JSON.parse(actualRaw);
           if (typeof actual === 'object') actual = JSON.stringify(actual);
           passed = isDeepStrictEqual(actual, expected);
-          status = passed ? SubmitStatus.ACCEPTED : SubmitStatus.WRONG_ANSWER;
+          status = passed ? SubmissionsStatus.ACCEPTED : SubmissionsStatus.WRONG_ANSWER;
         } catch (e) {
-          status = SubmitStatus.INTERNAL_ERROR;
+          status = SubmissionsStatus.INTERNAL_ERROR;
         }
       }
 
@@ -118,7 +118,7 @@ export const JavaScript = async (
         expected: testCase.expected,
         actual: actualRaw,
         error: stderr,
-        status: status as SubmitStatus,
+        status: status as SubmissionsStatus,
         passed,
       });
     } catch (e: any) {
@@ -127,7 +127,7 @@ export const JavaScript = async (
         expected: testCase.expected,
         actual: null,
         error: e.message,
-        status: SubmitStatus.INTERNAL_ERROR,
+        status: SubmissionsStatus.INTERNAL_ERROR,
         passed: false,
       });
     }
@@ -136,18 +136,18 @@ export const JavaScript = async (
   const allPassed = testResults.every((t) => t.passed);
   const hasFatal = testResults.some((t) =>
     [
-      SubmitStatus.EXECUTION_ERROR as string,
-      SubmitStatus.TIME_OUT as string,
-      SubmitStatus.INTERNAL_ERROR as string,
+      SubmissionsStatus.EXECUTION_ERROR as string,
+      SubmissionsStatus.TIME_OUT as string,
+      SubmissionsStatus.INTERNAL_ERROR as string,
     ].includes(t.status)
   );
 
-  await submitRepo.update(data.submissionId, {
+  await submissionsRepo.update(data.submissionId, {
     status: allPassed
-      ? SubmitStatus.ACCEPTED
+      ? SubmissionsStatus.ACCEPTED
       : hasFatal
-      ? SubmitStatus.FAILED
-      : SubmitStatus.WRONG_ANSWER,
+      ? SubmissionsStatus.FAILED
+      : SubmissionsStatus.WRONG_ANSWER,
     output: JSON.stringify(testResults),
   });
 

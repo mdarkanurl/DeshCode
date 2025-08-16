@@ -20,7 +20,7 @@ enum DifficultyLevel {
   HARD
 }
 
-enum submissionsStatus {
+enum SubmissionsStatus {
   PENDING
   ACCEPTED
   WRONG_ANSWER
@@ -54,16 +54,16 @@ model Problems {
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
-  submissions submissions[]
+  submissions Submissions[]
   discussions Discussion[]
 }
 
-model submissions {
+model Submissions {
   id         Int      @id @default(autoincrement())
   userId     Int
   problemId  String
   problem    Problems  @relation(fields: [problemId], references: [id])
-  status     submissionsStatus
+  status     SubmissionsStatus
   language   String
   code   String
   output String?

@@ -1,26 +1,26 @@
 import amqplib from "amqplib";
-import { ProblemTypes } from "../../generated/prisma"; // Assuming this is an enum
+import { ProblemsTypes } from "../../generated/prisma"; // Assuming this is an enum
 import { languageExecutors } from "../language/languageExecutors";
-import { SubmitRepo } from "../../repo/index";
+import { SubmissionsRepo } from "../../repo/index";
 
-const submitRepo = new SubmitRepo();
+const submissionsRepo = new SubmissionsRepo();
 
 const EXCHANGE = "problems_exchange";
 const EXCHANGE_TYPE = "direct";
 
-export async function consume(problemType: ProblemTypes) {
+export async function consume(problemsType: ProblemsTypes) {
   const conn = await amqplib.connect("amqp://localhost");
   const channel = await conn.createChannel();
 
-  const queueName = problemType;
-  const routingKey = problemType;
+  const queueName = problemsType;
+  const routingKey = problemsType;
 
   await channel.assertExchange(EXCHANGE, EXCHANGE_TYPE, { durable: false });
   await channel.assertQueue(queueName, { durable: false });
   await channel.bindQueue(queueName, EXCHANGE, routingKey);
   await channel.prefetch(1);
 
-  console.log(`🟢 [${problemType}] Waiting for submissions...`);
+  console.log(`🟢 [${problemsType}] Waiting for submissions...`);
 
   channel.consume(
     queueName,
@@ -38,7 +38,7 @@ export async function consume(problemType: ProblemTypes) {
 
       const executor = languageExecutors[data.language?.toLowerCase()];
       if (!executor) {
-        await submitRepo.update(data.submissionId, {
+        await submissionsRepo.update(data.submissionId, {
           status: "LANGUAGE_NOT_SUPPORTED",
           output: JSON.stringify({ error: "Unsupported language" }),
         });
@@ -52,11 +52,11 @@ export async function consume(problemType: ProblemTypes) {
           functionName: data.functionName,
           testCases: data.testCases,
           code: data.code,
-          ProblemTypes: problemType,
+          ProblemsTypes: problemsType,
         });
       } catch (e: any) {
         console.error(`❌ Executor failed (ID: ${data.submissionId}):`, e);
-        await submitRepo.update(parseInt(data.submissionId), {
+        await submissionsRepo.update(parseInt(data.submissionId), {
           status: "INTERNAL_ERROR",
           output: JSON.stringify({ error: e.message }),
         });
