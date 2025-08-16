@@ -108,7 +108,7 @@ async function getProblem(
     next: NextFunction
 ) {
     try {
-        const parseData = problemsSchema.getProblemSchema.safeParse({ id: (req.params.id) });
+        const parseData = problemsSchema.getProblemsSchema.safeParse({ id: (req.params.id) });
 
         if(!parseData.success) {
             res.status(400).json({
@@ -120,7 +120,7 @@ async function getProblem(
             return;
         }
 
-        const problem = await problemsServices.getProblem(parseData.data);
+        const problem = await problemsServices.getProblems(parseData.data);
 
         res.status(200).json({
             Success: true,
@@ -141,7 +141,7 @@ async function updateProblem(
     next: NextFunction
 ) {
     try {
-        const parseData = problemsSchema.updateProblemSchema.safeParse(req.body);
+        const parseData = problemsSchema.updateProblemsSchema.safeParse(req.body);
         const problemId = req.params.id as string;
 
         if(!parseData.success || req.body === null || undefined || !problemId) {
@@ -154,7 +154,7 @@ async function updateProblem(
             return;
         }
 
-        const problems = await problemsServices.updateProblem(
+        const problems = await problemsServices.updateProblems(
             {
                 id: problemId,
                 data: {

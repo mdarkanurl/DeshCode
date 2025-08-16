@@ -1,15 +1,19 @@
-import { createProblems, getAllProblems, getProblem, updateProblem } from "./problems-services";
-import { submitSolution, getSubmission } from "./submit-service";
+import { createProblems, getAllProblems, getProblems, updateProblems } from "./problems-services";
+import { submissionsSolution, getSubmissionById } from "./submissions-services";
 
 const problemsServices = {
     createProblems,
     getAllProblems,
-    getProblem,
-    submitSolution,
-    updateProblem,
-    getSubmission
+    getProblems,
+    updateProblems
+}
+
+const submissionsServices = {
+    submissionsSolution,
+    getSubmissionById
 }
 
 export {
-    problemsServices
+    problemsServices,
+    submissionsServices
 }

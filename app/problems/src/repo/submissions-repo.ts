@@ -1,12 +1,12 @@
 import { prisma } from "../prisma"
 import { CrudRepo } from "./crud-repo"
 
-class SubmitRepo extends CrudRepo {
+class SubmissionsRepo extends CrudRepo {
     constructor() {
-        super(prisma.submit)
+        super(prisma.submissions)
     }
 }
 
 export {
-    SubmitRepo
+    SubmissionsRepo
 }

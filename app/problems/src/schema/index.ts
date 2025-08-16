@@ -1,17 +1,24 @@
 import {
     createProblemsSchema,
-    getProblemSchema,
-    submitSolutionSchema,
-    updateProblemSchema
+    getProblemsSchema,
+    updateProblemsSchema
 } from "./problems-schema";
+
+import {
+    submissionsSolutionSchema
+} from "./submissions-schema";
 
 const problemsSchema = {
     createProblemsSchema,
-    getProblemSchema,
-    submitSolutionSchema,
-    updateProblemSchema
+    getProblemsSchema,
+    updateProblemsSchema
+}
+
+const submissionsSchema = {
+    submissionsSolutionSchema
 }
 
 export {
-    problemsSchema
+    problemsSchema,
+    submissionsSchema
 }

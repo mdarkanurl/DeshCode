@@ -1,2 +1,2 @@
-export { ProblemRepo } from "./problems-repo";
-export { SubmitRepo } from "./submit-repo";
+export { ProblemsRepo } from "./problems-repo";
+export { SubmissionsRepo } from "./submissions-repo";

@@ -2,14 +2,14 @@ import { prisma } from "../prisma"
 import { CustomError } from "../utils/errors/app-error";
 import { CrudRepo } from "./crud-repo"
 
-class ProblemRepo extends CrudRepo {
+class ProblemsRepo extends CrudRepo {
     constructor() {
-        super(prisma.problem)
+        super(prisma.problems)
     }
 
-    async getByProblemId(id: string) {
+    async getByProblemsId(id: string) {
         try {
-            return prisma.problem.findUnique({
+            return prisma.problems.findUnique({
                 where: { id },
                 select: {
                     id: true,
@@ -19,7 +19,7 @@ class ProblemRepo extends CrudRepo {
                     language: true,
                     difficulty: true,
                     testCases: true,
-                    problemTypes: true,
+                    problemsTypes: true,
                     tags: true
                 }
             });
@@ -30,7 +30,7 @@ class ProblemRepo extends CrudRepo {
 
     async updateById(id: string, data: Object, select?: {}) {
         try {
-            return prisma.problem.update({
+            return prisma.problems.update({
                 where: { id },
                 data: { ...data },
                 select: {
@@ -44,5 +44,5 @@ class ProblemRepo extends CrudRepo {
 }
 
 export {
-    ProblemRepo
+    ProblemsRepo
 }

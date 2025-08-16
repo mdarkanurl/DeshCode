@@ -11,7 +11,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("PROBLEMS_DATABASE_URL")
 }
 
 enum DifficultyLevel {
@@ -20,7 +20,7 @@ enum DifficultyLevel {
   HARD
 }
 
-enum SubmitStatus {
+enum submissionsStatus {
   PENDING
   ACCEPTED
   WRONG_ANSWER
@@ -32,7 +32,7 @@ enum SubmitStatus {
   LANGUAGE_NOT_SUPPORTED
 }
 
-enum ProblemTypes {
+enum ProblemsTypes {
   NORMAL_PROBLEM
   Arrays_and_Strings
   Linked_Lists
@@ -41,7 +41,7 @@ enum ProblemTypes {
   Sorting_and_Searching
 }
 
-model Problem {
+model Problems {
   id          String         @id
   title       String
   description String
@@ -49,21 +49,21 @@ model Problem {
   language     String[]
   difficulty  DifficultyLevel
   testCases   Json[]
-  problemTypes ProblemTypes
+  problemsTypes ProblemsTypes
   tags        String[]
   createdAt   DateTime    @default(now())
   updatedAt   DateTime    @updatedAt
 
-  submissions Submit[]
+  submissions submissions[]
   discussions Discussion[]
 }
 
-model Submit {
+model submissions {
   id         Int      @id @default(autoincrement())
   userId     Int
   problemId  String
-  problem    Problem  @relation(fields: [problemId], references: [id])
-  status     SubmitStatus
+  problem    Problems  @relation(fields: [problemId], references: [id])
+  status     submissionsStatus
   language   String
   code   String
   output String?
@@ -77,7 +77,7 @@ model Discussion {
   id         Int      @id @default(autoincrement())
   userId     String
   problemId  String
-  problem    Problem  @relation(fields: [problemId], references: [id])
+  problem    Problems  @relation(fields: [problemId], references: [id])
   content    String
   createdAt  DateTime @default(now())
 }

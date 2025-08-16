@@ -1,7 +1,7 @@
 import { z } from "zod";
-import { ProblemTypes } from "../generated/prisma";
+import { ProblemsTypes } from "../generated/prisma";
 
-const problemTypesEnum = z.enum([...(Object.values(ProblemTypes) as [string, ...string[]])]);
+const problemsTypesEnum = z.enum([...(Object.values(ProblemsTypes) as [string, ...string[]])]);
 
 export const createProblemsSchema = z.object({
   id: z.string(),
@@ -14,22 +14,15 @@ export const createProblemsSchema = z.object({
     input: z.array(z.any()),
     expected: z.any()
   })),
-  problemTypes: problemTypesEnum,
+  problemTypes: problemsTypesEnum,
   tags: z.array(z.string()).optional()
 });
 
-export const getProblemSchema = z.object({
+export const getProblemsSchema = z.object({
     id: z.string()
 });
 
-export const submitSolutionSchema = z.object({
-    userId: z.number(),
-    problemId: z.string(),
-    language: z.string().min(1).toLowerCase(),
-    code: z.string().min(1)
-});
-
-export const updateProblemSchema = z.object({
+export const updateProblemsSchema = z.object({
     title: z.string().optional(),
     description: z.string().optional(),
     functionName: z.string().optional(),

@@ -1,9 +1,9 @@
-import { ProblemRepo } from "../repo";
+import { ProblemsRepo } from "../repo";
 import { DifficultyLevel } from "../generated/prisma";
 import { CustomError } from "../utils/errors/app-error";
 import { prisma } from "../prisma";
 
-const problemRepo = new ProblemRepo();
+const problemsRepo = new ProblemsRepo();
 
 async function createProblems(data: {
     id: string,
@@ -17,7 +17,7 @@ async function createProblems(data: {
 }) {
     try {
         // Check if problem already exist or not
-        const isProblemExist = await problemRepo.getByProblemId(data.id);
+        const isProblemExist = await problemsRepo.getByProblemsId(data.id);
 
         if(isProblemExist) {
             throw new CustomError(`The problem id ${data.id} already taken`, 400);
@@ -25,7 +25,7 @@ async function createProblems(data: {
 
 
         // Create problems and add to DB
-        const problems = await problemRepo.create(data);
+        const problems = await problemsRepo.create(data);
         return {
             id: problems.id,
             title: problems.title,
@@ -71,12 +71,12 @@ async function getAllProblems(
         
 
         // Get total count for pagination
-        const total = await prisma.problem.count({
+        const total = await prisma.problems.count({
             where: whereClause
         });
 
         // Get all problems from Database
-        const problems = await prisma.problem.findMany({
+        const problems = await prisma.problems.findMany({
             where: whereClause,
             select: {
                 id: true,
@@ -108,23 +108,23 @@ async function getAllProblems(
     }
 }
 
-async function getProblem(data: { id: string }) {
+async function getProblems(data: { id: string }) {
     try {
         // Find problem by ID
-        const problem = await problemRepo.getByProblemId(data.id);
+        const problems = await problemsRepo.getByProblemsId(data.id);
 
-        if(!problem) {
+        if(!problems) {
             throw new CustomError('Problem not found', 404);
         }
 
-        return problem;
+        return problems;
     } catch (error) {
         if(error instanceof CustomError) throw error;
         throw new CustomError('Internal Server Error', 500);
     }
 }
 
-async function updateProblem(
+async function updateProblems(
     data: {
         id: string,
         data: {
@@ -137,7 +137,7 @@ async function updateProblem(
     }
 ) {
     try {
-        const problems = await problemRepo.updateById(
+        const problems = await problemsRepo.updateById(
             data.id,
             data.data
         );
@@ -156,6 +156,6 @@ async function updateProblem(
 export {
     createProblems,
     getAllProblems,
-    getProblem,
-    updateProblem
+    getProblems,
+    updateProblems
 }
