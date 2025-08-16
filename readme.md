@@ -18,6 +18,7 @@
 - Learn how to build a scalable and maintainable system
 
 ## Local setup
+
 **prerequisites:**
 - Node.js (version 14 or later)
 - Docker (for running code in isolated environments)
@@ -51,3 +52,7 @@
 ```bash
 docker pull mdarkanurl/deshcode
 ```
+
+## Contributing
+
+If you want to contribute to DeshCode, please follow the guidelines outlined in the [contributing.md](contribute.md) file.
