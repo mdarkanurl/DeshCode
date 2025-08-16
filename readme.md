@@ -17,6 +17,16 @@
 - Learn some advanced techniques in code evaluation and sandboxing
 - Learn how to build a scalable and maintainable system
 
+
+## Tech stack
+- Languages: TypeScript
+- Backend: Node.js, Express.js
+- Databases: PostgreSQL, Redis
+- Messaging & Queueing: RabbitMQ
+- Tools & Platforms: Docker, Git, GitHub, GitHub Action, CI/CD pipelines, Supabase
+- Testing: Jest, Supertest, Postman
+- Other Skills: OOP, REST API Design, WebSockets, Microservices
+
 ## Local setup
 
 **prerequisites:**
