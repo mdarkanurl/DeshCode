@@ -18,6 +18,10 @@
 - Learn how to build a scalable and maintainable system
 
 ## Local setup
+**prerequisites:**
+- Node.js (version 14 or later)
+- Docker (for running code in isolated environments)
+- Docker image of runtime environment (e.g., Python, Node.js)
 
 1. Clone the repository:
    ```bash
@@ -42,3 +46,8 @@
 
 5. Access the application: <br>
    Open your testing tool and navigate to `http://localhost:3000` or the appropriate endpoint for the service you started.
+
+**Docker:** if you have Docker you can pull the image from Docker Hub and test it:
+```bash
+docker pull mdarkanurl/deshcode
+```
