@@ -55,4 +55,4 @@ docker pull mdarkanurl/deshcode
 
 ## Contributing
 
-If you want to contribute to DeshCode, please follow the guidelines outlined in the [contributing.md](contribute.md) file.
+If you want to contribute to DeshCode, please follow the guidelines outlined in the [contribute.md](contribute.md) file.
