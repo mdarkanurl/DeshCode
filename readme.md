@@ -21,7 +21,7 @@
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/DeshCode.git
+   git clone https://github.com/mdarkanurl/DeshCode.git
    cd DeshCode
    ```
 
@@ -33,10 +33,12 @@
 3. Set up environment variables:
    Create a `.env` file in the root directory and add the necessary environment variables. You can use the provided `.env.example` as a reference.
 
-4. Start the service server:
+4. Start the service whatever service you need:
+    If you need to start the problems service, run:
    ```bash
-   npm run dev
+   npm run dev:problems
    ```
+   Look up to `package.json` and find the script as you need.
 
 5. Access the application:
-   Open your browser and navigate to `http://localhost:3000`.
+   Open your testing tool and navigate to `http://localhost:3000` or the appropriate endpoint for the service you started.
