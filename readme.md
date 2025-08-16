@@ -40,5 +40,5 @@
    ```
    Look up to `package.json` and find the script as you need.
 
-5. Access the application:
+5. Access the application: <br>
    Open your testing tool and navigate to `http://localhost:3000` or the appropriate endpoint for the service you started.
