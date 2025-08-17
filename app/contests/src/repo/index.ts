@@ -1,3 +1,3 @@
-export { ContestRepo } from './contest-repo';
-export { ParticipantRepo } from './participant-repo';
-export { SubmitRepo } from './submit-repo';
+export { ContestsRepo } from './contest-repo';
+export { ParticipantsRepo } from './participant-repo';
+export { SubmissionsRepo } from './submissions-repo';

@@ -1,5 +1,5 @@
 import amqplib from "amqplib";
-import { ProblemTypes } from "../generated/prisma";
+import { ProblemsTypes } from "../generated/prisma";
 
 let channel: amqplib.Channel;
 const EXCHANGE = 'contests_exchange';
@@ -12,7 +12,7 @@ async function connect() {
   await channel.assertExchange(EXCHANGE, EXCHANGE_TYPE, { durable: false });
 }
 
-async function sendData(problemType: ProblemTypes, data: any) {
+async function sendData(problemType: ProblemsTypes, data: any) {
   if (!channel) throw new Error("Channel is not initialized. Call connect() first.");
 
   const queueName = problemType;

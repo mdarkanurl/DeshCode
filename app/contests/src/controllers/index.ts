@@ -1,33 +1,31 @@
 import {
-    createContest,
-    getContestById,
-    getAllContest
+    createContests,
+    getContestsById,
+    getAllContests
 } from "./contest-controllers";
 
 import {
-    createParticipant
+    createParticipants
 } from "./participant-controllers";
 
-import {
-    submitSolution
-} from "./submit-controllers";
+import { submitSolution } from "./submission-controllers";
 
-const contestControllers = {
-    createContest,
-    getContestById,
-    getAllContest
+const contestsControllers = {
+    createContests,
+    getContestsById,
+    getAllContests
 }
 
-const participantControllers = {
-    createParticipant
+const participantsControllers = {
+    createParticipants
 }
 
-const submitControllers = {
+const submissionsControllers = {
     submitSolution
 }
 
 export {
-    contestControllers,
-    participantControllers,
-    submitControllers
+    contestsControllers,
+    participantsControllers,
+    submissionsControllers
 }

@@ -1,33 +1,33 @@
 import {
-    createContest,
+    createContests,
     getContestById,
-    getAllContest
+    getAllContests
 } from "./contest-service";
 
 import {
-    createParticipant
+    createParticipants
 } from "./participant-service";
 
 import {
-    submitSolution
-} from "./submit-services";
+    submissionsSolution
+} from "./submission-services";
 
- const contestService = {
-    createContest,
+ const contestsService = {
+    createContests,
     getContestById,
-    getAllContest
+    getAllContests
 }
 
-const participantService = {
-    createParticipant
+const participantsService = {
+    createParticipants
 }
 
-const submitService = {
-    submitSolution
+const submissionsService = {
+    submissionsSolution
 }
 
  export {
-    contestService,
-    participantService,
-    submitService
+    contestsService,
+    participantsService,
+    submissionsService
 }

@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { participantControllers } from "../../controllers";
+import { participantsControllers } from "../../controllers";
 const router = Router();
 
-router.post('/', participantControllers.createParticipant);
+router.post('/', participantsControllers.createParticipants);
 
 export default router;

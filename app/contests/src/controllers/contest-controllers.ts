@@ -1,15 +1,15 @@
 import { Request, Response, NextFunction } from "express";
-import { contestSchema } from "../schema";
-import { contestService } from "../services";
+import { contestsSchema } from "../schema";
+import { contestsService } from "../services";
 import { CustomError } from "../utils/errors/app-error";
 
-async function createContest(
+async function createContests(
     req: Request,
     res: Response,
     next: NextFunction
 ) {
     try {
-        const parseData: any = contestSchema.createContest.safeParse(req.body);
+        const parseData: any = contestsSchema.createContests.safeParse(req.body);
 
         if(!parseData.success) {
             res.status(400).json({
@@ -21,7 +21,7 @@ async function createContest(
             return;
         }
 
-        const contests = await contestService.createContest(parseData.data);
+        const contests = await contestsService.createContests(parseData.data);
 
         res.status(201).json({
             Success: true,
@@ -36,14 +36,14 @@ async function createContest(
     }
 }
 
-async function getContestById(
+async function getContestsById(
     req: Request,
     res: Response,
     next: NextFunction
 ) {
     try {
         const id = req.params.id;
-        const contests = await contestService.getContestById(id);
+        const contests = await contestsService.getContestById(id);
 
         res.status(201).json({
             Success: true,
@@ -58,7 +58,7 @@ async function getContestById(
     }
 }
 
-async function getAllContest(
+async function getAllContests(
     req: Request,
     res: Response,
     next: NextFunction
@@ -71,7 +71,7 @@ async function getAllContest(
 
         const skip = (pageNumber - 1) * limitNumber;
 
-        const contests = await contestService.getAllContest({
+        const contests = await contestsService.getAllContests({
             skip,
             limit: limitNumber
         });
@@ -90,7 +90,7 @@ async function getAllContest(
 }
 
 export {
-    createContest,
-    getContestById,
-    getAllContest
+    createContests,
+    getContestsById,
+    getAllContests
 }

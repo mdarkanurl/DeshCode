@@ -26,7 +26,16 @@ enum SubmissionsStatus {
   LANGUAGE_NOT_SUPPORTED
 }
 
-model Contest {
+enum ProblemsTypes {
+  NORMAL_PROBLEM
+  Arrays_and_Strings
+  Linked_Lists
+  Trees_and_Graphs
+  Dynamic_Programming
+  Sorting_and_Searching
+}
+
+model Contests {
   id          String   @id @default(cuid())
   name        String
   description String?
@@ -35,7 +44,7 @@ model Contest {
   startTime   DateTime
   endTime     DateTime
 
-  participants Participant[]
+  participants Participants[]
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -44,7 +53,7 @@ model Contest {
 model Submissions {
   id         Int      @id @default(autoincrement())
   participantId     String
-  participants Participant @relation(fields: [participantId], references: [id])
+  participants Participants @relation(fields: [participantId], references: [id])
   problemsId  String
   status     SubmissionsStatus
   language   String
@@ -56,12 +65,12 @@ model Submissions {
   updatedAt    DateTime  @updatedAt
 }
 
-model Participant {
+model Participants {
   id        String  @id @default(cuid())
   contestId String
   userId    String
 
-  contest   Contest  @relation(fields: [contestId], references: [id])
+  contest   Contests  @relation(fields: [contestId], references: [id])
   Submissions Submissions[]
   
   createdAt DateTime @default(now())

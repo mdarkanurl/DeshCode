@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import { submitService } from "../services";
-import { submitSchema } from "../schema";
+import { submissionsService } from "../services";
+import { submissionsSchema } from "../schema";
 import { CustomError } from "../utils/errors/app-error";
 
 
@@ -10,7 +10,7 @@ async function submitSolution(
     next: NextFunction
 ) {
     try {
-        const parseData = submitSchema.submitSolution.safeParse(req.body);
+        const parseData = submissionsSchema.submissionsSolution.safeParse(req.body);
 
         if(!parseData.success) {
             res.status(400).json({
@@ -22,12 +22,12 @@ async function submitSolution(
             return;
         }
 
-        const submit = await submitService.submitSolution(parseData.data);
+        const submission = await submissionsService.submissionsSolution(parseData.data);
 
         res.status(200).json({
             Success: true,
             Message: 'Solution submitted successfully',
-            Data: submit,
+            Data: submission,
             Errors: {}
         });
         return;

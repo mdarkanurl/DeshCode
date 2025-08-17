@@ -1,13 +1,13 @@
-import { SubmitRepo } from "../repo";
+import { SubmissionsRepo } from "../repo";
 import axios from "axios";
 import { config } from "dotenv";
 import { CustomError } from "../utils/errors/app-error";
 import { sendData } from "../utils/RabbitMQ";
 config();
 
-const submitRepo = new SubmitRepo();
+const submissionsRepo = new SubmissionsRepo();
 
-async function submitSolution(data: {
+async function submissionsSolution(data: {
     participantId: string,
     contestId: string,
     problemId: string,
@@ -30,7 +30,7 @@ async function submitSolution(data: {
             }
         }
 
-        const submits = await submitRepo.create({
+        const submissions = await submissionsRepo.create({
             participantId: data.participantId,
             problemId: problems.data.Data.id,
             status: "PENDING",
@@ -40,7 +40,7 @@ async function submitSolution(data: {
 
         // Send data to RabbitMQ
         const message = {
-            submissionId: submits.id,
+            submissionId: submissions.id,
             language: data.language,
             functionName: problems.data.Data.functionName,
             testCases: problems.data.Data.testCases,
@@ -48,11 +48,11 @@ async function submitSolution(data: {
             code: data.code
         };
 
-        await sendData(problems.data.Data.problemTypes, message);
+        await sendData(problems.data.Data.problemsTypes, message);
 
         return {
-            submitId: submits.id,
-            status: submits.status
+            submitId: submissions.id,
+            status: submissions.status
         }
     } catch (error) {
         if(error instanceof CustomError) throw error;
@@ -61,5 +61,5 @@ async function submitSolution(data: {
 }
 
 export {
-    submitSolution
+    submissionsSolution
 }

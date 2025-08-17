@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const createPaticipant = z.object({
+export const createPaticipants = z.object({
     contestId: z.string(),
     userId: z.string()
 });

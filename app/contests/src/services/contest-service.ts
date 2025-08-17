@@ -1,9 +1,9 @@
-import { ContestRepo } from "../repo";
+import { ContestsRepo } from "../repo";
 import { CustomError } from "../utils/errors/app-error";
-const contestRepo = new ContestRepo();
+const contestRepo = new ContestsRepo();
 
 
-async function createContest(data: {
+async function createContests(data: {
     name: string;
     description: string;
     rules: string;
@@ -33,7 +33,7 @@ async function getContestById(id: string) {
     }
 }
 
-async function getAllContest(data: {
+async function getAllContests(data: {
     skip: number,
     limit: number
 }) {
@@ -50,7 +50,7 @@ async function getAllContest(data: {
 }
 
 export {
-    createContest,
+    createContests,
     getContestById,
-    getAllContest
+    getAllContests
 }

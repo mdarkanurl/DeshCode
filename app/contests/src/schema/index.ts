@@ -1,27 +1,29 @@
 import {
-    createContest
+    createContests
 } from "./contest-schema";
 
 import {
-    createPaticipant
+    createPaticipants
 } from "./participant-schema";
 
-import { submitSolution } from "./submit-schema";
+import {
+    submissionsSolution
+} from "./submission-schema";
 
-const contestSchema = {
-    createContest
+const contestsSchema = {
+    createContests
 }
 
-const participantSchema = {
-    createPaticipant
+const participantsSchema = {
+    createPaticipants
 }
 
-const submitSchema = {
-    submitSolution
+const submissionsSchema = {
+    submissionsSolution
 }
 
 export {
-    contestSchema,
-    participantSchema,
-    submitSchema
+    contestsSchema,
+    participantsSchema,
+    submissionsSchema
 }

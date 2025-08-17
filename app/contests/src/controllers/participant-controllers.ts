@@ -1,15 +1,15 @@
 import { Request, Response, NextFunction } from "express";
-import { participantSchema } from "../schema";
-import { participantService } from "../services";
+import { participantsSchema } from "../schema";
+import { participantsService } from "../services";
 import { CustomError } from "../utils/errors/app-error";
 
-async function createParticipant(
+async function createParticipants(
     req: Request,
     res: Response,
     next: NextFunction
 ) {
     try {
-        const parseData: any = participantSchema.createPaticipant.safeParse(req.body);
+        const parseData: any = participantsSchema.createPaticipants.safeParse(req.body);
 
         if(!parseData.success) {
             res.status(400).json({
@@ -21,12 +21,12 @@ async function createParticipant(
             return;
         }
 
-        const participant = await participantService.createParticipant(parseData.data);
+        const participants = await participantsService.createParticipants(parseData.data);
 
         res.status(201).json({
             Success: true,
             Message: 'participant created successfully',
-            Data: participant,
+            Data: participants,
             Errors: {}
         });
         return;
@@ -37,5 +37,5 @@ async function createParticipant(
 }
 
 export {
-    createParticipant
+    createParticipants
 }

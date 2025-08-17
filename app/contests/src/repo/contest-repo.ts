@@ -2,14 +2,14 @@ import { CrudRepo } from "./crud-repo";
 import { prisma } from "../prisma";
 import { CustomError } from "../utils/errors/app-error";
 
-class ContestRepo extends CrudRepo {
+class ContestsRepo extends CrudRepo {
     constructor() {
-        super(prisma.contest)
+        super(prisma.contests)
     }
 
-    async getContestById(id: string, select?: {}) {
+    async getContestById(id: string) {
         try {
-            const contest = await prisma.contest.findUnique({
+            const contest = await prisma.contests.findUnique({
                 where: {
                     id
                 }
@@ -26,7 +26,7 @@ class ContestRepo extends CrudRepo {
 
     async getAllContestwithPagination(skip: number, take: number, select?: {}) {
         try {
-            const contests = await prisma.contest.findMany({
+            const contests = await prisma.contests.findMany({
                 skip,
                 take,
                 select: {
@@ -45,5 +45,5 @@ class ContestRepo extends CrudRepo {
 }
 
 export {
-    ContestRepo
+    ContestsRepo
 }
