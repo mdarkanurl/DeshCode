@@ -1,19 +1,28 @@
-import { createDiscuss, getAllDiscuss, getDiscussById, updateDiscuss } from "./discuss-services";
-import { createComment, getAllComments } from "./comment-services";
+import {
+    createDiscussions,
+    getAllDiscussions,
+    getDiscussionsById,
+    updateDiscussions
+} from "./discussions-services";
 
-const discussServices = {
-    createDiscuss,
-    getAllDiscuss,
-    getDiscussById,
-    updateDiscuss
+import {
+    createComments,
+    getAllComments
+} from "./comment-services";
+
+const discussionsServices = {
+    createDiscussions,
+    getAllDiscussions,
+    getDiscussionsById,
+    updateDiscussions
 }
 
-const commentServices = {
-    createComment,
+const commentsServices = {
+    createComments,
     getAllComments
 }
 
 export {
-    discussServices,
-    commentServices
+    discussionsServices,
+    commentsServices
 }

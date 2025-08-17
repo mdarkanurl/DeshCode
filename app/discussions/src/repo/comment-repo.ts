@@ -2,7 +2,7 @@ import { prisma } from "../prisma";
 import { CustomError } from "../utils/errors/app-error";
 import { CrudRepo } from "./crud-repo";
 
-class CommentRepo extends CrudRepo {
+class CommentsRepo extends CrudRepo {
     constructor() {
         super(prisma.comments);
     }
@@ -39,5 +39,5 @@ class CommentRepo extends CrudRepo {
 }
 
 export {
-    CommentRepo
+    CommentsRepo
 }

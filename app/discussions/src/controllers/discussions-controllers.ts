@@ -1,16 +1,16 @@
 import { Request, Response, NextFunction } from "express";
-import { discussSchema } from "../schema";
-import { discussServices } from "../services";
+import { discussionsSchema } from "../schema";
+import { discussionsServices } from "../services";
 import { CustomError } from "../utils/errors/app-error";
 import { Topic } from "../generated/prisma";
 
-async function createDiscuss(
+async function createDiscussions(
     req: Request,
     res: Response,
     next: NextFunction
 ) {
     try {
-        const parseData: any = discussSchema.createDiscuss.safeParse(req.body);
+        const parseData: any = discussionsSchema.createDiscussions.safeParse(req.body);
 
         if(!parseData.success) {
             res.status(400).json({
@@ -22,12 +22,12 @@ async function createDiscuss(
             return;
         }
 
-        const discuss = await discussServices.createDiscuss(parseData.data);
+        const discussions = await discussionsServices.createDiscussions(parseData.data);
 
         res.status(201).json({
             Success: true,
             Message: 'Discuss created successfully',
-            Data: discuss,
+            Data: discussions,
             Errors: {}
         });
         return;
@@ -37,7 +37,7 @@ async function createDiscuss(
     }
 }
 
-async function getAllDiscuss(
+async function getAllDiscussions(
     req: Request,
     res: Response,
     next: NextFunction
@@ -52,7 +52,7 @@ async function getAllDiscuss(
         
         if(topic && !Object.values(Topic).includes(topicEnum)) throw new CustomError('Invalid topic', 400);
 
-        const allDiscuss = await discussServices.getAllDiscuss(
+        const allDiscussions = await discussionsServices.getAllDiscussions(
             {
                 topic: topicEnum,
                 skip: skip,
@@ -62,8 +62,8 @@ async function getAllDiscuss(
 
         res.status(200).json({
             Success: true,
-            Message: 'All Discuss fetched successfully',
-            Data: allDiscuss,
+            Message: 'All discussions fetched successfully',
+            Data: allDiscussions,
             Errors: {}
         });
         return;
@@ -73,7 +73,7 @@ async function getAllDiscuss(
     }
 }
 
-async function getDiscussById(
+async function getDiscussionsById(
     req: Request,
     res: Response,
     next: NextFunction
@@ -81,12 +81,12 @@ async function getDiscussById(
     try {
         const { id } = req.params;
 
-        const discuss = await discussServices.getDiscussById({ id: parseInt(id) });
+        const discussions = await discussionsServices.getDiscussionsById({ id: parseInt(id) });
 
         res.status(200).json({
             Success: true,
-            Message: 'Discuss fetched successfully',
-            Data: discuss,
+            Message: 'Discussion fetched successfully',
+            Data: discussions,
             Errors: {}
         });
         return;
@@ -96,7 +96,7 @@ async function getDiscussById(
     }
 }
 
-async function updateDiscuss(
+async function updateDiscussions(
     req: Request,
     res: Response,
     next: NextFunction
@@ -104,7 +104,7 @@ async function updateDiscuss(
     try {
         const { id } = req.params;
         req.body.discussId = parseInt(id);
-        const parseData: any = discussSchema.updateDiscuss.safeParse((req.body));
+        const parseData: any = discussionsSchema.updateDiscussions.safeParse((req.body));
 
         if (!parseData.success) {
             res.status(400).json({
@@ -116,12 +116,12 @@ async function updateDiscuss(
             return;
         }
 
-        const discuss = await discussServices.updateDiscuss(parseData.data);
+        const discussions = await discussionsServices.updateDiscussions(parseData.data);
 
         res.status(200).json({
             Success: true,
             Message: 'Discuss updated successfully',
-            Data: discuss,
+            Data: discussions,
             Errors: {}
         });
         return;
@@ -132,8 +132,8 @@ async function updateDiscuss(
 }
 
 export {
-    createDiscuss,
-    getAllDiscuss,
-    getDiscussById,
-    updateDiscuss
+    createDiscussions,
+    getAllDiscussions,
+    getDiscussionsById,
+    updateDiscussions
 }

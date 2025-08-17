@@ -1,11 +1,11 @@
 import { z } from "zod";
 
-const createComment = z.object({
+const createComments = z.object({
     userId: z.string(),
     discussId: z.number(),
     content: z.string().min(3).max(500)
 });
 
 export {
-    createComment
+    createComments
 }

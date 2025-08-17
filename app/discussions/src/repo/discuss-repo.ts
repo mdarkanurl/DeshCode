@@ -1,12 +1,12 @@
 import { CrudRepo } from "./crud-repo";
 import { prisma } from "../prisma";
 
-class DiscussRepo extends CrudRepo {
+class DiscussionsRepo extends CrudRepo {
     constructor() {
-        super(prisma.discuss)
+        super(prisma.discussions)
     }
 }
 
 export {
-    DiscussRepo
+    DiscussionsRepo
 }

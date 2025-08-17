@@ -1,19 +1,28 @@
-import { createDiscuss, getAllDiscuss, getDiscussById, updateDiscuss } from "./discuss-controllers";
-import { createComment, getAllComments } from "./comment-controllers";
+import {
+    createDiscussions,
+    getAllDiscussions,
+    getDiscussionsById,
+    updateDiscussions
+} from "./discussions-controllers";
 
-const discussControllers = {
-    createDiscuss,
-    getAllDiscuss,
-    getDiscussById,
-    updateDiscuss
+import {
+    createComments,
+    getAllComments
+} from "./comments-controllers";
+
+const discussionsControllers = {
+    createDiscussions,
+    getAllDiscussions,
+    getDiscussionsById,
+    updateDiscussions
 };
 
-const commentControllers = {
-    createComment,
+const commentsControllers = {
+    createComments,
     getAllComments
 };
 
 export {
-    discussControllers,
-    commentControllers
+    discussionsControllers,
+    commentsControllers
 }

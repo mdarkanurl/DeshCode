@@ -1,14 +1,14 @@
-import { CommentRepo } from "../repo";
+import { CommentsRepo } from "../repo";
 import { CustomError } from "../utils/errors/app-error";
-const commentRepo = new CommentRepo();
+const commentsRepo = new CommentsRepo();
 
-async function createComment(data: {
+async function createComments(data: {
     userId: string;
     discussId: number;
     content: string;
 }) {
     try {
-        const comment = await commentRepo.create(data);
+        const comment = await commentsRepo.create(data);
         return comment;
     } catch (error) {
         if(error instanceof CustomError) throw error;
@@ -17,27 +17,27 @@ async function createComment(data: {
 }
 
 async function getAllComments(data: {
-    discussId: number;
+    discussionsId: number;
     skip: number;
     limit: number;
 }) {
     try {
         const whereClause: any = {
-            discussId: data.discussId
+            discussionsId: data.discussionsId
         };
 
-        const total = await commentRepo.count({ where: whereClause });
+        const total = await commentsRepo.count({ where: whereClause });
 
         if (total === 0) {
             throw new CustomError('No comments found', 404);
         }
 
-        const allDiscuss = await commentRepo.getAllWithPagination(
+        const allDiscussions = await commentsRepo.getAllWithPagination(
             whereClause,
             {
                 id: true,
                 userId: true,
-                discussId: true,
+                discussionsId: true,
                 content: true,
                 createdAt: false,
                 updatedAt: false,
@@ -47,7 +47,7 @@ async function getAllComments(data: {
         )
 
         return {
-            discussions: allDiscuss,
+            discussions: allDiscussions,
             pagination: {
                 totalDiscussions: total,
                 currentPage: Math.floor(data.skip / data.limit) + 1,
@@ -62,6 +62,6 @@ async function getAllComments(data: {
 }
 
 export {
-    createComment,
+    createComments,
     getAllComments
 }

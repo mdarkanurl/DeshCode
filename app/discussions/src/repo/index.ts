@@ -1,2 +1,2 @@
-export { DiscussRepo } from './discuss-repo';
-export { CommentRepo } from './comment-repo';
+export { DiscussionsRepo } from './discuss-repo';
+export { CommentsRepo } from './comment-repo';

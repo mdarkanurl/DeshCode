@@ -1,26 +1,26 @@
-import { DiscussRepo } from "../repo";
+import { DiscussionsRepo } from "../repo";
 import { Topic } from "../generated/prisma";
 import { CustomError } from "../utils/errors/app-error";
 import { prisma } from "../prisma";
 
-const discussRepo = new DiscussRepo();
+const discussionsRepo = new DiscussionsRepo();
 
-async function createDiscuss(data: {
+async function createDiscussions(data: {
     userId: string
     topic: Topic
     title: string
     content: string
 }) {
     try {
-        const discuss = await discussRepo.create(data);
-        return discuss;
+        const discussions = await discussionsRepo.create(data);
+        return discussions;
     } catch (error) {
         if(error instanceof CustomError) throw error;
         throw new CustomError('Internal Server Error', 500);
     }
 }
 
-async function getAllDiscuss(data: {
+async function getAllDiscussions(data: {
     topic?: Topic,
     skip: number,
     limit: number
@@ -32,11 +32,11 @@ async function getAllDiscuss(data: {
             whereClause.topic = data.topic;
         }
 
-        const total = await prisma.discuss.count({
+        const total = await prisma.discussions.count({
             where: whereClause
         });
 
-        const allDiscuss = await prisma.discuss.findMany({
+        const allDiscussions = await prisma.discussions.findMany({
             where: whereClause,
             select: {
                 id: true,
@@ -48,12 +48,12 @@ async function getAllDiscuss(data: {
             take: data.limit
         });
 
-        if(allDiscuss.length === 0) {
+        if(allDiscussions.length === 0) {
             throw new CustomError('No discussions found', 404);
         }
 
         return {
-            discussions: allDiscuss,
+            discussions: allDiscussions,
             pagination: {
                 totalDiscussions: total,
                 currentPage: Math.floor(data.skip / data.limit) + 1,
@@ -67,36 +67,36 @@ async function getAllDiscuss(data: {
     }
 }
 
-async function getDiscussById(data: {
+async function getDiscussionsById(data: {
     id: number
 }) {
     try {
-        const discuss = await discussRepo.getById(data.id);
+        const discussions = await discussionsRepo.getById(data.id);
 
-        if (!discuss) throw new CustomError('Discuss not found', 404);
-        return discuss;
+        if (!discussions) throw new CustomError('Discussion not found', 404);
+        return discussions;
     } catch (error) {
         if (error instanceof CustomError) throw error;
         throw new CustomError('Internal Server Error', 500);
     }
 }
 
-async function updateDiscuss(data: {
+async function updateDiscussions(data: {
     id: number
     title?: string
     content?: string
 }) {
     try {
-        const discuss = await discussRepo.update(data.id, {
+        const discussions = await discussionsRepo.update(data.id, {
             title: data.title,
             content: data.content
         });
 
-        if (!discuss) {
-            const isDiscussExists = await discussRepo.getById(data.id);
-            if (!isDiscussExists) throw new CustomError('Discuss not found', 404);
+        if (!discussions) {
+            const isDiscussionsExists = await discussionsRepo.getById(data.id);
+            if (!isDiscussionsExists) throw new CustomError('Discussion not found', 404);
         }
-        return discuss;
+        return discussions;
     } catch (error) {
         if (error instanceof CustomError) throw error;
         throw new CustomError('Internal Server Error', 500);
@@ -104,8 +104,8 @@ async function updateDiscuss(data: {
 }
 
 export {
-    createDiscuss,
-    getAllDiscuss,
-    getDiscussById,
-    updateDiscuss
+    createDiscussions,
+    getAllDiscussions,
+    getDiscussionsById,
+    updateDiscussions
 }

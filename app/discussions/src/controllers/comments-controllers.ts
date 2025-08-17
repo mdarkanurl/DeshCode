@@ -1,15 +1,15 @@
 import { Request, Response, NextFunction } from "express";
-import { commentSchema } from "../schema";
-import { commentServices } from "../services";
+import { commentsSchema } from "../schema";
+import { commentsServices } from "../services";
 import { CustomError } from "../utils/errors/app-error";
 
-async function createComment(
+async function createComments(
     req: Request,
     res: Response,
     next: NextFunction
 ) {
     try {
-        const parseData = commentSchema.createComment.safeParse(req.body);
+        const parseData = commentsSchema.createComments.safeParse(req.body);
 
         if (!parseData.success) {
            res.status(400).json({
@@ -21,7 +21,7 @@ async function createComment(
             return;
         }
 
-        const comments = await commentServices.createComment(parseData.data);
+        const comments = await commentsServices.createComments(parseData.data);
 
         res.status(201).json({
             Success: true,
@@ -42,14 +42,14 @@ async function getAllComments(
     next: NextFunction
 ) {
     try {
-        const { page, limit, discussId } = req.query;
+        const { page, limit, discussionsId } = req.query;
 
         const limitNumber = parseInt(limit as string) || 5;
         const pageNumber = parseInt(page as string) || 1;
         const skip = (pageNumber - 1) * limitNumber;
 
-        const allComments = await commentServices.getAllComments({
-            discussId: parseInt(discussId as string),
+        const allComments = await commentsServices.getAllComments({
+            discussionsId: parseInt(discussionsId as string),
             skip: skip,
             limit: limitNumber
         });
@@ -68,6 +68,6 @@ async function getAllComments(
 }
 
 export {
-    createComment,
+    createComments,
     getAllComments
 }

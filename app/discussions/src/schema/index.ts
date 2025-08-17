@@ -1,16 +1,16 @@
-import { createDiscuss, updateDiscuss } from "./discuss-schema";
-import { createComment } from "./comment-schema";
+import { createDiscussions, updateDiscussions } from "./discussions-schema";
+import { createComments } from "./comments-schema";
 
-const discussSchema = {
-    createDiscuss,
-    updateDiscuss
+const discussionsSchema = {
+    createDiscussions,
+    updateDiscussions
 }
 
-const commentSchema = {
-    createComment
+const commentsSchema = {
+    createComments
 }
 
 export {
-    discussSchema,
-    commentSchema
+    discussionsSchema,
+    commentsSchema
 }
