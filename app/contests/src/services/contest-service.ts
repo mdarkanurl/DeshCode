@@ -7,14 +7,11 @@ async function createContests(data: {
     name: string;
     description: string;
     rules: string;
-    problemIds: string[];
+    problemsId: string[];
     startDate: Date;
     endDate: Date;
 }) {
     try {
-        // const isValidTime = data.endDate > data.startDate;
-        // if (isValidTime) throw new CustomError("Invalid time", 400);
-
         const contests = await contestRepo.create(data);
         return contests;
     } catch (error: any) {
