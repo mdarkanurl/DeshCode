@@ -13,7 +13,6 @@ export class CrudRepo {
                 data: { ...data }
             });
         } catch (error) {
-            console.log(error);
             throw new CustomError("Failed to create record from repo", 500);
         }
     }

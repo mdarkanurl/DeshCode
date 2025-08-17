@@ -61,8 +61,8 @@ model Problems {
 model Submissions {
   id         Int      @id @default(autoincrement())
   userId     Int
-  problemId  String
-  problem    Problems  @relation(fields: [problemId], references: [id])
+  problemsId  String
+  problems    Problems  @relation(fields: [problemsId], references: [id])
   status     SubmissionsStatus
   language   String
   code   String

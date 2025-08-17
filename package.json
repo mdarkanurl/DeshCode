@@ -24,19 +24,20 @@
   "dependencies": {
     "@prisma/client": "^6.10.1",
     "amqplib": "^0.10.8",
+    "axios": "^1.11.0",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",
     "p-limit": "^6.2.0",
     "prisma": "^6.10.1",
+    "redis": "^5.8.1",
     "uuid": "^11.1.0",
-    "zod": "^3.25.67",
-    "axios": "^1.11.0"
+    "zod": "^3.25.67"
   },
   "devDependencies": {
-    "@types/amqplib": "^0.10.7",
     "@babel/core": "^7.28.3",
     "@babel/generator": "^7.28.0",
     "@babel/parser": "^7.28.0",
+    "@types/amqplib": "^0.10.7",
     "@types/babel__core": "^7.20.5",
     "@types/babel__generator": "^7.27.0",
     "@types/babel__parser": "^7.0.0",

@@ -2,7 +2,7 @@ import { submissionsSchema } from "../schema";
 import { submissionsServices } from "../services";
 import { CustomError } from "../utils/errors/app-error";
 import { Request, Response, NextFunction } from "express";
-import { submissionsStatus } from "../generated/prisma";
+import { SubmissionsStatus } from "../generated/prisma";
 
 
 async function submissionsSolution(
@@ -60,15 +60,15 @@ async function getSubmissionsById(
 
         const status = submissions.status;
         const messageMap: any = {
-            [submissionsStatus.PENDING]: 'Submission is pending.',
-            [submissionsStatus.ACCEPTED]: 'Submission accepted successfully.',
-            [submissionsStatus.WRONG_ANSWER]: 'Submission returned wrong answer.',
-            [submissionsStatus.EXECUTION_ERROR]: 'Submission encountered a runtime error.',
-            [submissionsStatus.TIME_OUT]: 'Submission timed out.',
-            [submissionsStatus.FAILED]: 'Submission failed.',
-            [submissionsStatus.INTERNAL_ERROR]: 'Submission encountered an internal error.',
-            [submissionsStatus.INVALID_FUNCTION_SIGNATURE]: 'Submission has an invalid function signature.',
-            [submissionsStatus.LANGUAGE_NOT_SUPPORTED]: 'Submission language is not supported.',
+            [SubmissionsStatus.PENDING]: 'Submission is pending.',
+            [SubmissionsStatus.ACCEPTED]: 'Submission accepted successfully.',
+            [SubmissionsStatus.WRONG_ANSWER]: 'Submission returned wrong answer.',
+            [SubmissionsStatus.EXECUTION_ERROR]: 'Submission encountered a runtime error.',
+            [SubmissionsStatus.TIME_OUT]: 'Submission timed out.',
+            [SubmissionsStatus.FAILED]: 'Submission failed.',
+            [SubmissionsStatus.INTERNAL_ERROR]: 'Submission encountered an internal error.',
+            [SubmissionsStatus.INVALID_FUNCTION_SIGNATURE]: 'Submission has an invalid function signature.',
+            [SubmissionsStatus.LANGUAGE_NOT_SUPPORTED]: 'Submission language is not supported.',
         };
 
         res.status(200).json({

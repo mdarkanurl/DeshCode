@@ -13,6 +13,7 @@ export class CrudRepo {
                 data: { ...data }
             });
         } catch (error) {
+            console.error("Error creating record:", error);
             throw new CustomError("Failed to create record", 500);
         }
     }
@@ -63,6 +64,7 @@ export class CrudRepo {
                 data: { ...data },
             });
         } catch (error) {
+            console.log("Error updating record:", error);
             throw new CustomError("Failed to update record", 500);
         }
     }

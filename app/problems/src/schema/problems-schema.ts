@@ -14,7 +14,7 @@ export const createProblemsSchema = z.object({
     input: z.array(z.any()),
     expected: z.any()
   })),
-  problemTypes: problemsTypesEnum,
+  problemsTypes: problemsTypesEnum,
   tags: z.array(z.string()).optional()
 });
 
