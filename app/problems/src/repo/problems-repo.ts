@@ -1,3 +1,4 @@
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 import { prisma } from "../prisma"
 import { CustomError } from "../utils/errors/app-error";
 import { CrudRepo } from "./crud-repo"
@@ -28,17 +29,18 @@ class ProblemsRepo extends CrudRepo {
         }
     }
 
-    async updateById(id: string, data: Object, select?: {}) {
+    async updateById(id: string, data: Object) {
         try {
-            return prisma.problems.update({
+            const problems = await prisma.problems.update({
                 where: { id },
-                data: { ...data },
-                select: {
-                    ...select
-                }
+                data: { ...data }
             });
-        } catch (error) {
-            throw new CustomError("Failed to create record", 500);
+            return problems;
+        } catch (error: any) {
+            if (error.code === "P2025") {
+                throw new CustomError("Problem not found", 404);
+            }
+            throw new CustomError("Failed to update record", 500);
         }
     }
 }

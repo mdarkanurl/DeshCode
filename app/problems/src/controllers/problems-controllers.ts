@@ -144,7 +144,7 @@ async function updateProblem(
         const parseData = problemsSchema.updateProblemsSchema.safeParse(req.body);
         const problemId = req.params.id as string;
 
-        if(!parseData.success || req.body === null || undefined || !problemId) {
+        if(!parseData.success || Object.keys(req.body).length === 0 || !problemId) {
             res.status(400).json({
                 Success: false,
                 Message: 'Invalid input',

@@ -52,9 +52,7 @@ async function getAllProblems(
     }
 ) {
     try {
-        const whereClause: any = {
-            isVisible: true
-        };
+        const whereClause: any = {};
 
         if (data.difficulty !== undefined) {
             whereClause.difficulty = data.difficulty;
@@ -68,12 +66,15 @@ async function getAllProblems(
             whereClause.language = { hasSome: data.language };
         }
 
-        
-
-        // Get total count for pagination
-        const total = await prisma.problems.count({
-            where: whereClause
-        });
+        let total = 0;
+        try {
+            // Get total count for pagination
+            total = await prisma.problems.count({
+                where: whereClause
+            });
+        } catch (error) {
+           throw new CustomError('Internal server error', 500); 
+        }
 
         // Get all problems from Database
         const problems = await prisma.problems.findMany({
@@ -137,16 +138,10 @@ async function updateProblems(
     }
 ) {
     try {
-        const problems = await problemsRepo.updateById(
+        return await problemsRepo.updateById(
             data.id,
             data.data
         );
-
-        if(!problems) {
-            throw new CustomError('Problem can not update. Please check problem ID', 404);
-        }
-
-        return problems;
     } catch (error) {
         if(error instanceof CustomError) throw error;
         throw new CustomError('Internal Server Error', 500);
