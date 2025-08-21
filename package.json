@@ -3,11 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev:problems": "ts-node app/problems/src/app.ts",
     "dev:discussions": "ts-node app/discussions/src/app.ts",
     "dev:contests": "ts-node app/contests/src/app.ts",
-    "dev:contestsworker": "ts-node app/contests/src/worker/index.ts",
-    "dev:problemsWorker": "ts-node app/problems/src/worker/index.ts"
+    "dev:contestsworker": "ts-node app/contests/src/worker/index.ts"
   },
   "repository": {
     "type": "git",
