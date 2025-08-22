@@ -1,0 +1,24 @@
+{
+  "id": "n-queens",
+  "title": "N‑Queens",
+  "description": "The n-queens puzzle is the problem of placing n queens on an n×n chessboard so that no two queens threaten each other (i.e., no two share the same row, column, or diagonal). Return all distinct board configurations of such placements, using 'Q' for queens and '.' for empty spaces.",
+  "functionName": "solveNQueens",
+  "language": ["javascript", "python"],
+  "difficulty": "HARD",
+  "testCases": [
+    {
+      "input": [4],
+      "expected": [
+        [".Q..","...Q","Q...","..Q."],
+        ["..Q.","Q...","...Q",".Q.."]
+      ]
+    },
+    {
+      "input": [1],
+      "expected": [
+        ["Q"]
+      ]
+    }
+  ],
+  "problemsTypes": "Arrays_and_Strings"
+}

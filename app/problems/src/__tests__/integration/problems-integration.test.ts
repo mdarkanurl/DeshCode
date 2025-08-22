@@ -1,5 +1,6 @@
 import supertest from "supertest";
 import dotenv from 'dotenv';
+import { problemsData } from "../data/problems-data";
 import app from "../../index";
 dotenv.config({ path: '.env' });
 
@@ -15,9 +16,9 @@ describe('Problems routes', () => {
   it('Should create a problems', async () => {
     const response = await supertest(app)
       .post('/api/v1/problems')
-      .send()
+      .send(problemsData.nQueens)
       expect(response.body.Success).toEqual(true);
-      expect(response.body.Message).toEqual("No problems found");
+      expect(response.body.Message).toEqual("Problem created successfully");
       expect(response.status).toEqual(201);
   });
 });
