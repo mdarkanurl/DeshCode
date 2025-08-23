@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ProblemsTypes } from "../generated/prisma";
+import { ProblemsTypes } from "@prisma/client";
 
 const problemsTypesEnum = z.enum([...(Object.values(ProblemsTypes) as [string, ...string[]])]);
 

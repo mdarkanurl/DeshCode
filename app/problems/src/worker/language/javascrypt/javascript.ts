@@ -6,7 +6,7 @@ import { SubmissionsRepo } from "../../../repo";
 import { prepareCodeWithBabel } from "./babel/prepareCodeWithBabel";
 import { runDocker } from "../../utils/dockerRunner";
 import { isDeepStrictEqual } from "util";
-import { SubmissionsStatus } from "../../../generated/prisma";
+import { SubmissionsStatus } from "@prisma/client";
 
 const submissionsRepo = new SubmissionsRepo();
 

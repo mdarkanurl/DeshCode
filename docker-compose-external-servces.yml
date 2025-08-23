@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  problems-db:
+    image: postgres:17-alpine
+    container_name: problems-db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 6081
+      POSTGRES_DB: problems_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - devohh-network
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"   # RabbitMQ protocol
+      - "15672:15672" # RabbitMQ Management Dashboard
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - devohh-network
+
+
+volumes:
+  db-data:
+  rabbitmq-data:
+
+networks:
+  devohh-network:
+    external: true

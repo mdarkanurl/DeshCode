@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  problems-api:
+    build:
+      context: ./app/problems      # Where Docker should look for files
+      dockerfile: Dockerfile
+    container_name: problems-api
+    environment:
+      - NODE_ENV=development
+      - PROBLEMS_DATABASE_URL=postgresql://postgres:6081@problems-db:5432/problems_db
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+    command: pnpm run start:api
+    ports:
+      - "3000:3000"
+    networks:
+      - devohh-network
+
+  problems-worker:
+    build:
+      context: ./app/problems      # Where Docker should look for files
+      dockerfile: Dockerfile
+    container_name: problems-worker
+    environment:
+      - NODE_ENV=development
+      - PROBLEMS_DATABASE_URL=postgresql://postgres:6081@problems-db:5432/problems_db
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+    command: pnpm run start:worker
+    ports:
+      - "4000:4000"
+    networks:
+      - devohh-network
+
+networks:
+  devohh-network:
+    external: true

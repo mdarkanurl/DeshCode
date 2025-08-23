@@ -1,7 +1,7 @@
 import supertest from "supertest";
 import dotenv from 'dotenv';
 import { problemsData } from "../data/problems-data";
-import app from "../../index";
+import app from "../../src/index";
 dotenv.config({ path: '.env' });
 
 describe('Problems routes', () => {

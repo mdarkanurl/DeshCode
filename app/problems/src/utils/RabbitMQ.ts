@@ -1,12 +1,14 @@
 import amqplib from "amqplib";
 import { ProblemsTypes } from "../generated/prisma";
+import dotenv from "dotenv";
+dotenv.config();
 
 let channel: amqplib.Channel;
 const EXCHANGE = 'problems_exchange';
 const EXCHANGE_TYPE = 'direct';
 
 async function connect() {
-  const conn = await amqplib.connect('amqp://localhost');
+  const conn = await amqplib.connect(process.env.RABBITMQ_URL || 'amqp://localhost');
   channel = await conn.createChannel();
 
   await channel.assertExchange(EXCHANGE, EXCHANGE_TYPE, { durable: false });

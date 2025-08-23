@@ -2,7 +2,7 @@ import { submissionsSchema } from "../schema";
 import { submissionsServices } from "../services";
 import { CustomError } from "../utils/errors/app-error";
 import { Request, Response, NextFunction } from "express";
-import { SubmissionsStatus } from "../generated/prisma";
+import { SubmissionsStatus } from "@prisma/client";
 
 
 async function submissionsSolution(
