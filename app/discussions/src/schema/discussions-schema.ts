@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { Topic } from "../generated/prisma";
+import { Topic } from "@prisma/client";
 
 export const createDiscussions = z.object({
     userId: z.string(),

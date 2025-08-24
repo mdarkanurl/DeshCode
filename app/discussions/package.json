@@ -4,7 +4,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "ts-node src/app.ts"
+    "prisma:generate": "prisma generate",
+    "dev": "ts-node src/app.ts",
+    "build": "tsc",
+    "start:api": "node dist/app.js"
   },
   "keywords": [],
   "author": "",

@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { discussionsSchema } from "../schema";
 import { discussionsServices } from "../services";
 import { CustomError } from "../utils/errors/app-error";
-import { Topic } from "../generated/prisma";
+import { Topic } from "@prisma/client";
 
 async function createDiscussions(
     req: Request,

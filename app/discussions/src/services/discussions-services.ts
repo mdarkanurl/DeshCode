@@ -1,5 +1,5 @@
 import { DiscussionsRepo } from "../repo";
-import { Topic } from "../generated/prisma";
+import { Topic } from "@prisma/client";
 import { CustomError } from "../utils/errors/app-error";
 import { prisma } from "../prisma";
 

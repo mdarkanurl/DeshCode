@@ -32,6 +32,20 @@ services:
     networks:
       - devohh-network
 
+  discussions-api:
+    build:
+      context: ./app/discussions
+      dockerfile: Dockerfile
+    container_name: discussions-api
+    environment:
+      - NODE_ENV=development
+      - DISCUSSIONS_DATABASE_URL=postgresql://postgres:6081@problems-db:5432/discussions_db
+    command: pnpm run start:api
+    ports:
+      - "3001:3001"
+    networks:
+      - devohh-network
+
 networks:
   devohh-network:
     external: true
