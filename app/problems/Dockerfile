@@ -1,5 +1,14 @@
-# Use Node.js Alpine base image
-FROM node:20-alpine
+# 1️⃣ Base image: Docker-in-Docker (DinD)
+FROM docker:24.0-dind
+
+# 2️⃣ Install Node.js and other tools
+RUN apk add --no-cache \
+    nodejs \
+    npm \
+    git \
+    bash \
+    curl \
+    build-base
 
 # Set working directory
 WORKDIR /app
