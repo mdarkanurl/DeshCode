@@ -24,14 +24,11 @@ class ContestsRepo extends CrudRepo {
         }
     }
 
-    async getAllContestwithPagination(skip: number, take: number, select?: {}) {
+    async getAllContestwithPagination(skip: number, take: number) {
         try {
             const contests = await prisma.contests.findMany({
                 skip,
-                take,
-                select: {
-                    ...select
-                }
+                take
             });
 
             if(contests.length == 0) throw new CustomError("No contest found", 404);

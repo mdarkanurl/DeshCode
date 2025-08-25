@@ -5,10 +5,14 @@ import {
 } from "./contest-controllers";
 
 import {
-    createParticipants
+    createParticipants,
+    getParticipantsByContestId
 } from "./participant-controllers";
 
-import { submitSolution } from "./submission-controllers";
+import {
+    submitSolution,
+    getSubmission
+} from "./submission-controllers";
 
 const contestsControllers = {
     createContests,
@@ -17,11 +21,13 @@ const contestsControllers = {
 }
 
 const participantsControllers = {
-    createParticipants
+    createParticipants,
+    getParticipantsByContestId
 }
 
 const submissionsControllers = {
-    submitSolution
+    submitSolution,
+    getSubmission
 }
 
 export {

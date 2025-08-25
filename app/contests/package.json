@@ -1,0 +1,50 @@
+{
+  "name": "contests",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "dev": "ts-node src/app.ts",
+    "dev:worker": "ts-node src/worker/index.ts",
+    "build": "tsc",
+    "prisma:generate": "prisma generate",
+    "start:api": "node dist/app.js",
+    "start:worker": "node dist/worker/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.14.0",
+  "dependencies": {
+    "@babel/traverse": "^7.28.3",
+    "@prisma/client": "^6.14.0",
+    "amqplib": "^0.10.8",
+    "axios": "^1.11.0",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "prisma": "^6.14.0",
+    "uuid": "^11.1.0",
+    "zod": "3.25.67"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.0",
+    "@babel/generator": "^7.28.0",
+    "@babel/parser": "^7.28.0",
+    "@babel/types": "^7.28.2",
+    "@types/amqplib": "^0.10.7",
+    "@types/babel__core": "^7.20.5",
+    "@types/babel__generator": "^7.27.0",
+    "@types/babel__parser": "^7.0.0",
+    "@types/babel__traverse": "^7.20.7",
+    "@types/express": "^5.0.3",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.3.0",
+    "@types/supertest": "^6.0.3",
+    "jest": "^30.0.5",
+    "supertest": "^7.1.4",
+    "ts-jest": "^29.4.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  }
+}

@@ -8,7 +8,7 @@ config();
 const submissionsRepo = new SubmissionsRepo();
 
 async function submissionsSolution(data: {
-    participantId: string,
+    participantId?: string,
     contestId: string,
     problemId: string,
     language: string,
@@ -59,11 +59,26 @@ async function submissionsSolution(data: {
             status: submissions.status
         }
     } catch (error) {
+        console.log(error);
         if(error instanceof CustomError) throw error;
         throw new CustomError('Internal Server Error', 500);
     }
 }
 
+async function getSubmission(id: number) {
+    try {
+        const submission = await submissionsRepo.getById(id);
+        if (!submission) {
+            throw new CustomError("Submission not found", 404);
+        }
+        return submission;
+    } catch (error) {
+        if (error instanceof CustomError) throw error;
+        throw new CustomError("Internal Server Error", 500);
+    }
+}
+
 export {
-    submissionsSolution
+    submissionsSolution,
+    getSubmission
 }

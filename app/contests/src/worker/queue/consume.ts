@@ -1,7 +1,10 @@
 import amqplib from "amqplib";
-import { ProblemsTypes } from "../../generated/prisma"; // Assuming this is an enum
+import { config } from "dotenv";
+import { ProblemsTypes } from "@prisma/client";
 import { languageExecutors } from "../language/languageExecutors";
 import { SubmissionsRepo } from "../../repo/index";
+
+config({ path: ".env" });
 
 const submissionsRepo = new SubmissionsRepo();
 
@@ -9,7 +12,7 @@ const EXCHANGE = "contests_exchange";
 const EXCHANGE_TYPE = "direct";
 
 export async function consume(problemsType: ProblemsTypes) {
-  const conn = await amqplib.connect("amqp://localhost");
+  const conn = await amqplib.connect(process.env.RABBITMQ_URL || "amqp://localhost");
   const channel = await conn.createChannel();
 
   const queueName = problemsType;

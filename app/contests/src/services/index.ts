@@ -5,11 +5,13 @@ import {
 } from "./contest-service";
 
 import {
-    createParticipants
+    createParticipants,
+    getParticipantsByContestId
 } from "./participant-service";
 
 import {
-    submissionsSolution
+    submissionsSolution,
+    getSubmission
 } from "./submission-services";
 
  const contestsService = {
@@ -19,11 +21,13 @@ import {
 }
 
 const participantsService = {
-    createParticipants
+    createParticipants,
+    getParticipantsByContestId
 }
 
 const submissionsService = {
-    submissionsSolution
+    submissionsSolution,
+    getSubmission
 }
 
  export {

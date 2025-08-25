@@ -1,12 +1,15 @@
 import amqplib from "amqplib";
-import { ProblemsTypes } from "../generated/prisma";
+import { config } from "dotenv";
+import { ProblemsTypes } from "@prisma/client";
+
+config({ path: ".env" });
 
 let channel: amqplib.Channel;
 const EXCHANGE = 'contests_exchange';
 const EXCHANGE_TYPE = 'direct';
 
 async function connect() {
-  const conn = await amqplib.connect('amqp://localhost');
+  const conn = await amqplib.connect(process.env.RABBITMQ_URL || 'amqp://localhost');
   channel = await conn.createChannel();
 
   await channel.assertExchange(EXCHANGE, EXCHANGE_TYPE, { durable: false });

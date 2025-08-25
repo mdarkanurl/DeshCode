@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -52,8 +51,8 @@ model Contests {
 
 model Submissions {
   id         Int      @id @default(autoincrement())
-  participantId     String
-  participants Participants @relation(fields: [participantId], references: [id])
+  participantId     String?
+  participants Participants? @relation(fields: [participantId], references: [id])
   problemsId  String
   status     SubmissionsStatus
   language   String
@@ -68,7 +67,7 @@ model Submissions {
 model Participants {
   id        String  @id @default(cuid())
   contestId String
-  userId    String
+  userId    String  @unique
 
   contest   Contests  @relation(fields: [contestId], references: [id])
   Submissions Submissions[]
