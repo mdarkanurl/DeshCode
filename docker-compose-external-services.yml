@@ -1,9 +1,9 @@
 version: "3.8"
 
 services:
-  problems-db:
+  Database:
     image: postgres:17-alpine
-    container_name: problems-db
+    container_name: Database
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 6081
@@ -19,8 +19,8 @@ services:
     image: rabbitmq:3-management
     container_name: rabbitmq
     ports:
-      - "5672:5672"   # RabbitMQ protocol
-      - "15672:15672" # RabbitMQ Management Dashboard
+      - "5672:5672"
+      - "15672:15672"
     environment:
       RABBITMQ_DEFAULT_USER: guest
       RABBITMQ_DEFAULT_PASS: guest
