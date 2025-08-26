@@ -44,19 +44,6 @@ class ParticipantsRepo extends CrudRepo {
             throw new CustomError("Failed to retrieve participants", 500);
         }
     }
-
-    async getParticipantsByUserId(data: { userId: string }) {
-        try {
-            return await prisma.participants.findMany({
-                where: {
-                    userId: data.userId
-                }
-            });
-        } catch (error) {
-            if (error instanceof CustomError) throw error;
-            throw new CustomError("Failed to retrieve participants", 500);
-        }
-    }
 }
 
 export {
