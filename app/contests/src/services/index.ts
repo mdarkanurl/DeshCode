@@ -6,7 +6,8 @@ import {
 
 import {
     createParticipants,
-    getParticipantsByContestId
+    getParticipantsByContestId,
+    getParticipantsByUserId
 } from "./participant-service";
 
 import {
@@ -22,7 +23,8 @@ import {
 
 const participantsService = {
     createParticipants,
-    getParticipantsByContestId
+    getParticipantsByContestId,
+    getParticipantsByUserId
 }
 
 const submissionsService = {
