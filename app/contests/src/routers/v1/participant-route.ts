@@ -4,6 +4,5 @@ const router = Router();
 
 router.post('/', participantsControllers.createParticipants);
 router.get('/:contestId', participantsControllers.getParticipantsByContestId);
-router.get('/:userId', participantsControllers.getParticipantsByUserId);
 
 export default router;

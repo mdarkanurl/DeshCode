@@ -6,8 +6,7 @@ import {
 
 import {
     createParticipants,
-    getParticipantsByContestId,
-    getParticipantsByUserId
+    getParticipantsByContestId
 } from "./participant-controllers";
 
 import {
@@ -23,8 +22,7 @@ const contestsControllers = {
 
 const participantsControllers = {
     createParticipants,
-    getParticipantsByContestId,
-    getParticipantsByUserId
+    getParticipantsByContestId
 }
 
 const submissionsControllers = {

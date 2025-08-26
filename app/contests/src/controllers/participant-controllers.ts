@@ -69,41 +69,7 @@ async function getParticipantsByContestId(
     }
 }
 
-async function getParticipantsByUserId(
-    req: Request,
-    res: Response,
-    next: NextFunction
-) {
-    try {
-        const { userId } = req.params as { userId: string };
-
-        if(!userId) {
-            res.status(400).json({
-                Success: false,
-                Message: 'Invalid input',
-                Data: {},
-                Errors: { userId: 'User ID is required' }
-            });
-            return;
-        }
-
-        const participants = await participantsService.getParticipantsByUserId({ userId });
-
-        res.status(200).json({
-            Success: true,
-            Message: 'Participants retrieved successfully',
-            Data: participants,
-            Errors: {}
-        });
-        return;
-    } catch (error) {
-        if (error instanceof CustomError) return next(error);
-        return next(new CustomError('Internal Server Error', 500));
-    }
-}
-
 export {
     createParticipants,
-    getParticipantsByContestId,
-    getParticipantsByUserId
+    getParticipantsByContestId
 }
