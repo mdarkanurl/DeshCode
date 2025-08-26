@@ -19,8 +19,7 @@ class ContestsRepo extends CrudRepo {
             return contest;
         } catch (error) {
             if(error instanceof CustomError) throw error;
-            console.log(error);
-            throw new CustomError("Faild to fatch contest data", 500)
+            throw new CustomError("Failed to fetch contest data", 500)
         }
     }
 
@@ -36,7 +35,7 @@ class ContestsRepo extends CrudRepo {
             return contests;
         } catch (error) {
             if(error instanceof CustomError) throw error;
-            throw new CustomError("Faild to fatch contest data", 500)
+            throw new CustomError("Failed to fetch contest data", 500)
         }
     }
 }
