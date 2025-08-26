@@ -9,6 +9,7 @@ const submissionsRepo = new SubmissionsRepo();
 
 async function submissionsSolution(data: {
     participantId?: string,
+    userId: string,
     contestId: string,
     problemId: string,
     language: string,
@@ -36,6 +37,7 @@ async function submissionsSolution(data: {
 
         const submissions = await submissionsRepo.create({
             participantId: data.participantId,
+            userId: data.userId,
             problemsId: problems.data.Data.id,
             status: "PENDING",
             language: data.language,

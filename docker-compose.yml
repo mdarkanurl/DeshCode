@@ -16,35 +16,35 @@ services:
     networks:
       - devohh-network
 
-  problems-worker:
-    build:
-      context: ./app/problems
-      dockerfile: Dockerfile
-    container_name: problems-worker
-    privileged: true
-    environment:
-      - NODE_ENV=development
-      - PROBLEMS_DATABASE_URL=postgresql://postgres:6081@Database:5432/problems_db
-      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
-    command: pnpm run start:worker
-    ports:
-      - "4000:4000"
-    networks:
-      - devohh-network
+  # problems-worker:
+  #   build:
+  #     context: ./app/problems
+  #     dockerfile: Dockerfile
+  #   container_name: problems-worker
+  #   privileged: true
+  #   environment:
+  #     - NODE_ENV=development
+  #     - PROBLEMS_DATABASE_URL=postgresql://postgres:6081@Database:5432/problems_db
+  #     - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+  #   command: sh -c "dockerd-entrypoint.sh & sleep 5 && pnpm run start:worker"
+  #   ports:
+  #     - "4000:4000"
+  #   networks:
+  #     - devohh-network
 
-  discussions-api:
-    build:
-      context: ./app/discussions
-      dockerfile: Dockerfile
-    container_name: discussions-api
-    environment:
-      - NODE_ENV=development
-      - DISCUSSIONS_DATABASE_URL=postgresql://postgres:6081@Database:5432/discussions_db
-    command: pnpm run start:api
-    ports:
-      - "3001:3001"
-    networks:
-      - devohh-network
+  # discussions-api:
+  #   build:
+  #     context: ./app/discussions
+  #     dockerfile: Dockerfile
+  #   container_name: discussions-api
+  #   environment:
+  #     - NODE_ENV=development
+  #     - DISCUSSIONS_DATABASE_URL=postgresql://postgres:6081@Database:5432/discussions_db
+  #   command: pnpm run start:api
+  #   ports:
+  #     - "3001:3001"
+  #   networks:
+  #     - devohh-network
 
   contests-api:
     build:
@@ -55,6 +55,7 @@ services:
       - NODE_ENV=development
       - CONTESTS_DATABASE_URL=postgresql://postgres:6081@Database:5432/contests_db
       - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+      - PROBLEM_SERVICE_URL=http://problems-api:3000
     command: pnpm run start:api
     ports:
       - "3002:3002"
@@ -66,11 +67,12 @@ services:
       context: ./app/contests
       dockerfile: Dockerfile
     container_name: contests-worker
+    privileged: true
     environment:
       - NODE_ENV=development
       - CONTESTS_DATABASE_URL=postgresql://postgres:6081@Database:5432/contests_db
       - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
-    command: pnpm run start:worker
+    command: sh -c "dockerd-entrypoint.sh & sleep 5 && pnpm run start:worker"
     ports:
       - "3010:3010"
     networks:

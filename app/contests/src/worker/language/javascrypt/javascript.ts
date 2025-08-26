@@ -88,7 +88,7 @@ export const JavaScript = async (
       }
 
       const result = runDocker({
-        image: "leetcode-js",
+        image: "thearkan/node.js",
         command: ["timeout", "8s", "node", "runner.js", JSON.stringify(input)],
         mountDir: tempDir,
       });

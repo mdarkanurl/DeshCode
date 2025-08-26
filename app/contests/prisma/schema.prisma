@@ -53,6 +53,7 @@ model Submissions {
   id         Int      @id @default(autoincrement())
   participantId     String?
   participants Participants? @relation(fields: [participantId], references: [id])
+  userId    String
   problemsId  String
   status     SubmissionsStatus
   language   String

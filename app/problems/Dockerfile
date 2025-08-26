@@ -4,7 +4,11 @@ FROM docker:24.0-dind
 # 2️⃣ Install Node.js and other tools
 RUN apk add --no-cache \
     nodejs \
-    npm
+    npm \
+    git \
+    bash \
+    curl \
+    build-base
 
 # Set working directory
 WORKDIR /app

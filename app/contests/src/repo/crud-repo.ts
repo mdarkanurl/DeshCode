@@ -13,6 +13,7 @@ export class CrudRepo {
                 data: { ...data }
             });
         } catch (error) {
+            console.log(error);
             throw new CustomError("Failed to create record", 500);
         }
     }
@@ -58,11 +59,12 @@ export class CrudRepo {
 
     async update(id: number, data: object) {
         try {
-            return await this.model.update({
+            return await this.model.updateMany({
                 where: { id },
-                data: { ...data },
+                data,
             });
         } catch (error) {
+            console.log("Error updating record:", error);
             throw new CustomError("Failed to update record", 500);
         }
     }
