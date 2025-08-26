@@ -46,19 +46,35 @@ services:
     networks:
       - devohh-network
 
-  # contests-api:
-  #   build:
-  #     context: ./app/contests
-  #     dockerfile: Dockerfile
-  #   container_name: contests-api
-  #   environment:
-  #     - NODE_ENV=development
-  #     - CONTESTS_DATABASE_URL=postgresql://postgres:6081@Database:5432/contests_db
-  #   command: pnpm run start:api
-  #   ports:
-  #     - "3002:3002"
-  #   networks:
-  #     - devohh-network
+  contests-api:
+    build:
+      context: ./app/contests
+      dockerfile: Dockerfile
+    container_name: contests-api
+    environment:
+      - NODE_ENV=development
+      - CONTESTS_DATABASE_URL=postgresql://postgres:6081@Database:5432/contests_db
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+    command: pnpm run start:api
+    ports:
+      - "3002:3002"
+    networks:
+      - devohh-network
+
+  contests-worker:
+    build:
+      context: ./app/contests
+      dockerfile: Dockerfile
+    container_name: contests-worker
+    environment:
+      - NODE_ENV=development
+      - CONTESTS_DATABASE_URL=postgresql://postgres:6081@Database:5432/contests_db
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+    command: pnpm run start:worker
+    ports:
+      - "3010:3010"
+    networks:
+      - devohh-network
 
 networks:
   devohh-network:
