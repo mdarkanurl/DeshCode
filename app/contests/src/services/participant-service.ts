@@ -32,7 +32,20 @@ async function getParticipantsByContestId(data: { contestId: string }) {
     }
 }
 
+async function getParticipantsByUserId(data: { userId: string }) {
+    try {
+        const participants = await participantsRepo.getParticipantsByUserId(data);
+
+        if(participants == null) throw new CustomError("No participants found", 404);
+        return participants;
+    } catch (error) {
+        if (error instanceof CustomError) throw error;
+        throw new CustomError("Internal server error", 500);
+    }
+}
+
 export {
     createParticipants,
-    getParticipantsByContestId
+    getParticipantsByContestId,
+    getParticipantsByUserId
 }
