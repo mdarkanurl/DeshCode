@@ -1,0 +1,21 @@
+{
+  "name": "postgres-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "tasks.max": "1",
+    "database.hostname": "database",
+    "database.port": "5432",
+    "database.user": "postgres",
+    "database.password": "6081",
+    "database.dbname": "contests_db",
+    "plugin.name": "pgoutput",
+    "slot.name": "debezium_slot",
+    "publication.name": "dbz_publication",
+    "topic.prefix": "my_postgres",
+    "table.include.list": "public.Submissions",
+    
+    "transforms": "filterUpdate",
+    "transforms.filterUpdate.type": "org.apache.kafka.connect.transforms.Filter",
+    "transforms.filterUpdate.condition": "op == 'u'"
+  }
+}

@@ -8,7 +8,7 @@ services:
     container_name: problems-api
     environment:
       - NODE_ENV=development
-      - PROBLEMS_DATABASE_URL=postgresql://postgres:6081@Database:5432/problems_db
+      - PROBLEMS_DATABASE_URL=postgresql://postgres:6081@database:5432/problems_db
       - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
     command: pnpm run start:api
     ports:
@@ -24,7 +24,7 @@ services:
     privileged: true
     environment:
       - NODE_ENV=development
-      - PROBLEMS_DATABASE_URL=postgresql://postgres:6081@Database:5432/problems_db
+      - PROBLEMS_DATABASE_URL=postgresql://postgres:6081@database:5432/problems_db
       - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
     command: sh -c "dockerd-entrypoint.sh & sleep 5 && pnpm run start:worker"
     ports:
@@ -39,7 +39,7 @@ services:
     container_name: discussions-api
     environment:
       - NODE_ENV=development
-      - DISCUSSIONS_DATABASE_URL=postgresql://postgres:6081@Database:5432/discussions_db
+      - DISCUSSIONS_DATABASE_URL=postgresql://postgres:6081@database:5432/discussions_db
     command: pnpm run start:api
     ports:
       - "3001:3001"
@@ -53,7 +53,7 @@ services:
     container_name: contests-api
     environment:
       - NODE_ENV=development
-      - CONTESTS_DATABASE_URL=postgresql://postgres:6081@Database:5432/contests_db
+      - CONTESTS_DATABASE_URL=postgresql://postgres:6081@database:5432/contests_db
       - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
       - PROBLEM_SERVICE_URL=http://problems-api:3000
     command: pnpm run start:api
@@ -70,7 +70,7 @@ services:
     privileged: true
     environment:
       - NODE_ENV=development
-      - CONTESTS_DATABASE_URL=postgresql://postgres:6081@Database:5432/contests_db
+      - CONTESTS_DATABASE_URL=postgresql://postgres:6081@database:5432/contests_db
       - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
     command: sh -c "dockerd-entrypoint.sh & sleep 5 && pnpm run start:worker"
     ports:
