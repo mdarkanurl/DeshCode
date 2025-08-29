@@ -1,74 +1,68 @@
 services:
   zookeeper:
-    image: confluentinc/cp-zookeeper:7.5.0
+    image: quay.io/debezium/zookeeper:3.2
     container_name: zookeeper
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
     ports:
       - "2181:2181"
     networks:
       - devohh-network
+    volumes:
+      - zookeeper-data:/var/lib/zookeeper
 
   kafka:
-    image: confluentinc/cp-kafka:7.5.0
+    image: quay.io/debezium/kafka:3.2
     container_name: kafka
     depends_on:
       - zookeeper
     ports:
       - "9092:9092"
+      - "29092:29092"
     environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:29092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://kafka:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     networks:
       - devohh-network
-
-  database:
-    image: postgres:17-alpine
-    container_name: database
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 6081
-      POSTGRES_DB: default_db
-    ports:
-      - "5432:5432"
-    command: >
-      postgres -c wal_level=logical
-               -c max_replication_slots=5
-               -c max_wal_senders=5
     volumes:
-      - db-data:/var/lib/postgresql/data
-    networks:
-      - devohh-network
+      - kafka-data:/var/lib/kafka/data
 
   connect:
-    image: debezium/connect:2.6
+    image: quay.io/debezium/connect:3.2
     container_name: connect
     depends_on:
       - kafka
-      - database
     ports:
       - "8083:8083"
     environment:
       BOOTSTRAP_SERVERS: kafka:9092
       GROUP_ID: 1
-      CONFIG_STORAGE_TOPIC: debezium_config
-      OFFSET_STORAGE_TOPIC: debezium_offsets
-      STATUS_STORAGE_TOPIC: debezium_status
-      KEY_CONVERTER: org.apache.kafka.connect.json.JsonConverter
-      VALUE_CONVERTER: org.apache.kafka.connect.json.JsonConverter
-      CONNECT_KEY_CONVERTER_SCHEMAS_ENABLE: "false"
-      CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
-      PLUGIN_PATH: /kafka/connect
-      CONNECT_REST_ADVERTISED_HOST_NAME: connect
-    volumes:
-      - ./kafka/connectors:/kafka/connectors
+      CONFIG_STORAGE_TOPIC: connect_configs
+      OFFSET_STORAGE_TOPIC: connect_offsets
+      STATUS_STORAGE_TOPIC: connect_statuses
+      KEY_CONVERTER_SCHEMAS_ENABLE: "false"
+      VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
     networks:
       - devohh-network
+    volumes:
+      - connect-data:/kafka/connect
+
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    command: postgres -c wal_level=logical -c max_wal_senders=10 -c max_replication_slots=10
+    environment:
+      POSTGRES_USER: dbz
+      POSTGRES_PASSWORD: dbz
+      POSTGRES_DB: example
+    networks:
+      - devohh-network
+    volumes:
+      - db-data:/var/lib/postgresql/data
 
   rabbitmq:
     image: rabbitmq:3-management
@@ -87,6 +81,9 @@ services:
 volumes:
   db-data:
   rabbitmq-data:
+  zookeeper-data:
+  kafka-data:
+  connect-data:
 
 networks:
   devohh-network:
