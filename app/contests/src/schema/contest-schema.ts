@@ -28,4 +28,11 @@ export const createContests = z
         code: "custom",
       });
     }
+    if (data.startTime < new Date()) {
+      ctx.addIssue({
+        path: ["startTime"],
+        message: "Start time must be in the future",
+        code: "custom",
+      });
+    }
   });

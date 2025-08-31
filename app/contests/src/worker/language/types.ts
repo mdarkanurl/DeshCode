@@ -10,6 +10,7 @@ export interface LanguageExecutor {
       functionName: string;
       testCases: any[];
       code: string;
+      difficulty: "EASY" | "MEDIUM" | "HARD";
       ProblemsTypes: ProblemsTypes;
     }
   ): Promise<void>;

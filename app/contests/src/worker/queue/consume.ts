@@ -55,6 +55,7 @@ export async function consume(problemsType: ProblemsTypes) {
           functionName: data.functionName,
           testCases: data.testCases,
           code: data.code,
+          difficulty: data.difficulty,
           ProblemsTypes: problemsType,
         });
       } catch (e: any) {

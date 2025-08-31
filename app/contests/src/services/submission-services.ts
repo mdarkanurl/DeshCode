@@ -51,7 +51,8 @@ async function submissionsSolution(data: {
             functionName: problems.data.Data.functionName,
             testCases: problems.data.Data.testCases,
             problemType: problems.data.Data.problemTypes,
-            code: data.code
+            code: data.code,
+            difficulty: problems.data.Data.difficulty
         };
 
         await sendData(problems.data.Data.problemsTypes, message);

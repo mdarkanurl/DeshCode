@@ -5,6 +5,7 @@ import * as t from "@babel/types";
 
 /**
  * Rewrite user-submitted JS to expose target function to global scope
+ * and remove console.log / console.error / console.warn statements
  */
 export function prepareCodeWithBabel(code: string, functionName: string): string {
   const ast = parser.parse(code, {
@@ -15,6 +16,20 @@ export function prepareCodeWithBabel(code: string, functionName: string): string
   let functionFound = false;
 
   traverse(ast, {
+    // Remove console.* calls
+    CallExpression(path) {
+      const callee = path.node.callee;
+      if (
+        t.isMemberExpression(callee) &&
+        t.isIdentifier(callee.object, { name: "console" }) &&
+        t.isIdentifier(callee.property) &&
+        ["log", "error", "warn", "info", "debug"].includes(callee.property.name)
+      ) {
+        path.remove();
+      }
+    },
+
+    // Expose target function globally
     FunctionDeclaration(path) {
       if ((path.node.id?.name ?? '') === functionName) {
         functionFound = true;

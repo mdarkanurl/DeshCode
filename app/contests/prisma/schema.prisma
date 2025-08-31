@@ -34,7 +34,7 @@ enum ProblemsTypes {
   Sorting_and_Searching
 }
 
-model Contests {
+model contests {
   id          String   @id @default(cuid())
   name        String
   description String?
@@ -43,21 +43,22 @@ model Contests {
   startTime   DateTime
   endTime     DateTime
 
-  participants Participants[]
+  participants participants[]
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
-model Submissions {
+model submissions {
   id         Int      @id @default(autoincrement())
   participantId     String?
-  participants Participants? @relation(fields: [participantId], references: [id])
+  participants participants? @relation(fields: [participantId], references: [id])
   userId    String
   problemsId  String
   status     SubmissionsStatus
   language   String
   code   String
+  score     Int?
   output String?
   runtimeMs  Int?
   memoryKb   Int?
@@ -65,13 +66,13 @@ model Submissions {
   updatedAt    DateTime  @updatedAt
 }
 
-model Participants {
+model participants {
   id        String  @id @default(cuid())
   contestId String
   userId    String  @unique
 
-  contest   Contests  @relation(fields: [contestId], references: [id])
-  Submissions Submissions[]
+  contest   contests  @relation(fields: [contestId], references: [id])
+  Submissions submissions[]
   
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

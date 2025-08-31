@@ -26,7 +26,8 @@ export const JavaScript = async (
     submissionId: number;
     functionName: string;
     testCases: any[];
-    ProblemsTypes: string
+    ProblemsTypes: string;
+    difficulty: "EASY" | "MEDIUM" | "HARD";
     code: string;
   }
 ) => {
@@ -42,6 +43,7 @@ export const JavaScript = async (
   } catch (e: any) {
     await submissionsRepo.update(data.submissionId, {
       status: SubmissionsStatus.INVALID_FUNCTION_SIGNATURE,
+      score: { EASY: -1, MEDIUM: -2, HARD: -3 }[data.difficulty] || 0,
       output: JSON.stringify({ error: e.message }),
     });
     channel.ack(msg);
@@ -137,19 +139,26 @@ export const JavaScript = async (
   const hasFatal = testResults.some((t) =>
     [
       SubmissionsStatus.EXECUTION_ERROR as string,
-      SubmissionsStatus.TIME_OUT as string,
       SubmissionsStatus.INTERNAL_ERROR as string,
     ].includes(t.status)
   );
 
+  let score: number = 0;
+  
+  if(allPassed) score = { EASY: 1, MEDIUM: 2, HARD: 3 }[data.difficulty] || 0;
+  if(hasFatal) score = 0;
+  if(!allPassed && !hasFatal) score = ({ EASY: -1, MEDIUM: -2, HARD: -3 }[data.difficulty] || 0);
+
   await submissionsRepo.update(data.submissionId, {
     status: allPassed
-      ? SubmissionsStatus.ACCEPTED
-      : hasFatal
-      ? SubmissionsStatus.FAILED
-      : SubmissionsStatus.WRONG_ANSWER,
+    ? SubmissionsStatus.ACCEPTED
+    : hasFatal
+    ? SubmissionsStatus.FAILED
+    : SubmissionsStatus.WRONG_ANSWER,
+    score: score,
     output: JSON.stringify(testResults),
   });
+
 
   fs.rmSync(tempDir, { recursive: true, force: true });
   channel.ack(msg);
