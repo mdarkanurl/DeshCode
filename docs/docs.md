@@ -19,4 +19,4 @@ The purpose of this project is to create a user-friendly application that allows
 - Containerization with Docker
 
 ## Getting Started
-To get started with the project, you can follow [../local-setup.md](local-setup.md) page.
+To get started with the project, you can follow local-setup.md page.
