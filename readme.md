@@ -34,4 +34,4 @@ Inside the `docs` folder, you will find various documentation files to help you 
 
 ## Contributing
 
-If you want to contribute to DeshCode, please follow the guidelines outlined in the [contribute.md](contribute.md) file.
+If you want to contribute to DeshCode, please follow the guidelines outlined in the [contributing.md](contributing.md) file.
