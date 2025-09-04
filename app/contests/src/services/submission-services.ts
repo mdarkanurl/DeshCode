@@ -36,6 +36,7 @@ async function submissionsSolution(data: {
         }
 
         const submissions = await submissionsRepo.create({
+            contestsId: data.contestId,
             participantId: data.participantId,
             userId: data.userId,
             problemsId: problems.data.Data.id,
@@ -62,7 +63,6 @@ async function submissionsSolution(data: {
             status: submissions.status
         }
     } catch (error) {
-        console.log(error);
         if(error instanceof CustomError) throw error;
         throw new CustomError('Internal Server Error', 500);
     }

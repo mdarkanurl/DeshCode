@@ -86,7 +86,9 @@ services:
     environment:
       - NODE_ENV=development
       - KAFKA_BROKER_URL=kafka:9092
-    command: pnpm run start
+      - REDIS_HOST=redis
+      - DEBEZIUM_CONNECTOR_URL=http://connect:8083
+    command: pnpm run start:debezium
     networks:
       - devohh-network
 
