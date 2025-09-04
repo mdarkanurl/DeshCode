@@ -29,7 +29,7 @@
 
 ## Local setup
 
-You can follow Docs [here](docs/local-setup.md) to set up the project locally.
+You can follow Docs [here](docs) to set up the project locally.
 Inside the `docs` folder, you will find various documentation files to help you understand and work with the project.
 
 ## Contributing
