@@ -1,6 +1,6 @@
 # DeshCode
 
-**DeshCode** is an advance LeeCode-style problem-solving platform.
+⚡ A LeetCode-style online judge with secure Docker-based code execution, real-time contests, leaderboards, and discussion forum.
 
 ## Features
 - Problem solving with instant feedback
