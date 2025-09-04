@@ -1,6 +1,13 @@
-# DeshCode
+# 🚀 LeetCode-Style Online Judge
 
-**DeshCode** is an advance LeeCode-style problem-solving platform.
+## 📖 Description
+This project is a LeetCode-style online coding platform built with Node.js, TypeScript, and Docker. It allows users to:
+
+- Submit and execute code securely in Docker containers.
+- Compete in timed contests with real-time leaderboards.
+- Discuss solutions and share knowledge in a built-in forum.
+
+The system leverages event-driven architecture with RabbitMQ, CDC with Debezium, Redis for real-time ranking, and PostgreSQL for persistence.
 
 ## Features
 - Problem solving with instant feedback
