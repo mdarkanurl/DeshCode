@@ -10,5 +10,29 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("PROBLEMS_DATABASE_URL")
+  url      = env("DATABASE_URL")
+}
+
+model Users {
+  id                String  @id @default(cuid())
+  email             String  @unique
+  password          String
+  verificationCode  Int
+  isVerified        Boolean @default(false)
+
+  profile           Profiles?
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
+
+model Profiles {
+  id        String  @id @default(cuid())
+  userId    String  @unique
+  name      String?
+  bio       String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user Users @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
