@@ -1,11 +1,13 @@
 import { sendVerificationCodeQueue } from "../RabbitMQ";
+import { Response } from "express";
 import { AuthRepo } from "../repo";
+import { jwtToken } from "../utils";
 import { CustomError } from "../utils/errors/app-error";
 import bcrypt from "bcryptjs";
 
 const authRepo = new AuthRepo();
 
-const signUp = async (data: { email: string, password: string }) => {
+const signUp = async (res: Response, data: { email: string, password: string }) => {
     try {
         const isUsersAlreadyExist = await authRepo.getByEmail(data.email, true);
 
@@ -26,8 +28,19 @@ const signUp = async (data: { email: string, password: string }) => {
             verificationCode: verificationCode.toString()
         });
 
+        // Generate JWT token and set it into cookie
+        jwtToken.accessToken(res, {
+            email: data.email,
+            isVerified: false
+        });
+
+        jwtToken.refreshToken(res, {
+            email: data.email,
+            isVerified: false
+        });
+
         // Send verification code to email
-        await sendVerificationCodeQueue(users.email, users.verificationCode);
+        await sendVerificationCodeQueue(data.email, verificationCode.toString());
         return users;
     } catch (error) {
         if(error instanceof CustomError) throw error;
@@ -35,6 +48,40 @@ const signUp = async (data: { email: string, password: string }) => {
     }
 }
 
+const verifyTheEmail = async (data: { email: string, code: number }) => {
+    try {
+        const users = await authRepo.getByEmail(data.email);
+
+        if(!users) {
+            throw new CustomError('No users found under this email', 404);
+        }
+
+        // Match the code
+        if(users.verificationCode !== data.code) {
+            throw new CustomError('Invalid verification code', 400);
+        }
+
+        // Update the isVerified
+        const updateIsVerified = await authRepo.updateById(
+            users.id,
+            {
+                code: data.code
+            },
+            {
+                password: false,
+                updatedAt: false,
+                createdAt: false
+            }
+        );
+
+        return updateIsVerified;
+    } catch (error) {
+        if(error instanceof CustomError) throw error;
+        throw new CustomError("Internal server error", 500);
+    }
+}
+
 export {
-    signUp
+    signUp,
+    verifyTheEmail
 }

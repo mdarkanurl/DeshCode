@@ -1,7 +1,11 @@
-import { signUp } from "./auth-schema";
+import {
+  signUp,
+  verifyTheEmail
+} from "./auth-schema";
 
 const authSchemas = {
-  signUp: signUp,
+  signUp,
+  verifyTheEmail
 };
 
 export {

@@ -1,9 +1,11 @@
 import {
-    signUp
+    signUp,
+    verifyTheEmail
 } from "./auth-controllers";
 
 const authControllers = {
-    signUp
+    signUp,
+    verifyTheEmail
 };
 
 export {

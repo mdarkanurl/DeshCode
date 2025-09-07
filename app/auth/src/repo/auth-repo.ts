@@ -14,7 +14,20 @@ export class AuthRepo extends CrudRepo {
             });
         } catch (error) {
             if(error instanceof CustomError) throw error;
-            throw new CustomError("Failed to fetch contest data", 500);
+            throw new CustomError("Internal Server Error", 500);
+        }
+    }
+
+    async updateById(id: string, data: {}, omit?: {}) {
+        try {
+            return await prisma.users.update({
+                where: { id },
+                data,
+                omit
+            });
+        } catch (error) {
+            if(error instanceof CustomError) throw error;
+            throw new CustomError("Internal Server Error", 500);
         }
     }
 }

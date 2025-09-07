@@ -1,9 +1,11 @@
 import {
-    signUp
+    signUp,
+    verifyTheEmail
 } from "./auth-services";
 
 const AuthService = {
-    signUp
+    signUp,
+    verifyTheEmail
 }
 
 export {
