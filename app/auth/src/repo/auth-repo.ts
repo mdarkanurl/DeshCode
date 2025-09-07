@@ -7,10 +7,11 @@ export class AuthRepo extends CrudRepo {
         super(prisma.users);
     }
 
-    async getByEmail( email: string, isVerified: boolean = true ) {
+    async getByEmail( email: string, isVerified: boolean = true, omit?: {} ) {
         try {
             return await prisma.users.findUnique({
-                where: { email, isVerified }
+                where: { email, isVerified },
+                omit
             });
         } catch (error) {
             if(error instanceof CustomError) throw error;

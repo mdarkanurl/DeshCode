@@ -81,7 +81,48 @@ const verifyTheEmail = async (data: { email: string, code: number }) => {
     }
 }
 
+const login = async (res: Response, data: { email: string, password: string }) => {
+    try {
+        const users = await authRepo.getByEmail(
+            data.email,
+            true,
+            {
+                createdAt: true,
+                updatedAt: true
+            }
+        );
+
+        if(!users) {
+            throw new CustomError('Invalid email or email is not verify yet', 400);
+        }
+
+        // Check the password
+        const password = await bcrypt.compare(data.password, users.password);
+
+        if(!password) {
+            throw new CustomError('Invalid password', 400);
+        }
+
+        // Generate JWT token and set it into cookie
+        jwtToken.accessToken(res, {
+            email: users.email,
+            isVerified: true
+        });
+
+        jwtToken.refreshToken(res, {
+            email: users.email,
+            isVerified: true
+        });
+
+        return users;
+    } catch (error) {
+        if(error instanceof CustomError) throw error;
+        throw new CustomError("Internal server error", 500);
+    }
+}
+
 export {
     signUp,
-    verifyTheEmail
+    verifyTheEmail,
+    login
 }
