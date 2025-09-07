@@ -119,8 +119,30 @@ const login = async (
     }
 }
 
+const logout = async (
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        await AuthService.logout(res);
+
+        res.status(200).json({
+            Success: true,
+            Message: `Logout successful`,
+            Data: null,
+            Errors: null
+        });
+        return;
+    } catch (error) {
+        if(error instanceof CustomError) return next(error);
+        return next(new CustomError('Internal Server Error', 500));
+    }
+}
+
 export {
     signUp,
     verifyTheEmail,
-    login
+    login,
+    logout
 }

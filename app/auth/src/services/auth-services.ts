@@ -65,7 +65,8 @@ const verifyTheEmail = async (data: { email: string, code: number }) => {
         const updateIsVerified = await authRepo.updateById(
             users.id,
             {
-                code: data.code
+                verificationCode: null,
+                isVerified: true
             },
             {
                 password: false,
@@ -121,8 +122,20 @@ const login = async (res: Response, data: { email: string, password: string }) =
     }
 }
 
+const logout = async (res: Response) => {
+    try {
+        // Clear the cookies
+        res.clearCookie("accessToken");
+        res.clearCookie("refreshToken");
+    } catch (error) {
+        if(error instanceof CustomError) throw error;
+        throw new CustomError("Internal server error", 500);
+    }
+}
+
 export {
     signUp,
     verifyTheEmail,
-    login
+    login,
+    logout
 }

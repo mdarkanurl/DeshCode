@@ -1,13 +1,15 @@
 import {
     signUp,
     verifyTheEmail,
-    login
+    login,
+    logout
 } from "./auth-controllers";
 
 const authControllers = {
     signUp,
     verifyTheEmail,
-    login
+    login,
+    logout
 };
 
 export {
