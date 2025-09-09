@@ -158,17 +158,87 @@ const forgetPassword = async (data: { email: string }) => {
         }
 
         // Generate a verification code
-        const verificationCode = Math.floor(100000 + Math.random() * 900000);
+        const forgotPasswordCode = Math.floor(100000 + Math.random() * 900000);
+
+        // Update the verification code in DB
+        await authRepo.updateById(
+            users.id,
+            {
+                forgotPasswordCode: forgotPasswordCode.toString()
+            },
+            {
+                password: true,
+                updatedAt: true,
+                createdAt: true
+            }
+        );
+
+        // Payload for jwt token
+        const payload = {
+            userId: users.id
+        }
+
+        // Generate JWT token and send to client
+        const tempToken = jwt.sign(
+            payload,
+            process.env.TEMP_JWT_TOKEN || 'Temp-Secret-JWT-Token',
+            {
+                expiresIn: '5m',
+            }
+        );
 
         // Send verification code to email
-        await sendVerificationCodeQueue(data.email, verificationCode.toString());
+        await sendVerificationCodeQueue(data.email, forgotPasswordCode.toString());
+
         return {
             email: users.email,
-            message: `DeshCode sent code to ${users.email}`
+            message: `DeshCode sent code to ${users.email}`,
+            tempToken
         };
     } catch (error) {
         if(error instanceof CustomError) throw error;
         throw new CustomError("Internal server error", 500)
+    }
+}
+
+const setForgetPassword = async (data: { userId: string, code: number, newPassword: string }) => {
+    try {
+        // Get the user from DB
+        const users = await authRepo.getByStringId(data.userId, {
+            updatedAt: true,
+            createdAt: true
+        });
+
+        if(!users) {
+            throw new CustomError('No user found under this email', 404);
+        }
+
+        // Match the code
+        if(users.forgotPasswordCode !== data.code) {
+            throw new CustomError('Invalid forgot password code code', 400);
+        }
+
+        // Hash the new password
+        const hashedPassword = await bcrypt.hash(data.newPassword, 10);
+
+        // Update the password
+        const updatePassword = await authRepo.updateById(
+            users.id,
+            {
+                password: hashedPassword,
+                forgotPasswordCode: null
+            },
+            {
+                password: true,
+                updatedAt: true,
+                createdAt: true
+            }
+        );
+
+        return updatePassword;
+    } catch (error) {
+        if(error instanceof CustomError) throw error;
+        throw new CustomError("Internal server error", 500);
     }
 }
 
@@ -177,5 +247,6 @@ export {
     verifyTheEmail,
     login,
     logout,
-    forgetPassword
+    forgetPassword,
+    setForgetPassword
 }

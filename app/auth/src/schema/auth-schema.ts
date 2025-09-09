@@ -17,4 +17,10 @@ export const login = z.object({
 
 export const forgetPassword = z.object({
   email: z.string().email("Invalid email address")
-})
+});
+
+export const setForgetPassword = z.object({
+  userId: z.string(),
+  newPassword: z.string().min(8, "Password must be at least 8 characters long"),
+  code: z.number()
+});

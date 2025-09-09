@@ -3,7 +3,8 @@ import {
     verifyTheEmail,
     login,
     logout,
-    forgetPassword
+    forgetPassword,
+    setForgetPassword
 } from "./auth-services";
 
 const AuthService = {
@@ -11,7 +12,8 @@ const AuthService = {
     verifyTheEmail,
     login,
     logout,
-    forgetPassword
+    forgetPassword,
+    setForgetPassword
 }
 
 export {

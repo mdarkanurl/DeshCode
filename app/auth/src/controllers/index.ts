@@ -3,7 +3,8 @@ import {
     verifyTheEmail,
     login,
     logout,
-    forgetPassword
+    forgetPassword,
+    setForgetPassword
 } from "./auth-controllers";
 
 const authControllers = {
@@ -11,7 +12,8 @@ const authControllers = {
     verifyTheEmail,
     login,
     logout,
-    forgetPassword
+    forgetPassword,
+    setForgetPassword
 };
 
 export {
