@@ -17,7 +17,7 @@ const signUp = async (res: Response, data: { email: string, password: string }) 
         }
 
         // Hash the password
-        const hashPassword = await bcrypt.hash(data.password, 10);
+        const hashedPassword = await bcrypt.hash(data.password, 10);
 
         // Generate a verification code
         const verificationCode = Math.floor(100000 + Math.random() * 900000);
@@ -25,7 +25,7 @@ const signUp = async (res: Response, data: { email: string, password: string }) 
         // Save the users to Database
         const users = await authRepo.create({
             email: data.email,
-            password: hashPassword,
+            password: hashedPassword,
             verificationCode: verificationCode.toString()
         });
 
@@ -242,11 +242,55 @@ const setForgetPassword = async (data: { userId: string, code: number, newPasswo
     }
 }
 
+const changesPassword = async (data: { userId: string, currentPassword: string, newPassword: string }) => {
+    try {
+        // Find the user from DB
+        const users = await authRepo.getByStringId(data.userId, {
+            createdAt: true,
+            updatedAt: true
+        });
+        
+        if(!users) {
+            throw new CustomError('No user found', 404);
+        }
+
+        // Check the password
+        const isPasswordVaild = await bcrypt.compare(data.currentPassword, users.password);
+
+        if(!isPasswordVaild) {
+            throw new CustomError('Invalid password', 400);
+        }
+
+        // Hash the new password
+        const hashedPassword = await bcrypt.hash(data.newPassword, 10);
+
+        // Change the password
+        const responses = await authRepo.updateById(
+            users.id,
+            {
+                password: hashedPassword
+            },
+            {
+                verificationCode: true,
+                forgotPasswordCode: true,
+                createdAt: true,
+                updatedAt: true
+            }
+        );
+
+        return responses;
+    } catch (error) {
+        if(error instanceof CustomError) throw error;
+        throw new CustomError("Internal server error", 500);
+    }
+}
+
 export {
     signUp,
     verifyTheEmail,
     login,
     logout,
     forgetPassword,
-    setForgetPassword
+    setForgetPassword,
+    changesPassword
 }

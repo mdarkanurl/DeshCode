@@ -4,18 +4,20 @@ import {
     login,
     logout,
     forgetPassword,
-    setForgetPassword
+    setForgetPassword,
+    changesPassword
 } from "./auth-services";
 
-const AuthService = {
+const authService = {
     signUp,
     verifyTheEmail,
     login,
     logout,
     forgetPassword,
-    setForgetPassword
+    setForgetPassword,
+    changesPassword
 }
 
 export {
-    AuthService
+    authService
 };

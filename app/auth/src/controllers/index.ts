@@ -4,7 +4,8 @@ import {
     login,
     logout,
     forgetPassword,
-    setForgetPassword
+    setForgetPassword,
+    changesPassword
 } from "./auth-controllers";
 
 const authControllers = {
@@ -13,7 +14,8 @@ const authControllers = {
     login,
     logout,
     forgetPassword,
-    setForgetPassword
+    setForgetPassword,
+    changesPassword
 };
 
 export {

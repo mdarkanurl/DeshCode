@@ -4,7 +4,7 @@ import { authControllers } from "../../controllers";
 import { authMiddlewares } from "../../middlewares";
 
 // Destructuring
-const { signUp, verifyTheEmail, login, logout, forgetPassword, setForgetPassword } = authControllers;
+const { signUp, verifyTheEmail, login, logout, forgetPassword, setForgetPassword, changesPassword } = authControllers;
 const { isTempJwtTokenExists, islogin } = authMiddlewares;
 
 router.post('/signup', signUp);
@@ -13,5 +13,6 @@ router.post('/login', login);
 router.get('/logout', islogin, logout);
 router.post('/forget-password', forgetPassword);
 router.put('/new-password', isTempJwtTokenExists, setForgetPassword);
+router.put('/changes-password', islogin, changesPassword);
 
 export default router;

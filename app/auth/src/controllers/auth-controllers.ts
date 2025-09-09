@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { authSchemas } from "../schema";
-import { AuthService } from "../services";
+import { authService } from "../services";
 import { CustomError } from "../utils/errors/app-error";
 
 interface AuthRequest extends Request {
@@ -25,7 +25,7 @@ const signUp = async (
             return;
         }
 
-        const users = await AuthService.signUp(res, {
+        const users = await authService.signUp(res, {
             email: data.email,
             password: data.password
         });
@@ -64,7 +64,7 @@ const verifyTheEmail = async (
             return;
         }
 
-        const updateUsers = await AuthService.verifyTheEmail({
+        const updateUsers = await authService.verifyTheEmail({
             userId: data.userId,
             code: data.code
         });
@@ -100,7 +100,7 @@ const login = async (
             return;
         }
 
-        const users = await AuthService.login(res, {
+        const users = await authService.login(res, {
             email: data.email,
             password: data.password
         });
@@ -124,7 +124,7 @@ const logout = async (
     next: NextFunction
 ) => {
     try {
-        await AuthService.logout(res);
+        await authService.logout(res);
 
         res.status(200).json({
             Success: true,
@@ -157,7 +157,7 @@ const forgetPassword = async (
             return;
         }
 
-        const responses = await AuthService.forgetPassword({ email: data.email });
+        const responses = await authService.forgetPassword({ email: data.email });
 
         res.status(200).json({
             Success: true,
@@ -193,9 +193,49 @@ const setForgetPassword = async (
             return;
         }
 
-        const responses = await AuthService.setForgetPassword({
+        const responses = await authService.setForgetPassword({
             userId: data.userId,
             code: data.code,
+            newPassword: data.newPassword
+        });
+
+        res.status(200).json({
+            Success: true,
+            Message: `Your new password successfully set`,
+            Data: responses,
+            Errors: null
+        });
+        return;
+    } catch (error) {
+        if(error instanceof CustomError) return next(error);
+        return next(new CustomError('Internal Server Error', 500));
+    }
+}
+
+const changesPassword = async (
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const { userId } = req;
+        const { currentPassword, newPassword } = req.body;
+
+        const { error, success, data } = authSchemas.changesPassword.safeParse({ userId, currentPassword, newPassword });
+
+        if(!success) {
+            res.status(400).json({
+                Success: false,
+                Message: 'Invalid input',
+                Data: null,
+                Errors: error.errors
+            });
+            return;
+        }
+
+        const responses = await authService.changesPassword({
+            userId: data.userId,
+            currentPassword: data.currentPassword,
             newPassword: data.newPassword
         });
 
@@ -218,5 +258,6 @@ export {
     login,
     logout,
     forgetPassword,
-    setForgetPassword
+    setForgetPassword,
+    changesPassword
 }

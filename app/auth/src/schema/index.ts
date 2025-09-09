@@ -3,7 +3,8 @@ import {
   verifyTheEmail,
   login,
   forgetPassword,
-  setForgetPassword
+  setForgetPassword,
+  changesPassword
 } from "./auth-schema";
 
 const authSchemas = {
@@ -11,7 +12,8 @@ const authSchemas = {
   verifyTheEmail,
   login,
   forgetPassword,
-  setForgetPassword
+  setForgetPassword,
+  changesPassword
 };
 
 export {

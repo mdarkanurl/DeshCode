@@ -24,3 +24,9 @@ export const setForgetPassword = z.object({
   newPassword: z.string().min(8, "Password must be at least 8 characters long"),
   code: z.number()
 });
+
+export const changesPassword = z.object({
+  userId: z.string(),
+  currentPassword: z.string().min(8, "Password must be at least 8 characters long"),
+  newPassword: z.string().min(8, "Password must be at least 8 characters long")
+});
