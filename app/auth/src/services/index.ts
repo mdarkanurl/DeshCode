@@ -2,14 +2,16 @@ import {
     signUp,
     verifyTheEmail,
     login,
-    logout
+    logout,
+    forgetPassword
 } from "./auth-services";
 
 const AuthService = {
     signUp,
     verifyTheEmail,
     login,
-    logout
+    logout,
+    forgetPassword
 }
 
 export {

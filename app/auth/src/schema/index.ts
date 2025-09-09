@@ -1,13 +1,15 @@
 import {
   signUp,
   verifyTheEmail,
-  login
+  login,
+  forgetPassword
 } from "./auth-schema";
 
 const authSchemas = {
   signUp,
   verifyTheEmail,
-  login
+  login,
+  forgetPassword
 };
 
 export {

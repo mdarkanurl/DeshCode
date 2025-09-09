@@ -139,9 +139,43 @@ const logout = async (
     }
 }
 
+const forgetPassword = async (
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const { error, success, data } = authSchemas.forgetPassword.safeParse(req.body);
+
+        if(!success) {
+            res.status(400).json({
+                Success: false,
+                Message: 'Invalid input',
+                Data: null,
+                Errors: error.errors
+            });
+            return;
+        }
+
+        const sendCode = await AuthService.forgetPassword({ email: data.email });
+
+        res.status(200).json({
+            Success: true,
+            Message: `Check your email and verify that it's you`,
+            Data: sendCode,
+            Errors: null
+        });
+        return;
+    } catch (error) {
+        if(error instanceof CustomError) return next(error);
+        return next(new CustomError('Internal Server Error', 500));
+    }
+}
+
 export {
     signUp,
     verifyTheEmail,
     login,
-    logout
+    logout,
+    forgetPassword
 }

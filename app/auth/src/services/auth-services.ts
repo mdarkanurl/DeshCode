@@ -148,9 +148,34 @@ const logout = async (res: Response) => {
     }
 }
 
+const forgetPassword = async (data: { email: string }) => {
+    try {
+        // Get the user from DB
+        const users = await authRepo.getByEmail(data.email);
+
+        if(!users) {
+            throw new CustomError('No user found under this email', 404);
+        }
+
+        // Generate a verification code
+        const verificationCode = Math.floor(100000 + Math.random() * 900000);
+
+        // Send verification code to email
+        await sendVerificationCodeQueue(data.email, verificationCode.toString());
+        return {
+            email: users.email,
+            message: `DeshCode sent code to ${users.email}`
+        };
+    } catch (error) {
+        if(error instanceof CustomError) throw error;
+        throw new CustomError("Internal server error", 500)
+    }
+}
+
 export {
     signUp,
     verifyTheEmail,
     login,
-    logout
+    logout,
+    forgetPassword
 }
