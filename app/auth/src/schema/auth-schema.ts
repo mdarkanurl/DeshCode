@@ -6,7 +6,7 @@ export const signUp = z.object({
 });
 
 export const verifyTheEmail = z.object({
-  email: z.string().email("Invalid email address"),
+  userId: z.string(),
   code: z.number()
 });
 

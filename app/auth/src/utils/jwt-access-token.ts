@@ -17,7 +17,6 @@ function generateJwtAccessToken(res: Response, data: { email: string, isVerified
             payload, process.env.ACCESS_TOKEN_SECRET || 'My_Access_Token_Secret',
             {
                 expiresIn: '15m',
-
             }
         );
 

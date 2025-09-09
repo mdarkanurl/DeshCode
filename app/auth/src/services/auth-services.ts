@@ -1,6 +1,7 @@
 import { sendVerificationCodeQueue } from "../RabbitMQ";
 import { Response } from "express";
 import { AuthRepo } from "../repo";
+import jwt from "jsonwebtoken";
 import { jwtToken } from "../utils";
 import { CustomError } from "../utils/errors/app-error";
 import bcrypt from "bcryptjs";
@@ -28,32 +29,46 @@ const signUp = async (res: Response, data: { email: string, password: string }) 
             verificationCode: verificationCode.toString()
         });
 
-        // Generate JWT token and set it into cookie
-        jwtToken.accessToken(res, {
-            email: data.email,
-            isVerified: false
-        });
+        // Payload for jwt token
+        const payload = {
+            userId: users.id
+        }
 
-        jwtToken.refreshToken(res, {
-            email: data.email,
-            isVerified: false
-        });
+        // Generate JWT token and send to client
+        const tempToken = jwt.sign(
+            payload,
+            process.env.TEMP_JWT_TOKEN || 'Temp-Secret-JWT-Token',
+            {
+                expiresIn: '5m',
+            }
+        );
 
         // Send verification code to email
         await sendVerificationCodeQueue(data.email, verificationCode.toString());
-        return users;
+        return {
+            userId: users.id,
+            email: users.email,
+            token: tempToken
+        };
     } catch (error) {
         if(error instanceof CustomError) throw error;
         throw new CustomError("Internal server error", 500)
     }
 }
 
-const verifyTheEmail = async (data: { email: string, code: number }) => {
+const verifyTheEmail = async (data: { userId: string, code: number }) => {
     try {
-        const users = await authRepo.getByEmail(data.email);
+        const users = await authRepo.getByStringId(
+            data.userId,
+            {
+                updatedAt: true,
+                createdAt: true,
+                password: true
+            }
+        );
 
         if(!users) {
-            throw new CustomError('No users found under this email', 404);
+            throw new CustomError('No users found under this ID', 404);
         }
 
         // Match the code
@@ -69,9 +84,9 @@ const verifyTheEmail = async (data: { email: string, code: number }) => {
                 isVerified: true
             },
             {
-                password: false,
-                updatedAt: false,
-                createdAt: false
+                password: true,
+                updatedAt: true,
+                createdAt: true
             }
         );
 

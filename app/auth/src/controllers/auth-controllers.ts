@@ -4,8 +4,7 @@ import { AuthService } from "../services";
 import { CustomError } from "../utils/errors/app-error";
 
 interface AuthRequest extends Request {
-  email?: string;
-  isVerified?: boolean;
+  userId?: string;
 }
 
 const signUp = async (
@@ -51,9 +50,9 @@ const verifyTheEmail = async (
 ) => {
     try {
         const code = parseInt(req.body.code);
-        const { email } = req;
+        const { userId } = req;
 
-        const { error, success, data } = authSchemas.verifyTheEmail.safeParse({ email, code });
+        const { error, success, data } = authSchemas.verifyTheEmail.safeParse({ userId, code });
 
         if(!success) {
             res.status(400).json({
@@ -66,7 +65,7 @@ const verifyTheEmail = async (
         }
 
         const updateUsers = await AuthService.verifyTheEmail({
-            email: data.email,
+            userId: data.userId,
             code: data.code
         });
 

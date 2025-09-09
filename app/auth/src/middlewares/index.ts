@@ -1,13 +1,13 @@
 import {
-    isJwtTokenExists
-} from "./is-jwt-token-exists";
+    isTempJwtTokenExists
+} from ".//is-temp-token-exists";
 
 import {
     islogin
 } from "./is-login";
 
 const authMiddlewares = {
-    isJwtTokenExists,
+    isTempJwtTokenExists,
     islogin
 };
 

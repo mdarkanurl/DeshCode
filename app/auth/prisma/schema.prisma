@@ -13,12 +13,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  ADMIN
+  USER
+}
+
 model Users {
   id                String  @id @default(cuid())
   email             String  @unique
   password          String
   verificationCode  Int
   isVerified        Boolean @default(false)
+  role              UserRole @default(USER)
 
   profile           Profiles?
 

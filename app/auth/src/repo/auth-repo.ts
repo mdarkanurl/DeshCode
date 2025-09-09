@@ -19,6 +19,18 @@ export class AuthRepo extends CrudRepo {
         }
     }
 
+    async getByStringId(id: string, omit?: {}) {
+        try {
+            return await prisma.users.findUnique({
+                where: { id },
+                omit
+            });
+        } catch (error) {
+            if(error instanceof CustomError) throw error;
+            throw new CustomError("Internal Server Error", 500);
+        }
+    }
+
     async updateById(id: string, data: {}, omit?: {}) {
         try {
             return await prisma.users.update({
