@@ -9,7 +9,8 @@ import {
 } from "./auth-controllers";
 
 import {
-    googleCallback
+    googleCallback,
+    githubCallback
 } from "./Oauth-controllers";
 
 const authControllers = {
@@ -23,7 +24,8 @@ const authControllers = {
 };
 
 const OauthControllers = {
-    googleCallback
+    googleCallback,
+    githubCallback
 }
 
 export {

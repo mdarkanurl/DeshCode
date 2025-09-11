@@ -22,7 +22,34 @@ const googleCallback = async (
 
         res.status(201).json({
             Success: true,
-            Message: ``,
+            Message: `Successfully authenticate via Google`,
+            Data: null,
+            Errors: null
+        });
+        return;
+    } catch (error) {
+        if(error instanceof CustomError) return next(error);
+        return next(new CustomError('Internal Server Error', 500));
+    }
+}
+
+const githubCallback = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const user = req.user as any;
+
+        if(!user) return;
+
+        OauthService.githubCallback(res, {
+            userId: user.id
+        });
+
+        res.status(201).json({
+            Success: true,
+            Message: `Successfully authenticate via GitHub`,
             Data: null,
             Errors: null
         });
@@ -34,5 +61,6 @@ const googleCallback = async (
 }
 
 export {
-    googleCallback
+    googleCallback,
+    githubCallback
 }

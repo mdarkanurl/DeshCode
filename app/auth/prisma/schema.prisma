@@ -42,3 +42,14 @@ model Google_OAuth {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+
+model GitHub_OAuth {
+  id          String @id @default(cuid())
+  githubId    String @unique
+  username    String
+  email       String?
+  avatar      String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}

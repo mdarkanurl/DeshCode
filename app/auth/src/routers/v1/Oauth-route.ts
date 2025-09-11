@@ -1,7 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
 import { OauthControllers } from "../../controllers";
-const { googleCallback } = OauthControllers;
+const { googleCallback, githubCallback } = OauthControllers;
 
 const router = Router();
 
@@ -12,6 +12,17 @@ router.post('/google',
 router.get('/google/callback', 
     passport.authenticate('google', { session: false, failureRedirect: '/login' }),
     googleCallback
+);
+
+router.get(
+    "/github",
+    passport.authenticate("github", { scope: ["user:email"] })
+);
+
+router.get(
+    "/github/callback",
+    passport.authenticate("github", { session: false, failureRedirect: "/login" }),
+    githubCallback
 );
 
 export default router;
