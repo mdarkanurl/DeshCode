@@ -4,12 +4,11 @@ import dotenv from "dotenv";
 import { CustomError } from "./errors/app-error";
 dotenv.config({ path: '../.env' });
 
-function generateJwtRefreshToken(res: Response, data: { email: string, isVerified: boolean }) {
+function generateJwtRefreshToken(res: Response, data: { userId: string }) {
     try {
         // Create a payload for JWT
         const payload = {
-            email: data.email,
-            isVerified: data.isVerified
+            email: data.userId
         }
 
         // Generate token

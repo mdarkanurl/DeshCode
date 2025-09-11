@@ -8,6 +8,10 @@ import {
     changesPassword
 } from "./auth-services";
 
+import {
+    googleCallback
+} from "./Oauth-services";
+
 const authService = {
     signUp,
     verifyTheEmail,
@@ -18,6 +22,11 @@ const authService = {
     changesPassword
 }
 
+const OauthService = {
+    googleCallback
+}
+
 export {
-    authService
+    authService,
+    OauthService
 };

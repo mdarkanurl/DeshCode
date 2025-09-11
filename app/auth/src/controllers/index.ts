@@ -8,6 +8,10 @@ import {
     changesPassword
 } from "./auth-controllers";
 
+import {
+    googleCallback
+} from "./Oauth-controllers";
+
 const authControllers = {
     signUp,
     verifyTheEmail,
@@ -18,6 +22,11 @@ const authControllers = {
     changesPassword
 };
 
+const OauthControllers = {
+    googleCallback
+}
+
 export {
-    authControllers
+    authControllers,
+    OauthControllers
 }

@@ -27,19 +27,18 @@ model Users {
   role                UserRole @default(USER)
   forgotPasswordCode  Int?
 
-  profile             Profiles?
-
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 }
 
-model Profiles {
-  id        String  @id @default(cuid())
-  userId    String  @unique
-  name      String?
-  bio       String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user Users @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Google_OAuth {
+  id          String @id @default(cuid())
+  email       String @unique
+  googleId    String @unique
+  name        String
+  provider    String
+  isVerified  Boolean
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
