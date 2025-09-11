@@ -41,6 +41,9 @@ importers:
       prisma:
         specifier: ^6.15.0
         version: 6.15.0(typescript@5.9.2)
+      resend:
+        specifier: ^6.0.3
+        version: 6.0.3
       zod:
         specifier: 3.25.67
         version: 3.25.67
@@ -614,6 +617,15 @@ packages:
 
   requires-port@1.0.0:
     resolution: {integrity: sha512-KigOCHcocU3XODJxsu8i/j8T9tzT4adHiecwORRQ0ZZFcp7ahwXuRU1m+yuO90C5ZUyGeGfocHDI14M3L3yDAQ==}
+
+  resend@6.0.3:
+    resolution: {integrity: sha512-Yb7o2n52v91LjkUjq5vIZQbJrGiaPoMo2VPAyS0QTKA73tmvHMUQ7P1M56J1ux/Cw9Lf68PeaKidTl6GuS8DTA==}
+    engines: {node: '>=18'}
+    peerDependencies:
+      '@react-email/render': ^1.1.0
+    peerDependenciesMeta:
+      '@react-email/render':
+        optional: true
 
   router@2.2.0:
     resolution: {integrity: sha512-nLTrUKm2UyiL7rlhapu/Zl45FwNgkZGaCpZbIHajDYgwlJCOzLSk+cIPAnsEqV955GjILJnKbdQC1nVPz+gAYQ==}
@@ -1297,6 +1309,8 @@ snapshots:
   readdirp@4.1.2: {}
 
   requires-port@1.0.0: {}
+
+  resend@6.0.3: {}
 
   router@2.2.0:
     dependencies:
