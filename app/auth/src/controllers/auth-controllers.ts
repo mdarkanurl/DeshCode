@@ -49,7 +49,7 @@ const verifyTheEmail = async (
     next: NextFunction
 ) => {
     try {
-        const code = parseInt(req.body.code);
+        const code = parseInt(req?.body?.code);
         const { userId } = req;
 
         const { error, success, data } = authSchemas.verifyTheEmail.safeParse({ userId, code });

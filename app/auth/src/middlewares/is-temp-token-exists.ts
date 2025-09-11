@@ -1,11 +1,10 @@
 // This function check whether the request has temp JWT token or not
 
 import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
+import jwt, { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
 import dotenv from "dotenv";
-import { jwtToken } from "../utils";
 import { CustomError } from "../utils/errors/app-error";
-dotenv.config({ path: '../.env' });
+dotenv.config({ path: '../../.env' });
 
 
 async function isTempJwtTokenExists(
@@ -29,13 +28,37 @@ async function isTempJwtTokenExists(
             return;
         }
 
-        // verify the temp token
-        const decoded = jwt.verify(
-            token,
-            process.env.TEMP_JWT_TOKEN || 'Temp-Secret-JWT-Token'
-        );
+        let decoded;
+        try {
+            // verify the temp token
+            decoded = jwt.verify(
+                token,
+                process.env.TEMP_JWT_TOKEN || 'Temp-Secret-JWT-Token'
+            );
+        } catch (error) {
+            // Handle JWT-specific errors
+            if (error instanceof JsonWebTokenError) {
+                res.status(401).json({
+                    Success: false,
+                    Message: "Unauthorized: Invalid token",
+                    Data: null,
+                    Errors: error.message,
+                });
+                return;
+            }
 
-        if (typeof decoded === "string" || !("userId" in decoded)) {
+            if (error instanceof TokenExpiredError) {
+                res.status(401).json({
+                    Success: false,
+                    Message: "Unauthorized: Token expired",
+                    Data: null,
+                    Errors: error.message,
+                });
+                return;
+            }
+        }
+
+        if (typeof decoded === "string" || !decoded || !("userId" in decoded)) {
             res.status(401).json({
                 Success: false,
                 Message: "Unauthorized",

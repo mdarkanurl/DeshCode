@@ -5,6 +5,8 @@ import jwt from "jsonwebtoken";
 import { jwtToken } from "../utils";
 import { CustomError } from "../utils/errors/app-error";
 import bcrypt from "bcryptjs";
+import dotenv from "dotenv";
+dotenv.config({ path: '../../.env' });
 
 const authRepo = new AuthRepo();
 
