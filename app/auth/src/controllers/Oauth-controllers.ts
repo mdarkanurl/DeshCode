@@ -3,7 +3,7 @@ import { OauthService } from "../services";
 import { CustomError } from "../utils/errors/app-error";
 
 interface AuthRequest extends Request {
-  userId?: string;
+  users?: Object;
 }
 
 const googleCallback = async (
@@ -12,7 +12,7 @@ const googleCallback = async (
     next: NextFunction
 ) => {
     try {
-        const userId = req.userId;
+        const userId = req.users && (req.users as any).id;
 
         if(!userId) return;
 
@@ -34,17 +34,17 @@ const googleCallback = async (
 }
 
 const githubCallback = async (
-    req: Request,
+    req: AuthRequest,
     res: Response,
     next: NextFunction
 ) => {
     try {
-        const user = req.user as any;
+        const userId = req.users && (req.users as any).id;
 
-        if(!user) return;
+        if(!userId) return;
 
         OauthService.githubCallback(res, {
-            userId: user.id
+            userId
         });
 
         res.status(201).json({
