@@ -74,12 +74,11 @@ async function handleRefreshToken(
         const decoded = jwt.verify(
             refreshToken,
             process.env.REFRESH_TOKEN_SECRET || 'My_Refresh_Token_Secret'
-        ) as { email?: string; isVerified?: boolean };
+        ) as { userId?: string; };
 
         if (
             typeof decoded === "string" ||
-            !decoded.email ||
-            decoded.isVerified === false
+            !decoded.userId
         ) {
             res.status(401).json({
                 Success: false,
@@ -91,18 +90,16 @@ async function handleRefreshToken(
         }
 
         // Access payload safely
-        const email = decoded.email as string;
-        const isVerified = decoded.isVerified as boolean;
+        const userId = decoded.userId as string;
 
         // Generate access token
-        jwtToken.accessToken(res, { email, isVerified });
+        jwtToken.accessToken(res, { userId });
 
         // Recreate refresh token
-        jwtToken.refreshToken(res, { email, isVerified });
+        jwtToken.refreshToken(res, { userId });
 
         // Attach email and isVerified to request object
-        (req as any).email = email;
-        (req as any).isVerified = isVerified;
+        (req as any).userId = userId
         next();
     } catch (error) {
         if(error instanceof CustomError) return next(error);

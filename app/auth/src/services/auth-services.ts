@@ -121,13 +121,11 @@ const login = async (res: Response, data: { email: string, password: string }) =
 
         // Generate JWT token and set it into cookie
         jwtToken.accessToken(res, {
-            email: users.email,
-            isVerified: true
+            userId: users.id
         });
 
         jwtToken.refreshToken(res, {
-            email: users.email,
-            isVerified: true
+            userId: users.id
         });
 
         return users;
