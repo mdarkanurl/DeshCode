@@ -26,7 +26,7 @@ const signUp = async (res: Response, data: { email: string, password: string }) 
         const users = await authRepo.create({
             email: data.email,
             password: hashedPassword,
-            verificationCode: verificationCode.toString()
+            verificationCode: verificationCode
         });
 
         // Payload for jwt token

@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import { connectWithRabbitMQ } from "./RabbitMQ";
 dotenv.config({ path: '.env' });
 
-const PORT = process.env.PROBLEMS_PORT || 3000;
+const PORT = process.env.PORT || 3004;
 app.listen(PORT, async () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📝 Environment: ${process.env.NODE_ENV}`);
