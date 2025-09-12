@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { jwtToken } from "../utils";
 import { CustomError } from "../utils/errors/app-error";
 import dotenv from "dotenv";
+import { UserRole } from "@prisma/client";
 
 dotenv.config({ path: '../.env' });
 
@@ -75,7 +76,7 @@ async function handleRefreshToken(
         const decoded = jwt.verify(
             refreshToken,
             process.env.REFRESH_TOKEN_SECRET || 'My_Refresh_Token_Secret'
-        ) as { userId?: string; };
+        ) as { userId?: string; role: UserRole };
 
         if (
             typeof decoded === "string" ||
@@ -92,15 +93,15 @@ async function handleRefreshToken(
 
         // Access payload safely
         const userId = decoded.userId as string;
+        const role = decoded.role as UserRole;
 
-        // Generate access token
-        jwtToken.accessToken(res, { userId });
-
-        // Recreate refresh token
-        jwtToken.refreshToken(res, { userId });
+        // Generate JWT token
+        jwtToken.accessToken(res, { userId, role });
+        jwtToken.refreshToken(res, { userId, role });
 
         // Attach email and isVerified to request object
-        (req as any).userId = userId
+        (req as any).userId = userId;
+        (req as any).role = role
         next();
     } catch (error) {
         if(error instanceof CustomError) return next(error);

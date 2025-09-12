@@ -6,12 +6,14 @@ const googleCallback = (res: Response, data: { userId: string }) => {
     try {
         // Create JWT access token
         jwtToken.accessToken(res, {
-            userId: data.userId
+            userId: data.userId,
+            role: "USER"
         });
 
         // Create JWT refresh token
         jwtToken.refreshToken(res, {
-            userId: data.userId
+            userId: data.userId,
+            role: "USER"
         });
         return
     } catch (error) {
@@ -24,12 +26,14 @@ const githubCallback = (res: Response, data: { userId: string }) => {
     try {
         // Create JWT access token
         jwtToken.accessToken(res, {
-            userId: data.userId
+            userId: data.userId,
+            role: "USER"
         });
 
         // Create JWT refresh token
         jwtToken.refreshToken(res, {
-            userId: data.userId
+            userId: data.userId,
+            role: "USER"
         });
         return
     } catch (error) {
