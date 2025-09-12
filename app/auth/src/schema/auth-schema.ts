@@ -1,15 +1,21 @@
 import { z } from "zod";
+import { UserRole } from "@prisma/client";
+import dotenv from "dotenv";
+dotenv.config();
+
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'mdarkanurl@gmail.com';
+const userRoleEnum = z.enum([...(Object.values(UserRole) as [string, ...string[]])]);
 
 export const signUp = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(8, "Password must be at least 8 characters long"),
-  role: z.enum(["ADMIN", "USER"]).optional(),
+  role: userRoleEnum.optional(),
 }).superRefine((data, ctx) => {
-  if (data.role === "ADMIN") {
-    if (!data.email.endsWith("@deshcode.com")) {
+  if (data.role === UserRole.ADMIN) {
+    if (data.email !== ADMIN_EMAIL) {
       ctx.addIssue({
         path: ["email"],
-        message: "Admin accounts must use a @deshcode.com email",
+        message: "Admin accounts must use ADMIN_EMAIL",
         code: z.ZodIssueCode.custom,
       });
     }

@@ -22,28 +22,26 @@ const signUp = async (res: Response, data: { email: string, password: string, ro
         // Hash the password
         const hashedPassword = await bcrypt.hash(data.password, 10);
 
-        if(data.role && data.role === UserRole.ADMIN) {
-            // Save the admin to Database
-            const users = await authRepo.create({
-                email: data.email,
-                password: hashedPassword,
-                role: data.role
-            });
-            return {
-                userId: users.id,
-                email: users.email
-            };
-        }
-
         // Generate a verification code
         const verificationCode = Math.floor(100000 + Math.random() * 900000);
 
-        // Save the users to Database
-        const users = await authRepo.create({
-            email: data.email,
-            password: hashedPassword,
-            verificationCode: verificationCode
-        });
+        let users;
+        if(data.role && data.role === UserRole.ADMIN) {
+            // Save the admin to Database
+            users = await authRepo.create({
+                email: data.email,
+                password: hashedPassword,
+                verificationCode: verificationCode,
+                role: data.role
+            });
+        } else {
+            // Save the users to Database
+            users = await authRepo.create({
+                email: data.email,
+                password: hashedPassword,
+                verificationCode: verificationCode
+            });
+        }
 
         // Payload for jwt token
         const payload = {
@@ -124,7 +122,8 @@ const login = async (res: Response, data: { email: string, password: string }) =
             true,
             {
                 createdAt: true,
-                updatedAt: true
+                updatedAt: true,
+                verificationCode: true
             }
         );
 
@@ -150,7 +149,12 @@ const login = async (res: Response, data: { email: string, password: string }) =
             role: users.role
         });
 
-        return users;
+        return {
+            id: users.id,
+            email: users.email,
+            isVerified: true,
+            role: users.role
+        };
     } catch (error) {
         if(error instanceof CustomError) throw error;
         throw new CustomError("Internal server error", 500);

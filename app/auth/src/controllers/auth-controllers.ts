@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { authSchemas } from "../schema";
 import { authService } from "../services";
 import { CustomError } from "../utils/errors/app-error";
+import { UserRole } from "@prisma/client";
 
 interface AuthRequest extends Request {
   userId?: string;
@@ -28,7 +29,7 @@ const signUp = async (
         const users = await authService.signUp(res, {
             email: data.email,
             password: data.password,
-            role: data.role
+            role: data.role as UserRole
         });
 
         res.status(201).json({

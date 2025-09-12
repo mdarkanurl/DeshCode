@@ -19,17 +19,26 @@ const islogin = async (
         if(!accessToken && refreshToken) {
             await handleRefreshToken(req, res, next);
             return;
+        } else if(!accessToken && !refreshToken) {
+            res.status(401).json({
+                Success: false,
+                Message: "Unauthorized",
+                Data: null,
+                Errors: null,
+            });
+            return;
         };
 
         // verify the access token
         const decoded = jwt.verify(
             accessToken,
             process.env.ACCESS_TOKEN_SECRET || 'My_Access_Token_Secret'
-        ) as { email?: string; isVerified?: boolean };;
+        ) as { role?: string; userId?: string; isVerified?: boolean };
 
         if (
             typeof decoded === "string" ||
-            !decoded.email ||
+            !decoded.role ||
+            !decoded.userId ||
             decoded.isVerified === false
         ) {
             res.status(401).json({
@@ -42,13 +51,14 @@ const islogin = async (
         }
 
         // Access payload safely
-        const email = decoded.email as string;
-        const isVerified = decoded.isVerified as boolean;
+        const userId = decoded.userId as string;
+        const role = decoded.role as UserRole;
 
-        (req as any).email = email;
-        (req as any).isVerified = isVerified;
+        (req as any).userId = userId;
+        (req as any).role = role;
         next();
     } catch (error) {
+        console.log("Error from is-login.ts:", error);
         if(error instanceof CustomError) return next(error);
         return next(new CustomError('Internal Server Error', 500));
     }
@@ -60,7 +70,8 @@ async function handleRefreshToken(
     next: NextFunction
 ) {
     try {
-        const { refreshToken } = req.cookies;
+        console.log('From handleRefreshToken function.....');
+        const refreshToken = req.cookies['refreshToken'];
 
         if(!refreshToken) {
             res.status(401).json({
@@ -80,7 +91,8 @@ async function handleRefreshToken(
 
         if (
             typeof decoded === "string" ||
-            !decoded.userId
+            !decoded.userId ||
+            !decoded.role
         ) {
             res.status(401).json({
                 Success: false,
@@ -99,11 +111,12 @@ async function handleRefreshToken(
         jwtToken.accessToken(res, { userId, role });
         jwtToken.refreshToken(res, { userId, role });
 
-        // Attach email and isVerified to request object
+        // Attach userId and role to request object
         (req as any).userId = userId;
         (req as any).role = role
         next();
     } catch (error) {
+        console.log("Error from is-login.ts:", error);
         if(error instanceof CustomError) return next(error);
         return next(new CustomError('Internal Server Error', 500));
     }
