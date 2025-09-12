@@ -2,13 +2,15 @@ import jwt from "jsonwebtoken";
 import { Response } from "express";
 import dotenv from "dotenv";
 import { CustomError } from "./errors/app-error";
+import { UserRole } from "@prisma/client";
 dotenv.config({ path: '../.env' });
 
-function generateJwtAccessToken(res: Response, data: { userId: string }) {
+function generateJwtAccessToken(res: Response, data: { userId: string, role: UserRole }) {
     try {
         // Create a payload for JWT
         const payload = {
-            email: data.userId,
+            userId: data.userId,
+            role: data.role
         }
 
         // Generate token

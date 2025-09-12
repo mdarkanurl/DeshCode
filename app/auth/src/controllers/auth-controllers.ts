@@ -27,7 +27,8 @@ const signUp = async (
 
         const users = await authService.signUp(res, {
             email: data.email,
-            password: data.password
+            password: data.password,
+            role: data.role
         });
 
         res.status(201).json({

@@ -6,11 +6,12 @@ import { jwtToken } from "../utils";
 import { CustomError } from "../utils/errors/app-error";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
+import { UserRole } from "@prisma/client";
 dotenv.config({ path: '../../.env' });
 
 const authRepo = new AuthRepo();
 
-const signUp = async (res: Response, data: { email: string, password: string }) => {
+const signUp = async (res: Response, data: { email: string, password: string, role?: UserRole }) => {
     try {
         const isUsersAlreadyExist = await authRepo.getByEmail(data.email, true);
 
@@ -20,6 +21,19 @@ const signUp = async (res: Response, data: { email: string, password: string }) 
 
         // Hash the password
         const hashedPassword = await bcrypt.hash(data.password, 10);
+
+        if(data.role && data.role === UserRole.ADMIN) {
+            // Save the admin to Database
+            const users = await authRepo.create({
+                email: data.email,
+                password: hashedPassword,
+                role: data.role
+            });
+            return {
+                userId: users.id,
+                email: users.email
+            };
+        }
 
         // Generate a verification code
         const verificationCode = Math.floor(100000 + Math.random() * 900000);
@@ -93,8 +107,8 @@ const verifyTheEmail = async (res: Response, data: { userId: string, code: numbe
         );
 
         // Generate access and refresh tokens and set to cookies
-        jwtToken.accessToken(res, { userId: users.id });
-        jwtToken.refreshToken(res, { userId: users.id });
+        jwtToken.accessToken(res, { userId: users.id, role: users.role });
+        jwtToken.refreshToken(res, { userId: users.id, role: users.role });
 
         return updateIsVerified;
     } catch (error) {
@@ -127,11 +141,13 @@ const login = async (res: Response, data: { email: string, password: string }) =
 
         // Generate JWT token and set it into cookie
         jwtToken.accessToken(res, {
-            userId: users.id
+            userId: users.id,
+            role: users.role
         });
 
         jwtToken.refreshToken(res, {
-            userId: users.id
+            userId: users.id,
+            role: users.role
         });
 
         return users;
