@@ -1,4 +1,4 @@
-import { sendVerificationCodeQueue } from "../RabbitMQ";
+import { sendVerificationCodeQueue, sendForgetPasswordCodeQueue } from "../RabbitMQ";
 import { Response } from "express";
 import { AuthRepo } from "../repo";
 import jwt from "jsonwebtoken";
@@ -188,7 +188,7 @@ const forgetPassword = async (data: { email: string }) => {
         await authRepo.updateById(
             users.id,
             {
-                forgotPasswordCode: forgotPasswordCode.toString()
+                forgotPasswordCode: forgotPasswordCode
             },
             {
                 password: true,
@@ -212,7 +212,7 @@ const forgetPassword = async (data: { email: string }) => {
         );
 
         // Send verification code to email
-        await sendVerificationCodeQueue(data.email, forgotPasswordCode.toString());
+        await sendForgetPasswordCodeQueue(data.email, forgotPasswordCode.toString());
 
         return {
             email: users.email,
@@ -254,6 +254,9 @@ const setForgetPassword = async (data: { userId: string, code: number, newPasswo
             },
             {
                 password: true,
+                verificationCode: true,
+                isVerified: true,
+                forgotPasswordCode: true,
                 updatedAt: true,
                 createdAt: true
             }
