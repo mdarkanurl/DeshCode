@@ -12,7 +12,8 @@ const islogin = async (
     next: NextFunction
 ) => {
     try {
-        const { accessToken, refreshToken } = req.cookies;
+        const accessToken = req.cookies['accessToken'];
+        const refreshToken = req.cookies['refreshToken'];
 
         if(!accessToken && refreshToken) {
             await handleRefreshToken(req, res, next);

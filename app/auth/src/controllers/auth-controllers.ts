@@ -64,7 +64,7 @@ const verifyTheEmail = async (
             return;
         }
 
-        const updateUsers = await authService.verifyTheEmail({
+        const updateUsers = await authService.verifyTheEmail(res, {
             userId: data.userId,
             code: data.code
         });

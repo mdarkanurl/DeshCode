@@ -58,7 +58,7 @@ const signUp = async (res: Response, data: { email: string, password: string }) 
     }
 }
 
-const verifyTheEmail = async (data: { userId: string, code: number }) => {
+const verifyTheEmail = async (res: Response, data: { userId: string, code: number }) => {
     try {
         const users = await authRepo.getByStringId(
             data.userId,
@@ -91,6 +91,10 @@ const verifyTheEmail = async (data: { userId: string, code: number }) => {
                 createdAt: true
             }
         );
+
+        // Generate access and refresh tokens and set to cookies
+        jwtToken.accessToken(res, { userId: users.id });
+        jwtToken.refreshToken(res, { userId: users.id });
 
         return updateIsVerified;
     } catch (error) {
