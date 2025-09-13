@@ -2,9 +2,12 @@ import { Router } from "express";
 import { discussionsControllers } from "../../controllers";
 const router = Router();
 
-router.post('/', discussionsControllers.createDiscussions);
+import { authMiddlewares } from "../../middlewares";
+const { islogin } = authMiddlewares;
+
+router.post('/', islogin, discussionsControllers.createDiscussions);
 router.get('/', discussionsControllers.getAllDiscussions);
 router.get('/:id', discussionsControllers.getDiscussionsById);
-router.patch('/:id', discussionsControllers.updateDiscussions);
+router.put('/:id', islogin, discussionsControllers.updateDiscussions);
 
 export default router
