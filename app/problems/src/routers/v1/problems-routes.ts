@@ -2,9 +2,12 @@ import { Router } from "express";
 import { problemscontrollers } from "../../controllers";
 const router = Router();
 
-router.post('/', problemscontrollers.createProblems);
+import { authMiddlewares } from "../../middlewares";
+const { isAdmin } = authMiddlewares;
+
+router.post('/', isAdmin, problemscontrollers.createProblems);
 router.get('/', problemscontrollers.getAllProblems);
 router.get('/:id', problemscontrollers.getProblem);
-router.put('/:id', problemscontrollers.updateProblem);
+router.put('/:id', isAdmin, problemscontrollers.updateProblem);
 
 export default router;

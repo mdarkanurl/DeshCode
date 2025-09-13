@@ -2,7 +2,10 @@ import { Router } from "express";
 import { submissionsControllers } from "../../controllers";
 const router = Router();
 
-router.post('/', submissionsControllers.submissionsSolution);
-router.get('/:id', submissionsControllers.getSubmissionsById);
+import { authMiddlewares } from "../../middlewares";
+const { islogin } = authMiddlewares;
+
+router.post('/', islogin, submissionsControllers.submissionsSolution);
+router.get('/:id', islogin, submissionsControllers.getSubmissionsById);
 
 export default router;
