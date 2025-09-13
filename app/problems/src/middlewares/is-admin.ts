@@ -59,6 +59,7 @@ const isAdmin = async (
         (req as any).role = role;
         next();
     } catch (error) {
+        console.log('Error from is-admin.ts', error);
         if(error instanceof CustomError) return next(error);
         return next(new CustomError('Internal Server Error', 500));
     }
