@@ -3,7 +3,7 @@ import { submissionsControllers } from "../../controllers";
 import { submissionMiddlewares, authMiddlewares } from "../../middlewares";
 const router = Router();
 
-const { isAdmin, islogin } = authMiddlewares;
+const { islogin } = authMiddlewares;
 
 router.post('/',
     islogin,
