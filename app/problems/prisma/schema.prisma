@@ -41,35 +41,35 @@ enum ProblemsTypes {
 }
 
 model Problems {
-  id          String         @id
-  title       String
-  description String
-  functionName String
-  language     String[]
-  difficulty  DifficultyLevel
-  testCases   Json[]
+  id            String         @id
+  title         String
+  description   String
+  functionName  String
+  language      String[]
+  difficulty    DifficultyLevel
+  testCases     Json[]
   problemsTypes ProblemsTypes
-  tags        String[]
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  tags          String[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
 
-  submissions Submissions[]
-  discussions Discussion[]
+  submissions   Submissions[]
+  discussions   Discussion[]
 }
 
 model Submissions {
-  id         Int      @id @default(autoincrement())
-  userId     Int
+  id          Int      @id @default(autoincrement())
+  userId      String
   problemsId  String
   problems    Problems  @relation(fields: [problemsId], references: [id])
-  status     SubmissionsStatus
-  language   String
-  code   String
-  output String?
-  runtimeMs  Int?
-  memoryKb   Int?
-  createdAt  DateTime @default(now())
-  updatedAt    DateTime  @updatedAt
+  status      SubmissionsStatus
+  language    String
+  code        String
+  output      String?
+  runtimeMs   Int?
+  memoryKb    Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime  @updatedAt
 }
 
 model Discussion {

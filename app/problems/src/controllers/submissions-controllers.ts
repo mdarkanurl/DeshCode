@@ -4,14 +4,25 @@ import { CustomError } from "../utils/errors/app-error";
 import { Request, Response, NextFunction } from "express";
 import { SubmissionsStatus } from "@prisma/client";
 
+interface AuthRequest extends Request {
+    userId?: String
+}
+
 
 async function submissionsSolution(
-    req: Request,
+    req: AuthRequest,
     res: Response,
     next: NextFunction
 ) {
     try {
-        const parseData = submissionsSchema.submissionsSolutionSchema.safeParse(req.body);
+        const userId = req.userId as string;
+        const { problemsId, language, code } = req.body;
+        const parseData = submissionsSchema.submissionsSolutionSchema.safeParse({
+            userId,
+            problemsId,
+            language,
+            code
+        });
 
         if(!parseData.success) {
             res.status(400).json({

@@ -9,7 +9,7 @@ const submissionsRepo = new SubmissionsRepo();
 
 async function submissionsSolution(data: {
     problemsId: string,
-    userId: number,
+    userId: string,
     language: string,
     code: string
 }) {
