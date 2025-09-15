@@ -5,7 +5,7 @@ const { googleCallback, githubCallback } = OauthControllers;
 
 const router = Router();
 
-router.post('/google',
+router.get('/google',
     passport.authenticate('google', { scope: ['profile', 'email'] })
 );
 

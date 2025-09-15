@@ -1,13 +1,15 @@
 import passport from "passport";
 import { Strategy as GitHubStrategy, Profile } from "passport-github2";
 import { prisma } from "../prisma";
+import dotenv from 'dotenv';
+dotenv.config();
 
 passport.use(
   new GitHubStrategy(
     {
       clientID: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
-      callbackURL: "http://localhost:3000/auth/github/callback",
+      callbackURL: process.env.GITHUB_CALL_BACK_URL || "http://localhost:3004/api/v1/oauth/github/callback",
     },
     async (
       _accessToken: string,
@@ -38,3 +40,7 @@ passport.use(
     }
   )
 );
+
+export {
+  passport
+};
