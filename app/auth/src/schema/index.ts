@@ -1,5 +1,6 @@
 import {
   signUp,
+  resendCode,
   verifyTheEmail,
   login,
   forgetPassword,
@@ -9,6 +10,7 @@ import {
 
 const authSchemas = {
   signUp,
+  resendCode,
   verifyTheEmail,
   login,
   forgetPassword,

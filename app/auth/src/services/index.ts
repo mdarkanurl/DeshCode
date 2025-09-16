@@ -1,5 +1,6 @@
 import {
     signUp,
+    resendCode,
     verifyTheEmail,
     login,
     logout,
@@ -15,6 +16,7 @@ import {
 
 const authService = {
     signUp,
+    resendCode,
     verifyTheEmail,
     login,
     logout,

@@ -22,6 +22,9 @@ export const signUp = z.object({
   }
 });
 
+export const resendCode = z.object({
+  email: z.string().email("Invalid email address"),
+})
 
 export const verifyTheEmail = z.object({
   userId: z.string(),

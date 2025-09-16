@@ -1,5 +1,5 @@
 import { sendVerificationCodeQueue, sendForgetPasswordCodeQueue } from "../RabbitMQ";
-import { Response } from "express";
+import e, { Response } from "express";
 import { UserRepo, AuthProviderRepo } from "../repo";
 import jwt from "jsonwebtoken";
 import { jwtToken } from "../utils";
@@ -12,7 +12,7 @@ dotenv.config({ path: '../../.env' });
 const userRepo = new UserRepo();
 const authProviderRepo = new AuthProviderRepo();
 
-const signUp = async (res: Response, data: { email: string, password: string, role?: UserRole }) => {
+const signUp = async ( data: { email: string, password: string, role?: UserRole }) => {
     try {
         const isUsersAlreadyExist = await userRepo.getByEmail(data.email, true);
 
@@ -74,6 +74,63 @@ const signUp = async (res: Response, data: { email: string, password: string, ro
     }
 }
 
+const resendCode = async (email: string) => {
+    try {
+        const users = await userRepo.getByEmail(email, false);
+
+        if(!users || !users.email) {
+            throw new CustomError('No user found under this email', 400);
+        }
+
+        // Generate a verification code
+        const verificationCode = Math.floor(100000 + Math.random() * 900000);
+
+        await authProviderRepo.updateByUserId(users.id, 
+            {
+                verificationCode
+            },
+            {
+                id: true,
+                email: true,
+                avatar: true,
+                createdAt: true,
+                updatedAt: true,
+                provider: true,
+                providerId: true,
+                username: true,
+                password: true,
+                forgotPasswordCode: true,
+                userId: true,
+            }
+        )
+
+        // Payload for jwt token
+        const payload = {
+            userId: users.id
+        }
+
+        // Generate JWT token and send to client
+        const tempToken = jwt.sign(
+            payload,
+            process.env.TEMP_JWT_TOKEN || 'Temp-Secret-JWT-Token',
+            {
+                expiresIn: '5m',
+            }
+        );
+
+        // Send verification code to email
+        await sendVerificationCodeQueue(users.email, verificationCode.toString());
+        return {
+            userId: users.id,
+            email: users.email,
+            token: tempToken
+        };
+    } catch (error) {
+        if(error instanceof CustomError) throw error;
+        throw new CustomError("Internal server error", 500);
+    }
+}
+
 const verifyTheEmail = async (res: Response, data: { userId: string, code: number }) => {
     try {
         const users = await userRepo.getByStringId(
@@ -82,7 +139,6 @@ const verifyTheEmail = async (res: Response, data: { userId: string, code: numbe
             {
                 updatedAt: true,
                 createdAt: true,
-                password: true
             }
         );
 
@@ -111,17 +167,22 @@ const verifyTheEmail = async (res: Response, data: { userId: string, code: numbe
             throw new CustomError('Invalid verification code', 400);
         }
 
-        // Update the isVerified
-        const updateTheIsVerified = await userRepo.updateById(
+        // Update the verificationCode to unll
+        await authProviderRepo.updateByUserId(
             users.id,
             {
-                verificationCode: null,
-                isVerified: true
+                verificationCode: null
             },
             {
                 password: true,
                 updatedAt: true,
                 createdAt: true
+            }
+        );
+
+        const updateTheIsVerified = await userRepo.updateById(users.id, 
+            {
+                isVerified: true
             }
         );
 
@@ -131,6 +192,7 @@ const verifyTheEmail = async (res: Response, data: { userId: string, code: numbe
 
         return updateTheIsVerified;
     } catch (error) {
+        console.log("Error from service", error);
         if(error instanceof CustomError) throw error;
         throw new CustomError("Internal server error", 500);
     }
@@ -386,6 +448,7 @@ const changesPassword = async (data: { userId: string, currentPassword: string, 
 
 export {
     signUp,
+    resendCode,
     verifyTheEmail,
     login,
     logout,

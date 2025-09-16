@@ -1,5 +1,6 @@
 import {
     signUp,
+    resendCode,
     verifyTheEmail,
     login,
     logout,
@@ -15,6 +16,7 @@ import {
 
 const authControllers = {
     signUp,
+    resendCode,
     verifyTheEmail,
     login,
     logout,

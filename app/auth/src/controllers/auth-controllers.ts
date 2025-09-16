@@ -26,7 +26,7 @@ const signUp = async (
             return;
         }
 
-        const users = await authService.signUp(res, {
+        const users = await authService.signUp({
             email: data.email,
             password: data.password,
             role: data.role as UserRole
@@ -42,6 +42,38 @@ const signUp = async (
     } catch (error) {
         if(error instanceof CustomError) return next(error);
         return next(new CustomError('Internal Server Error', 500));
+    }
+}
+
+const resendCode = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    try {
+        const { error, success, data } = authSchemas.resendCode.safeParse(req.body);
+
+        if(!success) {
+            res.status(400).json({
+                Success: false,
+                Message: 'Invalid input',
+                Data: null,
+                Errors: error.errors
+            });
+            return;
+        }
+
+        const responses = await authService.resendCode(data.email);
+
+        res.status(201).json({
+            Success: true,
+            Message: `Successfully send code this email ${data.email}`,
+            Data: responses,
+            Errors: null
+        });
+    } catch (error) {
+        if(error instanceof CustomError) return next(error);
+        return next(new CustomError('Internal Server Error', 500));   
     }
 }
 
@@ -256,6 +288,7 @@ const changesPassword = async (
 
 export {
     signUp,
+    resendCode,
     verifyTheEmail,
     login,
     logout,
