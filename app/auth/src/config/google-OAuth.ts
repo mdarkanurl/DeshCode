@@ -61,6 +61,14 @@ passport.use(new GoogleStrategy({
               userId: user.id
             }
           });
+
+          await prisma.user.update({
+            where: { id: user.id },
+            data: {
+              name: profile.displayName,
+              avatar: profile.photos?.[0]?.value ?? null,
+            }
+          });
         }
       }
 
