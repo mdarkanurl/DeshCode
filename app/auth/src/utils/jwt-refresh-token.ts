@@ -17,7 +17,7 @@ function generateJwtRefreshToken(res: Response, data: { userId: string, role: Us
         const token = jwt.sign(
             payload, process.env.REFRESH_TOKEN_SECRET || 'My_Refresh_Token_Secret',
             {
-                expiresIn: '30d',
+                expiresIn: '15d',
 
             }
         );

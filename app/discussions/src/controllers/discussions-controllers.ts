@@ -4,13 +4,23 @@ import { discussionsServices } from "../services";
 import { CustomError } from "../utils/errors/app-error";
 import { Topic } from "@prisma/client";
 
+interface AuthRequest extends Request {
+    userId?: String
+}
+
 async function createDiscussions(
-    req: Request,
+    req: AuthRequest,
     res: Response,
     next: NextFunction
 ) {
     try {
-        const parseData: any = discussionsSchema.createDiscussions.safeParse(req.body);
+        const userId = req.userId as string;
+        const parseData: any = discussionsSchema.createDiscussions.safeParse({
+            userId,
+            topic: req.body.topic,
+            title: req.body.title,
+            content: req.body.content
+        });
 
         if(!parseData.success) {
             res.status(400).json({
@@ -97,14 +107,21 @@ async function getDiscussionsById(
 }
 
 async function updateDiscussions(
-    req: Request,
+    req: AuthRequest,
     res: Response,
     next: NextFunction
 ) {
     try {
         const { id } = req.params;
+        const userId = req.userId as string;
         req.body.discussId = parseInt(id);
-        const parseData: any = discussionsSchema.updateDiscussions.safeParse((req.body));
+
+        const parseData: any = discussionsSchema.updateDiscussions.safeParse({
+            userId,
+            discussionsId: req.body.discussionsId,
+            title: req.body.title,
+            content: req.body.content
+        });
 
         if (!parseData.success) {
             res.status(400).json({

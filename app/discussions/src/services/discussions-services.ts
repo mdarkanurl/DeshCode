@@ -82,20 +82,23 @@ async function getDiscussionsById(data: {
 }
 
 async function updateDiscussions(data: {
+    userId: string
     id: number
     title?: string
     content?: string
 }) {
     try {
-        const discussions = await discussionsRepo.update(data.id, {
+        const discussions = await discussionsRepo.getById(data.id);
+
+        if(!discussions || discussions.userId !== data.userId) {
+            throw new CustomError('Access denied or discussion not found', 401)
+        }
+
+        await discussionsRepo.update(discussions.id, {
             title: data.title,
             content: data.content
         });
-
-        if (!discussions) {
-            const isDiscussionsExists = await discussionsRepo.getById(data.id);
-            if (!isDiscussionsExists) throw new CustomError('Discussion not found', 404);
-        }
+        
         return discussions;
     } catch (error) {
         if (error instanceof CustomError) throw error;

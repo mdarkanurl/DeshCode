@@ -17,7 +17,7 @@ function generateJwtAccessToken(res: Response, data: { userId: string, role: Use
         const token = jwt.sign(
             payload, process.env.ACCESS_TOKEN_SECRET || 'My_Access_Token_Secret',
             {
-                expiresIn: '15m',
+                expiresIn: '5m',
             }
         );
 
