@@ -2,6 +2,7 @@ import passport from "passport";
 import { Strategy as GitHubStrategy, Profile } from "passport-github2";
 import { prisma } from "../prisma";
 import dotenv from 'dotenv';
+import { Provider } from "@prisma/client";
 dotenv.config();
 
 passport.use(
@@ -19,8 +20,8 @@ passport.use(
     ) => {
       try {
         let user;
-        user = await prisma.authProvider.findUnique({
-          where: { providerId: profile.id },
+        user = await prisma.user.findUnique({
+          where: { email: profile.emails?.[0]?.value || undefined },
         });
 
         if (!user) {
@@ -43,6 +44,33 @@ passport.use(
               userId: user.id
             }
           });
+        } else {
+          const IsProviderGoogle = await prisma.authProvider.count({
+            where: {
+              userId: user.id,
+              provider: Provider.github
+            }
+          });
+          
+          if(IsProviderGoogle <= 0) {
+            await prisma.authProvider.create({
+              data: {
+                provider: Provider.github,
+                providerId: profile.id,
+                email: profile.emails?.[0]?.value || null,
+                username: profile.username ?? null,
+                avatar: profile.photos?.[0]?.value ?? null,
+                userId: user.id
+              }
+            });
+            await prisma.user.update({
+              where: { id: user.id },
+              data: {
+                name: profile.displayName,
+                avatar: profile.photos?.[0]?.value ?? null,
+              }
+            });
+          }
         }
 
         return done(null, user);
