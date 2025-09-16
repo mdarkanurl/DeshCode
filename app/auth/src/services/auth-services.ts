@@ -204,7 +204,10 @@ const login = async (res: Response, data: { email: string, password: string }) =
             data.email,
             true,
             {
-                verificationCode: true
+                avatar: true,
+                name: true,
+                createdAt: true,
+                updatedAt: true
             }
         );
 
@@ -370,7 +373,6 @@ const setForgetPassword = async (data: { userId: string, code: number, newPasswo
             {
                 password: true,
                 verificationCode: true,
-                isVerified: true,
                 forgotPasswordCode: true,
                 updatedAt: true,
                 createdAt: true
