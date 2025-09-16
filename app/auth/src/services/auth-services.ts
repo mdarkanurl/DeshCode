@@ -174,7 +174,6 @@ const verifyTheEmail = async (res: Response, data: { userId: string, code: numbe
 
         return updateTheIsVerified;
     } catch (error) {
-        console.log("Error from service", error);
         if(error instanceof CustomError) throw error;
         throw new CustomError("Internal server error", 500);
     }

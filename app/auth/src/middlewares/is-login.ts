@@ -58,7 +58,6 @@ const islogin = async (
         (req as any).role = role;
         next();
     } catch (error) {
-        console.log("Error from is-login.ts:", error);
         if(error instanceof CustomError) return next(error);
         return next(new CustomError('Internal Server Error', 500));
     }
@@ -70,7 +69,6 @@ async function handleRefreshToken(
     next: NextFunction
 ) {
     try {
-        console.log('From handleRefreshToken function.....');
         const refreshToken = req.cookies['refreshToken'];
 
         if(!refreshToken) {
@@ -116,7 +114,6 @@ async function handleRefreshToken(
         (req as any).role = role
         next();
     } catch (error) {
-        console.log("Error from is-login.ts:", error);
         if(error instanceof CustomError) return next(error);
         return next(new CustomError('Internal Server Error', 500));
     }

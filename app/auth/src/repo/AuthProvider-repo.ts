@@ -40,7 +40,6 @@ export class AuthProviderRepo extends CrudRepo {
                 omit
             });
         } catch (error) {
-            console.log("Error from AuthProvider-repo.ts: ", error);
             if(error instanceof CustomError) throw error;
             throw new CustomError("Internal Server Error", 500);
         }

@@ -39,7 +39,6 @@ export class UserRepo extends CrudRepo {
                 omit
             });
         } catch (error) {
-            console.log("Error from repo", error);
             if(error instanceof CustomError) throw error;
             throw new CustomError("Internal Server Error", 500);
         }
