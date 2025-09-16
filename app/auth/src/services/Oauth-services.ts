@@ -4,7 +4,6 @@ import { CustomError } from "../utils/errors/app-error";
 
 const googleCallback = (res: Response, data: { userId: string }) => {
     try {
-        console.log('Is it on services');
         // Create JWT access token
         jwtToken.accessToken(res, {
             userId: data.userId,

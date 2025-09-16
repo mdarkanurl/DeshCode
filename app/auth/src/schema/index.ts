@@ -8,6 +8,8 @@ import {
   changesPassword
 } from "./auth-schema";
 
+import { OauthSchema } from "./Oauth-schema";
+
 const authSchemas = {
   signUp,
   resendCode,
@@ -20,4 +22,5 @@ const authSchemas = {
 
 export {
     authSchemas,
+    OauthSchema
 };

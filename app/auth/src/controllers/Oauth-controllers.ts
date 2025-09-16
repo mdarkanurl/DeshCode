@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { OauthService } from "../services";
 import { CustomError } from "../utils/errors/app-error";
+import { OauthSchema } from "../schema";
 
 interface AuthRequest extends Request {
   user?: any;
@@ -12,15 +13,23 @@ const googleCallback = async (
     next: NextFunction
 ) => {
     try {
-        console.log('Is it hit here');
         const userId = req?.user?.id;
-        console.log("User Id: ", userId, "And user object", req.user);
 
-        if(!userId) return;
+        const { error, success, data } = OauthSchema.safeParse({ id: userId });
 
-        // OauthService.googleCallback(res, {
-        //     userId: userId
-        // });
+        if(!success) {
+            res.status(400).json({
+                Success: false,
+                Message: 'Invalid input',
+                Data: null,
+                Errors: error.errors
+            });
+            return;
+        };
+
+        OauthService.googleCallback(res, {
+            userId: data.id
+        });
 
         res.status(201).json({
             Success: true,
@@ -41,14 +50,22 @@ const githubCallback = async (
     next: NextFunction
 ) => {
     try {
-        console.log('Is it hit here');
         const userId = req?.user?.id;
-        console.log("User Id: ", userId)
 
-        if(!userId) return;
+        const { error, success, data } = OauthSchema.safeParse({ id: userId });
+
+        if(!success) {
+            res.status(400).json({
+                Success: false,
+                Message: 'Invalid input',
+                Data: null,
+                Errors: error.errors
+            });
+            return;
+        };
 
         OauthService.githubCallback(res, {
-            userId
+            userId: data.id
         });
 
         res.status(201).json({
