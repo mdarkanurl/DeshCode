@@ -1,19 +1,8 @@
-/*
-  Warnings:
+-- CreateEnum
+CREATE TYPE "public"."UserRole" AS ENUM ('ADMIN', 'USER');
 
-  - You are about to drop the `GitHub_OAuth` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Google_OAuth` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `Users` table. If the table is not empty, all the data it contains will be lost.
-
-*/
--- DropTable
-DROP TABLE "public"."GitHub_OAuth";
-
--- DropTable
-DROP TABLE "public"."Google_OAuth";
-
--- DropTable
-DROP TABLE "public"."Users";
+-- CreateEnum
+CREATE TYPE "public"."Provider" AS ENUM ('local', 'google', 'github');
 
 -- CreateTable
 CREATE TABLE "public"."User" (
@@ -32,7 +21,7 @@ CREATE TABLE "public"."User" (
 -- CreateTable
 CREATE TABLE "public"."AuthProvider" (
     "id" TEXT NOT NULL,
-    "provider" TEXT NOT NULL,
+    "provider" "public"."Provider" NOT NULL,
     "providerId" TEXT,
     "email" TEXT,
     "username" TEXT,
@@ -49,6 +38,12 @@ CREATE TABLE "public"."AuthProvider" (
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "public"."User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "AuthProvider_providerId_key" ON "public"."AuthProvider"("providerId");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "AuthProvider_userId_key" ON "public"."AuthProvider"("userId");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "AuthProvider_provider_providerId_key" ON "public"."AuthProvider"("provider", "providerId");

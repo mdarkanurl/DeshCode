@@ -1,6 +1,7 @@
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import passport from 'passport';
 import { prisma } from '../prisma';
+import { Provider } from "@prisma/client";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -33,7 +34,7 @@ passport.use(new GoogleStrategy({
 
         await prisma.authProvider.create({
           data: {
-            provider: "google",
+            provider: Provider.google,
             providerId: profile.id,
             email: email,
             username: profile.username ?? null,
@@ -41,6 +42,26 @@ passport.use(new GoogleStrategy({
             userId: user.id
           }
         });
+      } else { // If Google provider does not exist, create one
+        const IsProviderGoogle = await prisma.authProvider.count({
+          where: {
+            userId: user.id,
+            provider: Provider.google
+          }
+        });
+
+        if(IsProviderGoogle <= 0) {
+          await prisma.authProvider.create({
+            data: {
+              provider: Provider.google,
+              providerId: profile.id,
+              email: email,
+              username: profile.username ?? null,
+              avatar: profile.photos?.[0]?.value ?? null,
+              userId: user.id
+            }
+          });
+        }
       }
 
       // Pass user to next step
