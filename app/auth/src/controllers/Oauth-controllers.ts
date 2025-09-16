@@ -14,7 +14,7 @@ const googleCallback = async (
     try {
         console.log('Is it hit here');
         const userId = req?.user?.id;
-        console.log("User Id: ", userId)
+        console.log("User Id: ", userId, "And user object", req.user);
 
         if(!userId) return;
 

@@ -12,10 +12,9 @@ passport.use(new GoogleStrategy({
   async (accessToken, refreshToken, profile, done) => {
     try {
       const email = profile?.emails?.[0]?.value as string;
-      const googleId = profile.id;
 
       // Find user by email
-      let user = await prisma.google_OAuth.findUnique({
+      let user = await prisma.user.findUnique({
         where: {
             email: email
         }
@@ -23,18 +22,28 @@ passport.use(new GoogleStrategy({
 
       // If user does not exist, create one
       if (!user) {
-        user = await prisma.google_OAuth.create({
+        user = await prisma.user.create({
             data: {
                 email: email,
-                googleId,
                 name: profile.displayName,
-                provider: 'google',
+                avatar: profile.photos?.[0]?.value ?? null,
                 isVerified: true
             }
         });
+
+        await prisma.authProvider.create({
+          data: {
+            provider: "google",
+            providerId: profile.id,
+            email: email,
+            username: profile.username ?? null,
+            avatar: profile.photos?.[0]?.value ?? null,
+            userId: user.id
+          }
+        });
       }
 
-      // Pass users to next step
+      // Pass user to next step
       return done(null, user);
     } catch (err) {
       return done(err, false);

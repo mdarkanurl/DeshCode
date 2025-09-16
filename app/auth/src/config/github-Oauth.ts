@@ -18,18 +18,30 @@ passport.use(
       done: (error: any, user?: Express.User | false | null) => void
     ) => {
       try {
-        let user = await prisma.gitHub_OAuth.findUnique({
-          where: { githubId: profile.id },
+        let user;
+        user = await prisma.authProvider.findUnique({
+          where: { providerId: profile.id },
         });
 
         if (!user) {
-          user = await prisma.gitHub_OAuth.create({
+          user = await prisma.user.create({
             data: {
-              githubId: profile.id,
-              username: profile.username || "",
               email: profile.emails?.[0]?.value || null,
+              name: profile.displayName || null,
               avatar: profile.photos?.[0]?.value || null,
+              isVerified: true
             },
+          });
+
+          await prisma.authProvider.create({
+            data: {
+              provider: "github",
+              providerId: profile.id,
+              email: profile.emails?.[0]?.value || null,
+              username: profile.username || null,
+              avatar: profile.photos?.[0]?.value || null,
+              userId: user.id
+            }
           });
         }
 

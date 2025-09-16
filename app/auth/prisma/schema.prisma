@@ -18,38 +18,46 @@ enum UserRole {
   USER
 }
 
-model Users {
-  id                  String  @id @default(cuid())
-  email               String  @unique
-  password            String
-  verificationCode    Int?
-  isVerified          Boolean @default(false)
-  role                UserRole @default(USER)
-  forgotPasswordCode  Int?
-
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+enum Provider {
+  local
+  google
+  github
 }
 
-model Google_OAuth {
-  id          String @id @default(cuid())
-  email       String @unique
-  googleId    String @unique
-  name        String
-  provider    String
-  isVerified  Boolean
-  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+model User {
+  id                 String       @id @default(cuid())
+  email              String?      @unique
+  name               String?
+  avatar             String?
+  role               UserRole     @default(USER)
+  isVerified         Boolean      @default(false)
+
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  // Relations
+  authProviders      AuthProvider[]
 }
 
-model GitHub_OAuth {
-  id          String @id @default(cuid())
-  githubId    String @unique
-  username    String
-  email       String?
-  avatar      String?
+model AuthProvider {
+  id                 String   @id @default(cuid())
+  provider           Provider
+  providerId         String?  @unique
+  email              String?  // provider email (may differ from User.email)
+  username           String?  // GitHub username
+  avatar             String?  // provider avatar
 
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  // For local login only
+  password           String?
+  verificationCode   Int?
+  forgotPasswordCode Int?
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  // Relations
+  userId             String   @unique
+  user               User     @relation(fields: [userId], references: [id])
+
+  @@unique([provider, providerId]) // ensure no duplicate provider accounts
 }

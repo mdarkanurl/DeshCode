@@ -2,14 +2,14 @@ import { CrudRepo } from "./crud-repo";
 import { prisma } from "../prisma";
 import { CustomError } from "../utils/errors/app-error";
 
-export class AuthRepo extends CrudRepo {
+export class UserRepo extends CrudRepo {
     constructor() {
-        super(prisma.users);
+        super(prisma.user);
     }
 
     async getByEmail( email: string, isVerified: boolean = true, omit?: {} ) {
         try {
-            return await prisma.users.findUnique({
+            return await prisma.user.findUnique({
                 where: { email, isVerified },
                 omit
             });
@@ -19,10 +19,10 @@ export class AuthRepo extends CrudRepo {
         }
     }
 
-    async getByStringId(id: string, omit?: {}) {
+    async getByStringId(id: string, isVerified: boolean, omit?: {}) {
         try {
-            return await prisma.users.findUnique({
-                where: { id },
+            return await prisma.user.findUnique({
+                where: { id, isVerified },
                 omit
             });
         } catch (error) {
@@ -33,7 +33,7 @@ export class AuthRepo extends CrudRepo {
 
     async updateById(id: string, data: {}, omit?: {}) {
         try {
-            return await prisma.users.update({
+            return await prisma.user.update({
                 where: { id },
                 data,
                 omit
