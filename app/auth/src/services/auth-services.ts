@@ -88,19 +88,6 @@ const resendCode = async (email: string) => {
         await authProviderRepo.updateByUserId(users.id, 
             {
                 verificationCode
-            },
-            {
-                id: true,
-                email: true,
-                avatar: true,
-                createdAt: true,
-                updatedAt: true,
-                provider: true,
-                providerId: true,
-                username: true,
-                password: true,
-                forgotPasswordCode: true,
-                userId: true,
             }
         )
 
@@ -172,11 +159,6 @@ const verifyTheEmail = async (res: Response, data: { userId: string, code: numbe
             users.id,
             {
                 verificationCode: null
-            },
-            {
-                password: true,
-                updatedAt: true,
-                createdAt: true
             }
         );
 
@@ -284,18 +266,10 @@ const forgetPassword = async (data: { email: string }) => {
         const forgotPasswordCode = Math.floor(100000 + Math.random() * 900000);
 
         // Update the forget password code in DB
-        const x = await authProviderRepo.updateByUserId(
+        await authProviderRepo.updateByUserId(
             users.id,
             {
                 forgotPasswordCode: forgotPasswordCode
-            },
-            {
-                email: true,
-                avatar: true,
-                providerId: true,
-                username: true,
-                password: true,
-                verificationCode: true
             }
         );
 

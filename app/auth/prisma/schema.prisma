@@ -56,7 +56,7 @@ model AuthProvider {
   updatedAt          DateTime @updatedAt
 
   // Relations
-  userId             String   @unique
+  userId             String 
   user               User     @relation(fields: [userId], references: [id])
 
   @@unique([provider, providerId]) // ensure no duplicate provider accounts

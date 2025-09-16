@@ -22,10 +22,9 @@ export class AuthProviderRepo extends CrudRepo {
 
     async updateByUserId(userId: string, data: {}, omit?: {}) {
         try {
-            return await prisma.authProvider.update({
-                where: { userId },
-                data,
-                omit
+            return await prisma.authProvider.updateMany({
+                where: { userId: userId },
+                data
             });
         } catch (error) {
             if(error instanceof CustomError) throw error;
