@@ -96,9 +96,6 @@ importers:
       supertest:
         specifier: ^7.1.4
         version: 7.1.4
-      testcontainers:
-        specifier: ^11.5.1
-        version: 11.5.1
       ts-jest:
         specifier: ^29.4.1
         version: 29.4.1(@babel/core@7.28.3)(@jest/transform@30.0.5)(@jest/types@30.0.5)(babel-jest@30.0.5(@babel/core@7.28.3))(jest-util@30.0.5)(jest@30.0.5(@types/node@24.3.0)(ts-node@10.9.2(@types/node@24.3.0)(typescript@5.9.2)))(typescript@5.9.2)
