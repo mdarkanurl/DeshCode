@@ -24,6 +24,9 @@ const islogin = async (
                 Errors: null,
             });
             return;
+        } else if(!accessToken && refreshToken) {
+            await handleRefreshToken(req, res, next);
+            return;
         };
 
         let decoded;

@@ -27,6 +27,9 @@ const isAdmin = async (
                 Errors: null,
             });
             return;
+        } else if(!accessToken && refreshToken) {
+            await handleRefreshToken(req, res, next);
+            return;
         };
 
         // verify the access token
