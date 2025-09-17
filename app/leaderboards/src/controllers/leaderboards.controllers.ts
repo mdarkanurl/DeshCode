@@ -25,7 +25,7 @@ async function getLeaderboardResultsByContestId(
             Success: true,
             Message: 'All users successfully retrieved',
             Data: users,
-            Errors: {}
+            Errors: null
         });
         return;
     } catch (error) {

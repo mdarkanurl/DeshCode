@@ -28,7 +28,7 @@ async function submissionsSolution(
             res.status(400).json({
                 Success: false,
                 Message: 'Invalid input',
-                Data: {},
+                Data: null,
                 Errors: parseData.error.errors
             });
             return;
@@ -40,7 +40,7 @@ async function submissionsSolution(
             Success: true,
             Message: 'Solution submitted successfully',
             Data: submissions,
-            Errors: {}
+            Errors: null
         });
         return;
     } catch (error) {
@@ -61,8 +61,8 @@ async function getSubmissionsById(
             res.status(400).json({
                 Success: false,
                 Message: 'Invalid input, ID params missing',
-                Data: {},
-                Errors: {}
+                Data: null,
+                Errors: null
             });
             return;
         }
@@ -86,7 +86,7 @@ async function getSubmissionsById(
             Success: true,
             Message: messageMap[status] || 'Unknown submission status.',
             Data: submissions,
-            Errors: {}
+            Errors: null
         });
         return;
     } catch (error) {

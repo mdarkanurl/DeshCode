@@ -15,7 +15,7 @@ async function createProblems(
             res.status(400).json({
                 Success: false,
                 Message: 'Invalid input',
-                Data: {},
+                Data: null,
                 Errors: parseData.error.errors
             });
             return;
@@ -27,7 +27,7 @@ async function createProblems(
             Success: true,
             Message: 'Problem created successfully',
             Data: problems,
-            Errors: {}
+            Errors: null
         });
         return;
     } catch (error) {
@@ -56,8 +56,8 @@ async function getAllProblems(
             res.status(400).json({
                 Success: false,
                 Message: 'Invalid difficulty level',
-                Data: {},
-                Errors: {}
+                Data: null,
+                Errors: null
             });
             return;
         }
@@ -93,7 +93,7 @@ async function getAllProblems(
             Success: true,
             Message: 'All problems successfully get from Database',
             Data: problems,
-            Errors: {}
+            Errors: null
         });
         return;
     } catch (error) {
@@ -114,7 +114,7 @@ async function getProblem(
             res.status(400).json({
                 Success: false,
                 Message: 'Invalid input',
-                Data: {},
+                Data: null,
                 Errors: parseData.error.errors
             });
             return;
@@ -126,7 +126,7 @@ async function getProblem(
             Success: true,
             Message: 'Problem get successfully',
             Data: problem,
-            Errors: {}
+            Errors: null
         });
         return;
     } catch (error) {
@@ -148,7 +148,7 @@ async function updateProblem(
             res.status(400).json({
                 Success: false,
                 Message: 'Invalid input',
-                Data: {},
+                Data: null,
                 Errors: parseData?.error?.errors
             });
             return;
@@ -171,7 +171,7 @@ async function updateProblem(
             Success: true,
             Message: 'Problem successfully updated',
             Data: problems,
-            Errors: {}
+            Errors: null
         });
         return;
     } catch (error) {

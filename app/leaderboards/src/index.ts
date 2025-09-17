@@ -50,7 +50,7 @@ app.use((err: CustomError, req: Request, res: Response, next: NextFunction) => {
     Success: false,
     Message: err.message,
     Data: null,
-    Errors: {}
+    Errors: null
   });
 });
 

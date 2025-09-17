@@ -15,7 +15,7 @@ async function createContests(
             res.status(400).json({
                 Success: false,
                 Message: 'Invalid input',
-                Data: {},
+                Data: null,
                 Errors: parseData.error.errors
             });
             return;
@@ -27,7 +27,7 @@ async function createContests(
             Success: true,
             Message: 'Contest created successfully',
             Data: contests,
-            Errors: {}
+            Errors: null
         });
         return;
     } catch (error) {
@@ -49,7 +49,7 @@ async function getContestsById(
             Success: true,
             Message: 'Successfully fetched contest data',
             Data: contests,
-            Errors: {}
+            Errors: null
         });
         return;
     } catch (error) {
@@ -80,7 +80,7 @@ async function getAllContests(
             Success: true,
             Message: 'Successfully fetched all contests',
             Data: contests,
-            Errors: {}
+            Errors: null
         });
         return;
     } catch (error) {

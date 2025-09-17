@@ -17,7 +17,7 @@ const CheckIsSubmissionAllow = async (
             res.status(400).json({
                 Success: false,
                 Message: 'Invalid input',
-                Data: {},
+                Data: null,
                 Errors: parseData.error.errors
             });
             return;
@@ -30,8 +30,8 @@ const CheckIsSubmissionAllow = async (
             res.status(400).json({
                 Success: false,
                 Message: 'Contest is not started yet',
-                Data: {},
-                Errors: {}
+                Data: null,
+                Errors: null
             });
             return;
         }
@@ -41,8 +41,8 @@ const CheckIsSubmissionAllow = async (
             res.status(400).json({
                 Success: false,
                 Message: 'Contest is ended',
-                Data: {},
-                Errors: {}
+                Data: null,
+                Errors: null
             });
             return;
         }

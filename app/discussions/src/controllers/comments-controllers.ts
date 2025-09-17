@@ -15,7 +15,7 @@ async function createComments(
            res.status(400).json({
                 Success: false,
                 Message: 'Invalid input',
-                Data: {},
+                Data: null,
                 Errors: parseData.error.errors
             });
             return;
@@ -27,7 +27,7 @@ async function createComments(
             Success: true,
             Message: 'Comment created successfully',
             Data: comments,
-            Errors: {}
+            Errors: null
         });
         return;
     } catch (error) {
@@ -58,7 +58,7 @@ async function getAllComments(
             Success: true,
             Message: 'Comments fetched successfully',
             Data: allComments,
-            Errors: {}
+            Errors: null
         });
         return;
     } catch (error) {

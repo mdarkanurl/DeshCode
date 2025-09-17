@@ -15,7 +15,7 @@ async function createParticipants(
             res.status(400).json({
                 Success: false,
                 Message: 'Invalid input',
-                Data: {},
+                Data: null,
                 Errors: parseData.error.errors
             });
             return;
@@ -27,7 +27,7 @@ async function createParticipants(
             Success: true,
             Message: 'participant created successfully',
             Data: participants,
-            Errors: {}
+            Errors: null
         });
         return;
     } catch (error) {
@@ -48,7 +48,7 @@ async function getParticipantsByContestId(
             res.status(400).json({
                 Success: false,
                 Message: 'Invalid input',
-                Data: {},
+                Data: null,
                 Errors: { contestId: 'Contest ID is required' }
             });
             return;
@@ -60,7 +60,7 @@ async function getParticipantsByContestId(
             Success: true,
             Message: 'Participants retrieved successfully',
             Data: participants,
-            Errors: {}
+            Errors: null
         });
         return;
     } catch (error) {
@@ -81,7 +81,7 @@ async function getParticipantsByUserId(
             res.status(400).json({
                 Success: false,
                 Message: 'Invalid input',
-                Data: {},
+                Data: null,
                 Errors: { userId: 'User ID is required' }
             });
             return;
@@ -93,7 +93,7 @@ async function getParticipantsByUserId(
             Success: true,
             Message: 'Participants retrieved successfully',
             Data: participants,
-            Errors: {}
+            Errors: null
         });
         return;
     } catch (error) {

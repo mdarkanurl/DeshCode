@@ -26,7 +26,7 @@ async function createDiscussions(
             res.status(400).json({
                 Success: false,
                 Message: 'Invalid input',
-                Data: {},
+                Data: null,
                 Errors: parseData.error.errors
             });
             return;
@@ -38,7 +38,7 @@ async function createDiscussions(
             Success: true,
             Message: 'Discuss created successfully',
             Data: discussions,
-            Errors: {}
+            Errors: null
         });
         return;
     } catch (error) {
@@ -74,7 +74,7 @@ async function getAllDiscussions(
             Success: true,
             Message: 'All discussions fetched successfully',
             Data: allDiscussions,
-            Errors: {}
+            Errors: null
         });
         return;
     } catch (error) {
@@ -97,7 +97,7 @@ async function getDiscussionsById(
             Success: true,
             Message: 'Discussion fetched successfully',
             Data: discussions,
-            Errors: {}
+            Errors: null
         });
         return;
     } catch (error) {
@@ -127,7 +127,7 @@ async function updateDiscussions(
             res.status(400).json({
                 Success: false,
                 Message: 'Invalid input',
-                Data: {},
+                Data: null,
                 Errors: parseData.error.errors
             });
             return;
@@ -139,7 +139,7 @@ async function updateDiscussions(
             Success: true,
             Message: 'Discuss updated successfully',
             Data: discussions,
-            Errors: {}
+            Errors: null
         });
         return;
     } catch (error) {
