@@ -3,10 +3,7 @@ import { submissionsServices } from "../services";
 import { CustomError } from "../utils/errors/app-error";
 import { Request, Response, NextFunction } from "express";
 import { SubmissionsStatus } from "@prisma/client";
-
-interface AuthRequest extends Request {
-    userId?: String
-}
+import { AuthRequest } from "../types";
 
 
 async function submissionsSolution(
