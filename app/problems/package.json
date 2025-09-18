@@ -7,10 +7,12 @@
     "test": "jest",
     "dev": "ts-node src/app.ts",
     "dev:worker": "ts-node src/worker/index.ts",
+    "dev:rabbitmq": "ts-node src/utils/RabbitMQ.ts",
     "build": "tsc",
     "prisma:generate": "prisma generate",
     "start:api": "node dist/app.js",
-    "start:worker": "node dist/worker/index.js"
+    "start:worker": "node dist/worker/index.js",
+    "start": "node dist/utils/RabbitMQ.js"
   },
   "keywords": [],
   "author": "",
@@ -35,6 +37,7 @@
     "@babel/parser": "^7.28.0",
     "@babel/types": "^7.28.2",
     "@testcontainers/postgresql": "^11.5.1",
+    "@testcontainers/rabbitmq": "^11.6.0",
     "@types/amqplib": "^0.10.7",
     "@types/babel__core": "^7.20.5",
     "@types/babel__generator": "^7.27.0",
