@@ -3,10 +3,7 @@ import { discussionsSchema } from "../schema";
 import { discussionsServices } from "../services";
 import { CustomError } from "../utils/errors/app-error";
 import { Topic } from "@prisma/client";
-
-interface AuthRequest extends Request {
-    userId?: String
-}
+import { AuthRequest } from "../types";
 
 async function createDiscussions(
     req: AuthRequest,
