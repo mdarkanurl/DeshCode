@@ -1,19 +1,24 @@
 import { prisma } from "../prisma";
+import bcrypt from "bcryptjs";
 
 async function main() {
     // Seed a Admin on Database for testing
     const admin = await prisma.user.create({
         data: {
           email: 'admin@Deshcode.com',
-          role: "ADMIN"
+          role: "ADMIN",
+          isVerified: true
         },
     });
+
+    // Hash the password
+    const hashPass = await bcrypt.hash("testingPassword", 10);
 
     await prisma.authProvider.create({
         data: {
             provider: "local",
             email: admin.email,
-            password: "testingPassword",
+            password: hashPass,
             userId: admin.id
         }
     });
@@ -22,6 +27,7 @@ async function main() {
     const user = await prisma.user.create({
         data: {
           email: 'user@DeshCode.com',
+          isVerified: true
         },
     });
 
@@ -29,7 +35,7 @@ async function main() {
         data: {
             provider: "local",
             email: user.email,
-            password: "testingPassword",
+            password: hashPass,
             userId: user.id
         }
     });
