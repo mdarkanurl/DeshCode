@@ -1,0 +1,46 @@
+{
+  "id": "regular-expression-matching",
+  "title": "Regular Expression Matching",
+  "description": "Given an input string s and a pattern p, implement regular expression matching with support for '.' and '*' where:\n\n- '.' Matches any single character.\n- '*' Matches zero or more of the preceding element.\n\nThe matching should cover the entire input string (not partial).\n\nNote:\n- s may be empty and contains only lowercase English letters.\n- p may be empty and contains only lowercase English letters, and the characters '.' and '*'.",
+  "functionName": "isMatch",
+  "language": ["javascript", "python"],
+  "difficulty": "HARD",
+  "testCases": [
+    {
+      "input": [
+        "aa",
+        "a"
+      ],
+      "expected": false
+    },
+    {
+      "input": [
+        "aa",
+        "a*"
+      ],
+      "expected": true
+    },
+    {
+      "input": [
+        "mississippi",
+        "mis*is*p*."
+      ],
+      "expected": false
+    },
+    {
+      "input": [
+        "ab",
+        ".*"
+      ],
+      "expected": true
+    },
+    {
+      "input": [
+        "aab",
+        "c*a*b"
+      ],
+      "expected": true
+    }
+  ],
+  "problemsTypes": "Arrays_and_Strings"
+}

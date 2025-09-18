@@ -1,0 +1,31 @@
+{
+  "id": "wildcard-matching-44",
+  "title": "Wildcard Matching",
+  "description": "Given an input string s and a pattern p, implement wildcard pattern matching with support for '?' and '*' where:\n\n- '?' Matches any single character.\n- '*' Matches any sequence of characters (including the empty sequence).\n\nThe matching should cover the entire input string (not partial).\n\nReturn true if the input string matches the pattern, otherwise return false.",
+  "functionName": "isMatch",
+  "language": ["javascript", "python"],
+  "difficulty": "HARD",
+  "testCases": [
+    {
+      "input": ["aa", "a"],
+      "expected": false
+    },
+    {
+      "input": ["aa", "*"],
+      "expected": true
+    },
+    {
+      "input": ["cb", "?a"],
+      "expected": false
+    },
+    {
+      "input": ["adceb", "*a*b"],
+      "expected": true
+    },
+    {
+      "input": ["acdcb", "a*c?b"],
+      "expected": false
+    }
+  ],
+  "problemsTypes": "NORMAL_PROBLEM"
+}

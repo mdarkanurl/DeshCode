@@ -1,0 +1,31 @@
+{
+  "id": "binary-tree-maximum-path-sum",
+  "title": "Binary Tree Maximum Path Sum",
+  "description": "A path in a binary tree is a sequence of nodes where each pair of adjacent nodes in the sequence has an edge connecting them. A node can only appear in the sequence at most once. The path does not need to pass through the root.\n\nThe path sum of a path is the sum of the node values in the path.\n\nGiven the root of a binary tree, return the maximum path sum of any path.",
+  "functionName": "maxPathSum",
+  "language": ["javascript", "python"],
+  "difficulty": "HARD",
+  "testCases": [
+    {
+      "input": [[1,2,3]],
+      "expected": 6
+    },
+    {
+      "input": [[-10,9,20,null,null,15,7]],
+      "expected": 42
+    },
+    {
+      "input": [[2,-1]],
+      "expected": 2
+    },
+    {
+      "input": [[-3]],
+      "expected": -3
+    },
+    {
+      "input": [[5,4,8,11,null,13,4,7,2,null,null,null,1]],
+      "expected": 48
+    }
+  ],
+  "problemsTypes": "Trees_and_Graphs"
+}

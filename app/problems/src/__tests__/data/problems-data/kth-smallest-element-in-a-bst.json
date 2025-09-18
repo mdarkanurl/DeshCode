@@ -1,0 +1,31 @@
+{
+  "id": "kth-smallest-element-in-a-bst",
+  "title": "Kth Smallest Element in a BST",
+  "description": "Given the root of a binary search tree, and an integer k, return the kth smallest value (1-indexed) of all the values of the nodes in the tree.\n\nNote: A BST is a binary tree in which for each node, all elements in its left subtree are less, and all elements in its right subtree are greater.",
+  "functionName": "kthSmallest",
+  "language": ["javascript", "python"],
+  "difficulty": "MEDIUM",
+  "testCases": [
+    {
+      "input": [[3,1,4,null,2], 1],
+      "expected": 1
+    },
+    {
+      "input": [[5,3,6,2,4,null,null,1], 3],
+      "expected": 3
+    },
+    {
+      "input": [[2,1,3], 2],
+      "expected": 2
+    },
+    {
+      "input": [[1,null,2], 2],
+      "expected": 2
+    },
+    {
+      "input": [[15,10,20,8,12,17,25], 5],
+      "expected": 17
+    }
+  ],
+  "problemsTypes": "Trees_and_Graphs"
+}

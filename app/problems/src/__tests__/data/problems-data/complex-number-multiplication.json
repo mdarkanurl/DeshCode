@@ -1,0 +1,31 @@
+{
+  "id": "complex-number-multiplication",
+  "title": "Complex Number Multiplication",
+  "description": "Given two strings representing complex numbers (e.g., \"1+1i\"), return a string representing their product. A complex number in this context follows the form 'a+bi', where 'a' and 'b' are integers, and 'i' is the imaginary unit.",
+  "functionName": "complexNumberMultiply",
+  "language": ["javascript", "python"],
+  "difficulty": "MEDIUM",
+  "testCases": [
+    {
+      "input": ["1+1i", "1+1i"],
+      "expected": "0+2i"
+    },
+    {
+      "input": ["1+-1i", "1+-1i"],
+      "expected": "0+-2i"
+    },
+    {
+      "input": ["1+0i", "0+1i"],
+      "expected": "0+1i"
+    },
+    {
+      "input": ["0+0i", "0+0i"],
+      "expected": "0+0i"
+    },
+    {
+      "input": ["3+2i", "1+7i"],
+      "expected": "-11+23i"
+    }
+  ],
+  "problemsTypes": "Arrays_and_Strings"
+}

@@ -1,0 +1,31 @@
+{
+  "id": "unique-paths-ii",
+  "title": "Unique Paths II",
+  "description": "You are given an m x n integer array grid representing a robot's grid. The robot is initially located at the top-left corner (i.e., grid[0][0]). The robot can only move either down or right at any point in time. An obstacle is marked as 1 and a free space is marked as 0.\n\nReturn the number of possible unique paths that the robot can take to reach the bottom-right corner (i.e., grid[m-1][n-1]) while avoiding obstacles.\n\nNote: The robot cannot pass through obstacles.",
+  "functionName": "uniquePathsWithObstacles",
+  "language": ["javascript", "python"],
+  "difficulty": "MEDIUM",
+  "testCases": [
+    {
+      "input": [[[0,0,0],[0,1,0],[0,0,0]]],
+      "expected": 2
+    },
+    {
+      "input": [[[0,1],[0,0]]],
+      "expected": 1
+    },
+    {
+      "input": [[[1]]],
+      "expected": 0
+    },
+    {
+      "input": [[[0,0],[1,1],[0,0]]],
+      "expected": 0
+    },
+    {
+      "input": [[[0]]],
+      "expected": 1
+    }
+  ],
+  "problemsTypes": "Dynamic_Programming"
+}

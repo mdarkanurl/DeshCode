@@ -1,0 +1,31 @@
+{
+  "id": "word-ladder-127",
+  "title": "Word Ladder",
+  "description": "A transformation sequence from word beginWord to word endWord using a dictionary wordList is a sequence of words such that:\n\n- The first word is beginWord.\n- The last word is endWord.\n- Only one letter can be changed at a time.\n- Each transformed word must exist in the wordList.\n\nGiven two words, beginWord and endWord, and a dictionary wordList, return the number of words in the shortest transformation sequence from beginWord to endWord, or 0 if no such sequence exists.\n\nNote:\n- All words have the same length.\n- All words contain only lowercase alphabetic characters.",
+  "functionName": "ladderLength",
+  "language": ["javascript", "python"],
+  "difficulty": "HARD",
+  "testCases": [
+    {
+      "input": ["hit", "cog", ["hot","dot","dog","lot","log","cog"]],
+      "expected": 5
+    },
+    {
+      "input": ["hit", "cog", ["hot","dot","dog","lot","log"]],
+      "expected": 0
+    },
+    {
+      "input": ["a", "c", ["a","b","c"]],
+      "expected": 2
+    },
+    {
+      "input": ["lost", "cost", ["most", "fist", "lost", "cost", "fish"]],
+      "expected": 2
+    },
+    {
+      "input": ["game", "thee", ["fame","gane","tame","tane","than","then","thee"]],
+      "expected": 0
+    }
+  ],
+  "problemsTypes": "Arrays_and_Strings"
+}

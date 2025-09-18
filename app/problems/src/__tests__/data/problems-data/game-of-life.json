@@ -1,0 +1,31 @@
+{
+  "id": "game-of-life",
+  "title": "Game of Life",
+  "description": "According to Conway's Game of Life, the board evolves by applying the following rules to each cell: (1) Any live cell with fewer than two live neighbors dies (underpopulation). (2) Any live cell with two or three live neighbors lives on to the next generation. (3) Any live cell with more than three live neighbors dies (overpopulation). (4) Any dead cell with exactly three live neighbors becomes a live cell (reproduction). Given a 2D board of 0s and 1s representing dead and live cells respectively, compute the next state of the board in-place.",
+  "functionName": "gameOfLife",
+  "language": ["javascript", "python"],
+  "difficulty": "MEDIUM",
+  "testCases": [
+    {
+      "input": [[[0,1,0],[0,0,1],[1,1,1],[0,0,0]]],
+      "expected": [[0,0,0],[1,0,1],[0,1,1],[0,1,0]]
+    },
+    {
+      "input": [[[1,1],[1,0]]],
+      "expected": [[1,1],[1,1]]
+    },
+    {
+      "input": [[[1]]],
+      "expected": [[0]]
+    },
+    {
+      "input": [[[0]]],
+      "expected": [[0]]
+    },
+    {
+      "input": [[[1,1,1],[1,1,1],[1,1,1]]],
+      "expected": [[1,0,1],[0,0,0],[1,0,1]]
+    }
+  ],
+  "problemsTypes": "Arrays_and_Strings"
+}

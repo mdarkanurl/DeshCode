@@ -1,0 +1,31 @@
+{
+  "id": "utf8-validation",
+  "title": "UTF-8 Validation",
+  "description": "A character in UTF-8 can be from 1 to 4 bytes long, and each byte follows specific bit patterns: (1) For 1-byte characters, the first bit is a 0, followed by its 7-bit code. (2) For n-bytes characters (n > 1), the first byte starts with n '1' bits followed by a '0', and the remaining n-1 bytes all start with '10'. Given an array of integers representing bytes (each integer is between 0 and 255), return true if it is a valid UTF-8 encoding, else return false.",
+  "functionName": "validUtf8",
+  "language": ["javascript", "python"],
+  "difficulty": "MEDIUM",
+  "testCases": [
+    {
+      "input": [[197, 130, 1]],
+      "expected": true
+    },
+    {
+      "input": [[235, 140, 4]],
+      "expected": false
+    },
+    {
+      "input": [[240, 162, 138, 147]],
+      "expected": true
+    },
+    {
+      "input": [[250, 145, 145, 145, 145]],
+      "expected": false
+    },
+    {
+      "input": [[0]],
+      "expected": true
+    }
+  ],
+  "problemsTypes": "Arrays_and_Strings"
+}

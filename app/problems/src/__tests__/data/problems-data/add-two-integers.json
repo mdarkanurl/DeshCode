@@ -1,0 +1,23 @@
+{
+  "id": "add-two-integers",
+  "title": "Add two integers",
+  "description": "Given two integers `a` and `b`, return their sum. This is a simple arithmetic problem to get familiar with function input/output.",
+  "functionName": "addTwoIntegers",
+  "language": ["javascript", "python"],
+  "difficulty": "EASY",
+  "testCases": [
+    {
+      "input": [1, 2],
+      "expected": 3
+    },
+    {
+      "input": [100, -2],
+      "expected": 98
+    },
+    {
+      "input": [1031581, 361],
+      "expected": 1031942
+    }
+  ],
+  "problemsTypes": "Arrays_and_Strings"
+}
