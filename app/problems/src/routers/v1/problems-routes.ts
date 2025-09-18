@@ -9,5 +9,6 @@ router.post('/', isAdmin, problemscontrollers.createProblems);
 router.get('/', problemscontrollers.getAllProblems);
 router.get('/:id', problemscontrollers.getProblem);
 router.put('/:id', isAdmin, problemscontrollers.updateProblem);
+router.delete('/:id', isAdmin, problemscontrollers.deleteProblems);
 
 export default router;

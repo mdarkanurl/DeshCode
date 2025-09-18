@@ -1,7 +1,8 @@
 import {
     createProblemsSchema,
     getProblemsSchema,
-    updateProblemsSchema
+    updateProblemsSchema,
+    deleteProblemsSchema
 } from "./problems-schema";
 
 import {
@@ -11,7 +12,8 @@ import {
 const problemsSchema = {
     createProblemsSchema,
     getProblemsSchema,
-    updateProblemsSchema
+    updateProblemsSchema,
+    deleteProblemsSchema
 }
 
 const submissionsSchema = {

@@ -180,9 +180,43 @@ async function updateProblem(
     }
 }
 
+async function deleteProblems(
+    req: Request,
+    res: Response,
+    next: NextFunction
+) {
+    try {
+        const { error, success, data } = problemsSchema.deleteProblemsSchema.safeParse(req.body);
+
+        if(!success) {
+            res.status(400).json({
+                Success: false,
+                Message: 'Invalid input',
+                Data: null,
+                Errors: error.errors
+            });
+            return;
+        }
+
+        const deleteProblems = await problemsServices.deleteProblems({ id: data.id });
+
+        res.status(200).json({
+            Success: true,
+            Message: 'Problem successfully destroyed',
+            Data: deleteProblems,
+            Errors: null
+        });
+        return;
+    } catch (error) {
+        if(error instanceof CustomError) return next(error);
+        return next(new CustomError('Internal Server Error', 500));
+    }
+}
+
 export {
     createProblems,
     getAllProblems,
     getProblem,
-    updateProblem
+    updateProblem,
+    deleteProblems
 }

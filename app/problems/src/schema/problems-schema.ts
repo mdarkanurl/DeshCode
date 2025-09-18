@@ -33,3 +33,7 @@ export const updateProblemsSchema = z.object({
     })).optional(),
     tags: z.array(z.string()).optional()
 });
+
+export const deleteProblemsSchema = z.object({
+     id: z.string()
+});

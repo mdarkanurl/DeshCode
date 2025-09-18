@@ -1,11 +1,12 @@
-import { createProblems, getAllProblems, getProblem, updateProblem } from "./problems-controllers";
+import { createProblems, getAllProblems, getProblem, updateProblem, deleteProblems } from "./problems-controllers";
 import { submissionsSolution, getSubmissionsById } from "./submissions-controllers";
 
 const problemscontrollers = {
     createProblems,
     getAllProblems,
     getProblem,
-    updateProblem
+    updateProblem,
+    deleteProblems
 }
 
 const submissionsControllers = {

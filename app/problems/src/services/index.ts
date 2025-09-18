@@ -1,11 +1,12 @@
-import { createProblems, getAllProblems, getProblems, updateProblems } from "./problems-services";
+import { createProblems, getAllProblems, getProblems, updateProblems, deleteProblems } from "./problems-services";
 import { submissionsSolution, getSubmissionById } from "./submissions-services";
 
 const problemsServices = {
     createProblems,
     getAllProblems,
     getProblems,
-    updateProblems
+    updateProblems,
+    deleteProblems
 }
 
 const submissionsServices = {

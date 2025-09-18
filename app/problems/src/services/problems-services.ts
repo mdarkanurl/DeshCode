@@ -148,9 +148,32 @@ async function updateProblems(
     }
 }
 
+async function deleteProblems(data: { id: string }) {
+    try {
+        const problems = await problemsRepo.getByProblemsId(data.id);
+
+        if(!problems) {
+            throw new CustomError("Problem not found", 404);
+        }
+
+        // Delete the problem
+        const deleteProblems = await problemsRepo.destroyById(problems.id);
+
+        if(!deleteProblems) {
+            throw new CustomError('Internal Server Error', 500);
+        }
+
+        return deleteProblems;
+    } catch (error) {
+        if(error instanceof CustomError) throw error;
+        throw new CustomError('Internal Server Error', 500);
+    }
+}
+
 export {
     createProblems,
     getAllProblems,
     getProblems,
-    updateProblems
+    updateProblems,
+    deleteProblems
 }

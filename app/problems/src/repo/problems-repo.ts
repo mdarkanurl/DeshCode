@@ -43,6 +43,16 @@ class ProblemsRepo extends CrudRepo {
             throw new CustomError("Failed to update record", 500);
         }
     }
+
+    async destroyById(id: string) {
+        try {
+            return await prisma.problems.delete({
+                where: { id }
+            });
+        } catch (error) {
+            throw new CustomError("Failed to delete record", 500);
+        }
+    }
 }
 
 export {
