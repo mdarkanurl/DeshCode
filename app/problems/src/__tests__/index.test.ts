@@ -245,6 +245,18 @@ describe("/api/v1/problems", () => {
     expect(res.body).toHaveProperty("Data", null);
   });
 
+  it("should return 400 unexpected end of JSON input", async () => {
+    const res = await request(app)
+        .put(`/api/v1/problems/${textJustification.id}`)
+        .set("Cookie", [ refreshTokenCookie ]) // ✅ pass admin cookie
+        .send({  });
+
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "Invalid input");
+    expect(res.body).toHaveProperty("Data", null);
+  });
+
   it("should return 200 problem updated", async () => {
     const res = await request(app)
         .put(`/api/v1/problems/${textJustification.id}`)
@@ -257,5 +269,39 @@ describe("/api/v1/problems", () => {
     expect(res.body.Data.id).toBe(textJustification.id);
     expect(res.body.Data.title).toBe("This is the title of textJustification after update the title");
     expect(res.body.Data.problemsTypes).toBe(textJustification.problemsTypes);
+  });
+
+  it("should return 401 unauthorized to delete", async () => {
+    const res = await request(app)
+        .delete(`/api/v1/problems/${textJustification.id}`);
+
+    expect(res.status).toBe(401);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "Unauthorized");
+    expect(res.body).toHaveProperty("Data", null);
+  });
+
+  it("should return 404 problem not found to delete", async () => {
+    const res = await request(app)
+        .delete(`/api/v1/problems/DeshCode-delete`)
+        .set("Cookie", [ refreshTokenCookie ]) // ✅ pass admin cookie
+
+    expect(res.status).toBe(404);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "Problem not found");
+    expect(res.body).toHaveProperty("Data", null);
+  });
+
+  it("should return 200 Problem successfully destroyed", async () => {
+    const res = await request(app)
+        .delete(`/api/v1/problems/${nQueens.id}`)
+        .set("Cookie", [ refreshTokenCookie ]) // ✅ pass admin cookie
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Problem successfully destroyed");
+    expect(res.body.Data.id).toBe(nQueens.id);
+    expect(res.body.Data.title).toBe(nQueens.title);
+    expect(res.body.Data.problemsTypes).toBe(nQueens.problemsTypes);
   });
 });
