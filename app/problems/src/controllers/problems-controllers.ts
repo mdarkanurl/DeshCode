@@ -186,7 +186,7 @@ async function deleteProblems(
     next: NextFunction
 ) {
     try {
-        const { error, success, data } = problemsSchema.deleteProblemsSchema.safeParse(req.body);
+        const { error, success, data } = problemsSchema.deleteProblemsSchema.safeParse({ id: req.params.id });
 
         if(!success) {
             res.status(400).json({
