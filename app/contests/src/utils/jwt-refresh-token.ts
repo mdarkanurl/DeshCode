@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import { Response } from "express";
 import dotenv from "dotenv";
 import { CustomError } from "./errors/app-error";
-import { UserRole } from "@prisma/client";
+import { UserRole } from "../types";
 dotenv.config({ path: '../.env' });
 
 function generateJwtRefreshToken(res: Response, data: { userId: string, role: UserRole }) {
