@@ -2,10 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { OauthService } from "../services";
 import { CustomError } from "../utils/errors/app-error";
 import { OauthSchema } from "../schema";
-
-interface AuthRequest extends Request {
-  user?: any;
-}
+import { AuthRequest } from "../types";
 
 const googleCallback = async (
     req: AuthRequest,

@@ -3,10 +3,7 @@ import { authSchemas } from "../schema";
 import { authService } from "../services";
 import { CustomError } from "../utils/errors/app-error";
 import { UserRole } from "@prisma/client";
-
-interface AuthRequest extends Request {
-  userId?: string;
-}
+import { AuthRequest } from "../types";
 
 const signUp = async (
     req: Request,
