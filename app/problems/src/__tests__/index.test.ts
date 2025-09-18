@@ -1,8 +1,24 @@
 import request from "supertest";
 import app from "../index";
 import { problemsData } from "./data/problems-data";
-const { textJustification, unformattedTextJustification, nQueens } = problemsData;
+const {
+  textJustification,
+  unformattedTextJustification,
+  nQueens,
+  addTwoIntegers,
+  binaryTreeMaximumPathSum,
+  complexNumberMultiplication,
+  kthSmallestElementInABst,
+  regularExpressionMatching,
+  trappingRainWater,
+  uniquePathsIi,
+  utf8Validation,
+  wildcardMatching44,
+  wordLadder127,
+  gameOfLife
+} = problemsData;
 
+// Describe block for App
 describe("App", () => {
   it("should return health check with DB connected", async () => {
     const res = await request(app).get("/api/health");
@@ -39,8 +55,8 @@ describe("/api/v1/problems", () => {
     const loginRes = await request("http://localhost:3004") // or replace with Auth service URL
       .post("/api/v1/auth/login")
       .send({
-        email: "mdarkanurl@gmail.com",
-        password: "DeshCode.com",
+        email: "admin@Deshcode.com",
+        password: "testingPassword"
     });
 
     // loginRes.headers['set-cookie'] is an array of cookie strings
@@ -164,6 +180,215 @@ describe("/api/v1/problems", () => {
     expect(res.body.Data.testCases).toEqual(nQueens.testCases);
   });
 
+  it("should return 201 problem created", async () => {
+    const res = await request(app)
+        .post("/api/v1/problems")
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass admin cookies
+        .send(
+          addTwoIntegers
+        );
+
+    expect(res.status).toBe(201);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Problem created successfully");
+    expect(res.body.Data.title).toBe(addTwoIntegers.title);
+    expect(res.body.Data.description).toBe(addTwoIntegers.description);
+    expect(res.body.Data.functionName).toBe(addTwoIntegers.functionName);
+    expect(res.body.Data.language).toEqual(addTwoIntegers.language);
+    expect(res.body.Data.difficulty).toBe(addTwoIntegers.difficulty);
+    expect(res.body.Data.testCases).toEqual(addTwoIntegers.testCases);
+  });
+
+  it("should return 201 problem created", async () => {
+    const res = await request(app)
+        .post("/api/v1/problems")
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass admin cookies
+        .send(
+          binaryTreeMaximumPathSum
+        );
+
+    expect(res.status).toBe(201);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Problem created successfully");
+    expect(res.body.Data.title).toBe(binaryTreeMaximumPathSum.title);
+    expect(res.body.Data.description).toBe(binaryTreeMaximumPathSum.description);
+    expect(res.body.Data.functionName).toBe(binaryTreeMaximumPathSum.functionName);
+    expect(res.body.Data.language).toEqual(binaryTreeMaximumPathSum.language);
+    expect(res.body.Data.difficulty).toBe(binaryTreeMaximumPathSum.difficulty);
+    expect(res.body.Data.testCases).toEqual(binaryTreeMaximumPathSum.testCases);
+  });
+
+  it("should return 201 problem created", async () => {
+    const res = await request(app)
+        .post("/api/v1/problems")
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass admin cookies
+        .send(
+          complexNumberMultiplication
+        );
+
+    expect(res.status).toBe(201);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Problem created successfully");
+    expect(res.body.Data.title).toBe(complexNumberMultiplication.title);
+    expect(res.body.Data.description).toBe(complexNumberMultiplication.description);
+    expect(res.body.Data.functionName).toBe(complexNumberMultiplication.functionName);
+    expect(res.body.Data.language).toEqual(complexNumberMultiplication.language);
+    expect(res.body.Data.difficulty).toBe(complexNumberMultiplication.difficulty);
+    expect(res.body.Data.testCases).toEqual(complexNumberMultiplication.testCases);
+  });
+
+  it("should return 201 problem created", async () => {
+    const res = await request(app)
+        .post("/api/v1/problems")
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass admin cookies
+        .send(
+          kthSmallestElementInABst
+        );
+
+    expect(res.status).toBe(201);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Problem created successfully");
+    expect(res.body.Data.title).toBe(kthSmallestElementInABst.title);
+    expect(res.body.Data.description).toBe(kthSmallestElementInABst.description);
+    expect(res.body.Data.functionName).toBe(kthSmallestElementInABst.functionName);
+    expect(res.body.Data.language).toEqual(kthSmallestElementInABst.language);
+    expect(res.body.Data.difficulty).toBe(kthSmallestElementInABst.difficulty);
+    expect(res.body.Data.testCases).toEqual(kthSmallestElementInABst.testCases);
+  });
+
+  it("should return 201 problem created", async () => {
+    const res = await request(app)
+        .post("/api/v1/problems")
+        .set("Cookie", [refreshTokenCookie]) // ✅ pass admin cookies
+        .send(
+          regularExpressionMatching
+        );
+
+    expect(res.status).toBe(201);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Problem created successfully");
+    expect(res.body.Data.title).toBe(regularExpressionMatching.title);
+    expect(res.body.Data.description).toBe(regularExpressionMatching.description);
+    expect(res.body.Data.functionName).toBe(regularExpressionMatching.functionName);
+    expect(res.body.Data.language).toEqual(regularExpressionMatching.language);
+    expect(res.body.Data.difficulty).toBe(regularExpressionMatching.difficulty);
+    expect(res.body.Data.testCases).toEqual(regularExpressionMatching.testCases);
+  });
+
+  it("should return 201 problem created", async () => {
+    const res = await request(app)
+        .post("/api/v1/problems")
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass admin cookies
+        .send(
+          trappingRainWater
+        );
+
+    expect(res.status).toBe(201);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Problem created successfully");
+    expect(res.body.Data.title).toBe(trappingRainWater.title);
+    expect(res.body.Data.description).toBe(trappingRainWater.description);
+    expect(res.body.Data.functionName).toBe(trappingRainWater.functionName);
+    expect(res.body.Data.language).toEqual(trappingRainWater.language);
+    expect(res.body.Data.difficulty).toBe(trappingRainWater.difficulty);
+    expect(res.body.Data.testCases).toEqual(trappingRainWater.testCases);
+  });
+
+  it("should return 201 problem created", async () => {
+    const res = await request(app)
+        .post("/api/v1/problems")
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass admin cookies
+        .send(
+          uniquePathsIi
+        );
+
+    expect(res.status).toBe(201);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Problem created successfully");
+    expect(res.body.Data.title).toBe(uniquePathsIi.title);
+    expect(res.body.Data.description).toBe(uniquePathsIi.description);
+    expect(res.body.Data.functionName).toBe(uniquePathsIi.functionName);
+    expect(res.body.Data.language).toEqual(uniquePathsIi.language);
+    expect(res.body.Data.difficulty).toBe(uniquePathsIi.difficulty);
+    expect(res.body.Data.testCases).toEqual(uniquePathsIi.testCases);
+  });
+
+  it("should return 201 problem created", async () => {
+    const res = await request(app)
+        .post("/api/v1/problems")
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass admin cookies
+        .send(
+          utf8Validation
+        );
+
+    expect(res.status).toBe(201);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Problem created successfully");
+    expect(res.body.Data.title).toBe(utf8Validation.title);
+    expect(res.body.Data.description).toBe(utf8Validation.description);
+    expect(res.body.Data.functionName).toBe(utf8Validation.functionName);
+    expect(res.body.Data.language).toEqual(utf8Validation.language);
+    expect(res.body.Data.difficulty).toBe(utf8Validation.difficulty);
+    expect(res.body.Data.testCases).toEqual(utf8Validation.testCases);
+  });
+
+  it("should return 201 problem created", async () => {
+    const res = await request(app)
+        .post("/api/v1/problems")
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass admin cookies
+        .send(
+          wildcardMatching44
+        );
+
+    expect(res.status).toBe(201);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Problem created successfully");
+    expect(res.body.Data.title).toBe(wildcardMatching44.title);
+    expect(res.body.Data.description).toBe(wildcardMatching44.description);
+    expect(res.body.Data.functionName).toBe(wildcardMatching44.functionName);
+    expect(res.body.Data.language).toEqual(wildcardMatching44.language);
+    expect(res.body.Data.difficulty).toBe(wildcardMatching44.difficulty);
+    expect(res.body.Data.testCases).toEqual(wildcardMatching44.testCases);
+  });
+
+  it("should return 201 problem created", async () => {
+    const res = await request(app)
+        .post("/api/v1/problems")
+        .set("Cookie", [refreshTokenCookie]) // ✅ pass admin cookies
+        .send(
+          wordLadder127
+        );
+
+    expect(res.status).toBe(201);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Problem created successfully");
+    expect(res.body.Data.title).toBe(wordLadder127.title);
+    expect(res.body.Data.description).toBe(wordLadder127.description);
+    expect(res.body.Data.functionName).toBe(wordLadder127.functionName);
+    expect(res.body.Data.language).toEqual(wordLadder127.language);
+    expect(res.body.Data.difficulty).toBe(wordLadder127.difficulty);
+    expect(res.body.Data.testCases).toEqual(wordLadder127.testCases);
+  });
+
+  it("should return 201 problem created", async () => {
+    const res = await request(app)
+        .post("/api/v1/problems")
+        .set("Cookie", [ refreshTokenCookie]) // ✅ pass admin cookies
+        .send(
+          gameOfLife
+        );
+
+    expect(res.status).toBe(201);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Problem created successfully");
+    expect(res.body.Data.title).toBe(gameOfLife.title);
+    expect(res.body.Data.description).toBe(gameOfLife.description);
+    expect(res.body.Data.functionName).toBe(gameOfLife.functionName);
+    expect(res.body.Data.language).toEqual(gameOfLife.language);
+    expect(res.body.Data.difficulty).toBe(gameOfLife.difficulty);
+    expect(res.body.Data.testCases).toEqual(gameOfLife.testCases);
+  });
+
   it("should return 200 and all problems", async () => {
     const res = await request(app).get("/api/v1/problems");
 
@@ -173,26 +398,26 @@ describe("/api/v1/problems", () => {
     
     // Data.problems
     expect(Array.isArray(res.body.Data.problems)).toBe(true);
-    expect(res.body.Data.problems).toHaveLength(2);
+    expect(res.body.Data.problems).toHaveLength(10);
 
     // First problem
-    expect(res.body.Data.problems[0].id).toBe(nQueens.id);
-    expect(res.body.Data.problems[0].title).toBe(nQueens.title);
-    expect(res.body.Data.problems[0].language[0]).toBe(nQueens.language[0]);
-    expect(res.body.Data.problems[0].language[1]).toBe(nQueens.language[1]);
-    expect(res.body.Data.problems[0].difficulty).toBe(nQueens.difficulty);
+    expect(res.body.Data.problems[0].id).toBe(addTwoIntegers.id);
+    expect(res.body.Data.problems[0].title).toBe(addTwoIntegers.title);
+    expect(res.body.Data.problems[0].language[0]).toBe(addTwoIntegers.language[0]);
+    expect(res.body.Data.problems[0].language[1]).toBe(addTwoIntegers.language[1]);
+    expect(res.body.Data.problems[0].difficulty).toBe(addTwoIntegers.difficulty);
 
     // Second problem
-    expect(res.body.Data.problems[1].id).toBe(textJustification.id);
-    expect(res.body.Data.problems[1].title).toBe(textJustification.title);
-    expect(res.body.Data.problems[1].language[0]).toBe(textJustification.language[0]);
-    expect(res.body.Data.problems[1].language[1]).toBe(textJustification.language[1]);
-    expect(res.body.Data.problems[1].difficulty).toBe(textJustification.difficulty);
+    expect(res.body.Data.problems[1].id).toBe(binaryTreeMaximumPathSum.id);
+    expect(res.body.Data.problems[1].title).toBe(binaryTreeMaximumPathSum.title);
+    expect(res.body.Data.problems[1].language[0]).toBe(binaryTreeMaximumPathSum.language[0]);
+    expect(res.body.Data.problems[1].language[1]).toBe(binaryTreeMaximumPathSum.language[1]);
+    expect(res.body.Data.problems[1].difficulty).toBe(binaryTreeMaximumPathSum.difficulty);
 
     // Pagination
-    expect(res.body.Data.pagination.totalItems).toBe(2);
+    expect(res.body.Data.pagination.totalItems).toBe(13);
     expect(res.body.Data.pagination.currentPage).toBe(1);
-    expect(res.body.Data.pagination.totalPages).toBe(1);
+    expect(res.body.Data.pagination.totalPages).toBe(2);
     expect(res.body.Data.pagination.pageSize).toBe(10);
   });
 
@@ -304,4 +529,140 @@ describe("/api/v1/problems", () => {
     expect(res.body.Data.title).toBe(nQueens.title);
     expect(res.body.Data.problemsTypes).toBe(nQueens.problemsTypes);
   });
+});
+
+// Describe block for /api/v1/submissions
+describe("/api/v1/submissions", () => {
+
+  let accessTokenCookie: string;
+  let refreshTokenCookie: string;
+
+  beforeAll(async () => {
+
+    // Call Auth service to login as a user
+    const loginRes = await request("http://localhost:3004") // or replace with Auth service URL
+      .post("/api/v1/auth/login")
+      .send({
+        email: "user@DeshCode.com",
+        password: "testingPassword",
+    });
+
+    // loginRes.headers['set-cookie'] is an array of cookie strings
+    const cookies: string[] = loginRes.headers["set-cookie"] as any;
+
+    // Find the cookies by name
+    accessTokenCookie = cookies.find(c => c.startsWith("accessToken="))!;
+    refreshTokenCookie = cookies.find(c => c.startsWith("refreshToken="))!;
+  });
+
+  it("should return 401 unauthorized", async () => {
+    const res = await request(app).post("/api/v1/submissions")
+        .send({
+          problemsId: textJustification,
+          language: 'javascript',
+          code: "function fullJustify(words, maxWidth) { const result = []; let index = 0; while (index < words.length) { let totalChars = words[index].length; let last = index + 1; while ( last < words.length && totalChars + 1 + words[last].length <= maxWidth ) { totalChars += 1 + words[last].length; last++; } const lineWords = words.slice(index, last); const gaps = last - index - 1; let line = ''; if (last === words.length || gaps === 0) { line = lineWords.join(' '); line += ' '.repeat(maxWidth - line.length); } else { const totalSpaces = maxWidth - totalChars + gaps; const spaceBetween = Math.floor(totalSpaces / gaps); const extraSpaces = totalSpaces % gaps; for (let i = 0; i < gaps; i++) { line += lineWords[i]; line += ' '.repeat(spaceBetween + (i < extraSpaces ? 1 : 0)); } line += lineWords[lineWords.length - 1]; } result.push(line); index = last; } return result; }"
+        });
+
+    expect(res.status).toBe(401);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "Unauthorized");
+    expect(res.body).toHaveProperty("Data", null);
+  });
+
+  it("should return 400 invalid input", async () => {
+    const res = await request(app).post("/api/v1/submissions")
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass user cookies
+        .send({
+          problemsId: textJustification.id,
+          code: ""
+        });
+
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "Invalid input");
+    expect(res.body).toHaveProperty("Data", null);
+
+    expect(res.body.Errors[0].code).toBe("invalid_type");
+    expect(res.body.Errors[0].expected).toBe("string");
+    expect(res.body.Errors[0].received).toBe("undefined");
+    expect(res.body.Errors[0].path[0]).toBe("language");
+    expect(res.body.Errors[0].message).toBe("Required");
+  })
+
+  it('should return 404 problem not found', async () => {
+    const res = await request(app).post("/api/v1/submissions")
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass user cookies
+        .send({
+          problemsId: "DeshCode",
+          language: 'javascript',
+          code: "function fullJustify(words, maxWidth) { const result = []; let index = 0; while (index < words.length) { let totalChars = words[index].length; let last = index + 1; while ( last < words.length && totalChars + 1 + words[last].length <= maxWidth ) { totalChars += 1 + words[last].length; last++; } const lineWords = words.slice(index, last); const gaps = last - index - 1; let line = ''; if (last === words.length || gaps === 0) { line = lineWords.join(' '); line += ' '.repeat(maxWidth - line.length); } else { const totalSpaces = maxWidth - totalChars + gaps; const spaceBetween = Math.floor(totalSpaces / gaps); const extraSpaces = totalSpaces % gaps; for (let i = 0; i < gaps; i++) { line += lineWords[i]; line += ' '.repeat(spaceBetween + (i < extraSpaces ? 1 : 0)); } line += lineWords[lineWords.length - 1]; } result.push(line); index = last; } return result; }"
+        });
+
+    expect(res.status).toBe(404);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "The problem does not exist");
+    expect(res.body).toHaveProperty("Data", null);
+  });
+
+  it("should return 404 problem doesn't support language", async () => {
+    const res = await request(app).post("/api/v1/submissions")
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass user cookies
+        .send({
+          problemsId: textJustification.id,
+          language: 'ma',
+          code: "function fullJustify(words, maxWidth) { const result = []; let index = 0; while (index < words.length) { let totalChars = words[index].length; let last = index + 1; while ( last < words.length && totalChars + 1 + words[last].length <= maxWidth ) { totalChars += 1 + words[last].length; last++; } const lineWords = words.slice(index, last); const gaps = last - index - 1; let line = ''; if (last === words.length || gaps === 0) { line = lineWords.join(' '); line += ' '.repeat(maxWidth - line.length); } else { const totalSpaces = maxWidth - totalChars + gaps; const spaceBetween = Math.floor(totalSpaces / gaps); const extraSpaces = totalSpaces % gaps; for (let i = 0; i < gaps; i++) { line += lineWords[i]; line += ' '.repeat(spaceBetween + (i < extraSpaces ? 1 : 0)); } line += lineWords[lineWords.length - 1]; } result.push(line); index = last; } return result; }"
+        });
+
+    expect(res.status).toBe(404);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "This problem does not support ma language");
+    expect(res.body).toHaveProperty("Data", null);
+  });
+
+  it("should return 200 solution submitted", async () => {
+    const res = await request(app).post("/api/v1/submissions")
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass user cookies
+        .send({
+          problemsId: textJustification.id,
+          language: 'javascript',
+          code: "function fullJustify(words, maxWidth) { const result = []; let index = 0; while (index < words.length) { let totalChars = words[index].length; let last = index + 1; while ( last < words.length && totalChars + 1 + words[last].length <= maxWidth ) { totalChars += 1 + words[last].length; last++; } const lineWords = words.slice(index, last); const gaps = last - index - 1; let line = ''; if (last === words.length || gaps === 0) { line = lineWords.join(' '); line += ' '.repeat(maxWidth - line.length); } else { const totalSpaces = maxWidth - totalChars + gaps; const spaceBetween = Math.floor(totalSpaces / gaps); const extraSpaces = totalSpaces % gaps; for (let i = 0; i < gaps; i++) { line += lineWords[i]; line += ' '.repeat(spaceBetween + (i < extraSpaces ? 1 : 0)); } line += lineWords[lineWords.length - 1]; } result.push(line); index = last; } return result; }"
+        });
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Solution submitted successfully");
+    expect(res.body.Data.submissionsId).toBe(1);
+    expect(res.body.Data.status).toBe("PENDING");
+  });
+
+  it("should return 200 correct solution", async () => {
+
+    await new Promise((resolve) => setTimeout(resolve, 8000));
+
+    const res = await request(app).get("/api/v1/submissions/1")
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass user cookies
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Submission accepted successfully.");
+    expect(res.body.Data.id).toBe(1);
+    expect(res.body.Data.status).toBe("ACCEPTED");
+    expect(res.body.Data.problemsId).toBe(textJustification.id);
+  });
+
+  it("should return 200 solution submitted", async () => {
+    const res = await request(app).post("/api/v1/submissions")
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass user cookies
+        .send({
+          problemsId: addTwoIntegers.id,
+          language: 'javascript',
+          code: "function fullJustify(words, maxWidth) { const result = []; let index = 0; while (index < words.length) { let totalChars = words[index].length; let last = index + 1; while ( last < words.length && totalChars + 1 + words[last].length <= maxWidth ) { totalChars += 1 + words[last].length; last++; } const lineWords = words.slice(index, last); const gaps = last - index - 1; let line = ''; if (last === words.length || gaps === 0) { line = lineWords.join(' '); line += ' '.repeat(maxWidth - line.length); } else { const totalSpaces = maxWidth - totalChars + gaps; const spaceBetween = Math.floor(totalSpaces / gaps); const extraSpaces = totalSpaces % gaps; for (let i = 0; i < gaps; i++) { line += lineWords[i]; line += ' '.repeat(spaceBetween + (i < extraSpaces ? 1 : 0)); } line += lineWords[lineWords.length - 1]; } result.push(line); index = last; } return result; }"
+        });
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Solution submitted successfully");
+    expect(res.body.Data.submissionsId).toBe(2);
+    expect(res.body.Data.status).toBe("PENDING");
+  })
 });
