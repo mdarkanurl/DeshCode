@@ -24,7 +24,7 @@ async function submissionsSolution(data: {
         // check the language support or not
         for (let i = 0; i < problems.language.length; i++) {
             if(!problems.language.includes(data.language)) {
-                throw new CustomError(`This problem does not support ${data.language} language}`, 404);
+                throw new CustomError(`This problem does not support ${data.language} language`, 404);
             }
         }
 
