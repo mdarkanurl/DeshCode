@@ -1,6 +1,7 @@
 import request from "supertest";
 import app from "../index";
 import { problemsData } from "./data/problems-data";
+import { solutionData } from "./data/submissions-data";
 const {
   textJustification,
   unformattedTextJustification,
@@ -17,6 +18,27 @@ const {
   wordLadder127,
   gameOfLife
 } = problemsData;
+
+const {
+  textJustificationSolution,
+  invalidProblemIdSolution,
+  invalidInputSolution,
+  languageNotSupportSolution,
+  invalidFunctionSignature,
+  incorrectProblemSolution,
+  regularExpressionMatchingProblemSolution,
+  failedProblemSolution,
+  addTwoIntegersSolution,
+  binaryTreeMaximumPathSumSolution,
+  complexNumberMultiplicationSolutionSolution,
+  gameOfLifeSolution,
+  kthSmallestElementInABstSolution,
+  trappingRainWaterSolution,
+  uniquePathsIiSolution,
+  utf8ValidationSolution,
+  wildcardMatching44Solution,
+  wordLadder127Solution
+} = solutionData;
 
 // Describe block for App
 describe("App", () => {
@@ -557,11 +579,7 @@ describe("/api/v1/submissions", () => {
 
   it("should return 401 unauthorized", async () => {
     const res = await request(app).post("/api/v1/submissions")
-        .send({
-          problemsId: textJustification,
-          language: 'javascript',
-          code: "function fullJustify(words, maxWidth) { const result = []; let index = 0; while (index < words.length) { let totalChars = words[index].length; let last = index + 1; while ( last < words.length && totalChars + 1 + words[last].length <= maxWidth ) { totalChars += 1 + words[last].length; last++; } const lineWords = words.slice(index, last); const gaps = last - index - 1; let line = ''; if (last === words.length || gaps === 0) { line = lineWords.join(' '); line += ' '.repeat(maxWidth - line.length); } else { const totalSpaces = maxWidth - totalChars + gaps; const spaceBetween = Math.floor(totalSpaces / gaps); const extraSpaces = totalSpaces % gaps; for (let i = 0; i < gaps; i++) { line += lineWords[i]; line += ' '.repeat(spaceBetween + (i < extraSpaces ? 1 : 0)); } line += lineWords[lineWords.length - 1]; } result.push(line); index = last; } return result; }"
-        });
+        .send(textJustificationSolution);
 
     expect(res.status).toBe(401);
     expect(res.body).toHaveProperty("Success", false);
@@ -572,10 +590,7 @@ describe("/api/v1/submissions", () => {
   it("should return 400 invalid input", async () => {
     const res = await request(app).post("/api/v1/submissions")
         .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass user cookies
-        .send({
-          problemsId: textJustification.id,
-          code: ""
-        });
+        .send(invalidInputSolution);
 
     expect(res.status).toBe(400);
     expect(res.body).toHaveProperty("Success", false);
@@ -592,11 +607,7 @@ describe("/api/v1/submissions", () => {
   it('should return 404 problem not found', async () => {
     const res = await request(app).post("/api/v1/submissions")
         .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass user cookies
-        .send({
-          problemsId: "DeshCode",
-          language: 'javascript',
-          code: "function fullJustify(words, maxWidth) { const result = []; let index = 0; while (index < words.length) { let totalChars = words[index].length; let last = index + 1; while ( last < words.length && totalChars + 1 + words[last].length <= maxWidth ) { totalChars += 1 + words[last].length; last++; } const lineWords = words.slice(index, last); const gaps = last - index - 1; let line = ''; if (last === words.length || gaps === 0) { line = lineWords.join(' '); line += ' '.repeat(maxWidth - line.length); } else { const totalSpaces = maxWidth - totalChars + gaps; const spaceBetween = Math.floor(totalSpaces / gaps); const extraSpaces = totalSpaces % gaps; for (let i = 0; i < gaps; i++) { line += lineWords[i]; line += ' '.repeat(spaceBetween + (i < extraSpaces ? 1 : 0)); } line += lineWords[lineWords.length - 1]; } result.push(line); index = last; } return result; }"
-        });
+        .send(invalidProblemIdSolution);
 
     expect(res.status).toBe(404);
     expect(res.body).toHaveProperty("Success", false);
@@ -607,11 +618,7 @@ describe("/api/v1/submissions", () => {
   it("should return 404 problem doesn't support language", async () => {
     const res = await request(app).post("/api/v1/submissions")
         .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass user cookies
-        .send({
-          problemsId: textJustification.id,
-          language: 'ma',
-          code: "function fullJustify(words, maxWidth) { const result = []; let index = 0; while (index < words.length) { let totalChars = words[index].length; let last = index + 1; while ( last < words.length && totalChars + 1 + words[last].length <= maxWidth ) { totalChars += 1 + words[last].length; last++; } const lineWords = words.slice(index, last); const gaps = last - index - 1; let line = ''; if (last === words.length || gaps === 0) { line = lineWords.join(' '); line += ' '.repeat(maxWidth - line.length); } else { const totalSpaces = maxWidth - totalChars + gaps; const spaceBetween = Math.floor(totalSpaces / gaps); const extraSpaces = totalSpaces % gaps; for (let i = 0; i < gaps; i++) { line += lineWords[i]; line += ' '.repeat(spaceBetween + (i < extraSpaces ? 1 : 0)); } line += lineWords[lineWords.length - 1]; } result.push(line); index = last; } return result; }"
-        });
+        .send(languageNotSupportSolution);
 
     expect(res.status).toBe(404);
     expect(res.body).toHaveProperty("Success", false);
@@ -622,11 +629,7 @@ describe("/api/v1/submissions", () => {
   it("should return 200 solution submitted", async () => {
     const res = await request(app).post("/api/v1/submissions")
         .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass user cookies
-        .send({
-          problemsId: textJustification.id,
-          language: 'javascript',
-          code: "function fullJustify(words, maxWidth) { const result = []; let index = 0; while (index < words.length) { let totalChars = words[index].length; let last = index + 1; while ( last < words.length && totalChars + 1 + words[last].length <= maxWidth ) { totalChars += 1 + words[last].length; last++; } const lineWords = words.slice(index, last); const gaps = last - index - 1; let line = ''; if (last === words.length || gaps === 0) { line = lineWords.join(' '); line += ' '.repeat(maxWidth - line.length); } else { const totalSpaces = maxWidth - totalChars + gaps; const spaceBetween = Math.floor(totalSpaces / gaps); const extraSpaces = totalSpaces % gaps; for (let i = 0; i < gaps; i++) { line += lineWords[i]; line += ' '.repeat(spaceBetween + (i < extraSpaces ? 1 : 0)); } line += lineWords[lineWords.length - 1]; } result.push(line); index = last; } return result; }"
-        });
+        .send(textJustificationSolution);
 
     expect(res.status).toBe(200);
     expect(res.body).toHaveProperty("Success", true);
@@ -635,9 +638,41 @@ describe("/api/v1/submissions", () => {
     expect(res.body.Data.status).toBe("PENDING");
   });
 
+  it("should return 401 unauthorized to get solution", async () => {
+
+    const res = await request(app).get("/api/v1/submissions/1")
+
+    expect(res.status).toBe(401);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "Unauthorized");
+    expect(res.body).toHaveProperty("Data", null);
+  });
+
+  it("should return 404 solution not found", async () => {
+
+    const res = await request(app).get("/api/v1/submissions/1000")
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass user cookies
+
+    expect(res.status).toBe(404);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "The submit ID you provided it doesn't exist");
+    expect(res.body).toHaveProperty("Data", null);
+  });
+
+  it("should return 400 invalid input, ID params missing", async () => {
+
+    const res = await request(app).get("/api/v1/submissions/0")
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass user cookies
+
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "Invalid input, ID params missing");
+    expect(res.body).toHaveProperty("Data", null);
+  });
+
   it("should return 200 correct solution", async () => {
 
-    await new Promise((resolve) => setTimeout(resolve, 8000));
+    await new Promise((resolve) => setTimeout(resolve, 4000));
 
     const res = await request(app).get("/api/v1/submissions/1")
         .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass user cookies
@@ -653,16 +688,378 @@ describe("/api/v1/submissions", () => {
   it("should return 200 solution submitted", async () => {
     const res = await request(app).post("/api/v1/submissions")
         .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass user cookies
-        .send({
-          problemsId: addTwoIntegers.id,
-          language: 'javascript',
-          code: "function fullJustify(words, maxWidth) { const result = []; let index = 0; while (index < words.length) { let totalChars = words[index].length; let last = index + 1; while ( last < words.length && totalChars + 1 + words[last].length <= maxWidth ) { totalChars += 1 + words[last].length; last++; } const lineWords = words.slice(index, last); const gaps = last - index - 1; let line = ''; if (last === words.length || gaps === 0) { line = lineWords.join(' '); line += ' '.repeat(maxWidth - line.length); } else { const totalSpaces = maxWidth - totalChars + gaps; const spaceBetween = Math.floor(totalSpaces / gaps); const extraSpaces = totalSpaces % gaps; for (let i = 0; i < gaps; i++) { line += lineWords[i]; line += ' '.repeat(spaceBetween + (i < extraSpaces ? 1 : 0)); } line += lineWords[lineWords.length - 1]; } result.push(line); index = last; } return result; }"
-        });
+        .send(invalidFunctionSignature);
 
     expect(res.status).toBe(200);
     expect(res.body).toHaveProperty("Success", true);
     expect(res.body).toHaveProperty("Message", "Solution submitted successfully");
     expect(res.body.Data.submissionsId).toBe(2);
     expect(res.body.Data.status).toBe("PENDING");
-  })
+  });
+
+  it("should return 200 INVALID_FUNCTION_SIGNATURE", async () => {
+
+    await new Promise((resolve) => setTimeout(resolve, 4000));
+
+    const res = await request(app).get("/api/v1/submissions/2")
+        .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Submission has an invalid function signature.");
+    expect(res.body.Data.id).toBe(2);
+    expect(res.body.Data.status).toBe("INVALID_FUNCTION_SIGNATURE");
+    expect(res.body.Data.problemsId).toBe(invalidFunctionSignature.problemsId);
+  });
+
+  it("should return 200 solution submitted", async () => {
+    const res = await request(app).post("/api/v1/submissions")
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass user cookies
+        .send(incorrectProblemSolution);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Solution submitted successfully");
+    expect(res.body.Data.submissionsId).toBe(3)
+    expect(res.body.Data.status).toBe("PENDING");
+  });
+
+  it("should return 200 WRONG_ANSWER", async () => {
+
+    await new Promise((resolve) => setTimeout(resolve, 4000));
+
+    const res = await request(app).get("/api/v1/submissions/3")
+        .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Submission returned wrong answer.");
+    expect(res.body.Data.id).toBe(3);
+    expect(res.body.Data.status).toBe("WRONG_ANSWER");
+    expect(res.body.Data.problemsId).toBe(incorrectProblemSolution.problemsId);
+  });
+
+  it("should return 200 solution submitted", async () => {
+    const res = await request(app).post("/api/v1/submissions")
+        .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
+        .send(regularExpressionMatchingProblemSolution);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Solution submitted successfully");
+    expect(res.body.Data.submissionsId).toBe(4)
+    expect(res.body.Data.status).toBe("PENDING");
+  });
+
+  it("should return 200 correct solution", async () => {
+
+    await new Promise((resolve) => setTimeout(resolve, 4000));
+
+    const res = await request(app).get("/api/v1/submissions/4")
+        .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Submission accepted successfully.");
+    expect(res.body.Data.id).toBe(4);
+    expect(res.body.Data.status).toBe("ACCEPTED");
+    expect(res.body.Data.problemsId).toBe(regularExpressionMatchingProblemSolution.problemsId);
+  });
+
+  it("should return 200 solution submitted", async () => {
+    const res = await request(app).post("/api/v1/submissions")
+        .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
+        .send(failedProblemSolution);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Solution submitted successfully");
+    expect(res.body.Data.submissionsId).toBe(5)
+    expect(res.body.Data.status).toBe("PENDING");
+  });
+
+  it("should return 200 solution failed", async () => {
+
+    await new Promise((resolve) => setTimeout(resolve, 10000));
+
+    const res = await request(app).get("/api/v1/submissions/5")
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass user cookies
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Submission failed.");
+    expect(res.body.Data.id).toBe(5);
+    expect(res.body.Data.status).toBe("FAILED");
+    expect(res.body.Data.problemsId).toBe(regularExpressionMatchingProblemSolution.problemsId);
+  });
+
+  it("should return 200 solution submitted", async () => {
+    const res = await request(app).post("/api/v1/submissions")
+        .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
+        .send(addTwoIntegersSolution);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Solution submitted successfully");
+    expect(res.body.Data.submissionsId).toBe(6)
+    expect(res.body.Data.status).toBe("PENDING");
+  });
+
+  it("should return 200 solution submitted", async () => {
+    const res = await request(app).post("/api/v1/submissions")
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass user cookies
+        .send(binaryTreeMaximumPathSumSolution);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Solution submitted successfully");
+    expect(res.body.Data.submissionsId).toBe(7)
+    expect(res.body.Data.status).toBe("PENDING");
+  });
+
+  it("should return 200 solution submitted", async () => {
+    const res = await request(app).post("/api/v1/submissions")
+        .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
+        .send(complexNumberMultiplicationSolutionSolution);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Solution submitted successfully");
+    expect(res.body.Data.submissionsId).toBe(8)
+    expect(res.body.Data.status).toBe("PENDING");
+  });
+
+  it("should return 200 solution submitted", async () => {
+    const res = await request(app).post("/api/v1/submissions")
+        .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
+        .send(gameOfLifeSolution);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Solution submitted successfully");
+    expect(res.body.Data.submissionsId).toBe(9)
+    expect(res.body.Data.status).toBe("PENDING");
+  });
+
+  it("should return 200 solution submitted", async () => {
+    const res = await request(app).post("/api/v1/submissions")
+        .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
+        .send(kthSmallestElementInABstSolution);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Solution submitted successfully");
+    expect(res.body.Data.submissionsId).toBe(10)
+    expect(res.body.Data.status).toBe("PENDING");
+  });
+
+  it("should return 200 solution submitted", async () => {
+    const res = await request(app).post("/api/v1/submissions")
+        .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
+        .send(uniquePathsIiSolution);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Solution submitted successfully");
+    expect(res.body.Data.submissionsId).toBe(11)
+    expect(res.body.Data.status).toBe("PENDING");
+  });
+
+  it("should return 200 solution submitted", async () => {
+    const res = await request(app).post("/api/v1/submissions")
+        .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
+        .send(utf8ValidationSolution);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Solution submitted successfully");
+    expect(res.body.Data.submissionsId).toBe(12)
+    expect(res.body.Data.status).toBe("PENDING");
+  });
+
+  it("should return 200 solution submitted", async () => {
+    const res = await request(app).post("/api/v1/submissions")
+        .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
+        .send(wildcardMatching44Solution);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Solution submitted successfully");
+    expect(res.body.Data.submissionsId).toBe(13)
+    expect(res.body.Data.status).toBe("PENDING");
+  });
+
+  it("should return 200 solution submitted", async () => {
+    const res = await request(app).post("/api/v1/submissions")
+        .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
+        .send(wordLadder127Solution);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Solution submitted successfully");
+    expect(res.body.Data.submissionsId).toBe(14)
+    expect(res.body.Data.status).toBe("PENDING");
+  });
+
+  it("should return 200 solution submitted", async () => {
+    const res = await request(app).post("/api/v1/submissions")
+        .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
+        .send(trappingRainWaterSolution);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Solution submitted successfully");
+    expect(res.body.Data.submissionsId).toBe(15)
+    expect(res.body.Data.status).toBe("PENDING");
+  });
+
+  it("should return 200 correct solution", async () => {
+
+    await new Promise((resolve) => setTimeout(resolve, 4000));
+
+    const res = await request(app).get("/api/v1/submissions/6")
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass user cookies
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Submission accepted successfully.");
+    expect(res.body.Data.id).toBe(6);
+    expect(res.body.Data.status).toBe("ACCEPTED");
+    expect(res.body.Data.problemsId).toBe(addTwoIntegersSolution.problemsId);
+  });
+
+  it("should return 200 correct solution", async () => {
+
+    await new Promise((resolve) => setTimeout(resolve, 4000));
+
+    const res = await request(app).get("/api/v1/submissions/7")
+        .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Submission accepted successfully.");
+    expect(res.body.Data.id).toBe(7);
+    expect(res.body.Data.status).toBe("ACCEPTED");
+    expect(res.body.Data.problemsId).toBe(binaryTreeMaximumPathSumSolution.problemsId);
+  });
+
+  it("should return 200 correct solution", async () => {
+
+    await new Promise((resolve) => setTimeout(resolve, 4000));
+
+    const res = await request(app).get("/api/v1/submissions/8")
+        .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Submission accepted successfully.");
+    expect(res.body.Data.id).toBe(8);
+    expect(res.body.Data.status).toBe("ACCEPTED");
+    expect(res.body.Data.problemsId).toBe(complexNumberMultiplicationSolutionSolution.problemsId);
+  });
+
+  it("should return 200 correct solution", async () => {
+
+    await new Promise((resolve) => setTimeout(resolve, 4000));
+
+    const res = await request(app).get("/api/v1/submissions/9")
+        .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Submission accepted successfully.");
+    expect(res.body.Data.id).toBe(9);
+    expect(res.body.Data.status).toBe("ACCEPTED");
+    expect(res.body.Data.problemsId).toBe(gameOfLifeSolution.problemsId);
+  });
+
+  it("should return 200 correct solution", async () => {
+
+    await new Promise((resolve) => setTimeout(resolve, 4000));
+
+    const res = await request(app).get("/api/v1/submissions/10")
+        .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Submission accepted successfully.");
+    expect(res.body.Data.id).toBe(10);
+    expect(res.body.Data.status).toBe("ACCEPTED");
+    expect(res.body.Data.problemsId).toBe(kthSmallestElementInABstSolution.problemsId);
+  });
+
+  it("should return 200 correct solution", async () => {
+
+    await new Promise((resolve) => setTimeout(resolve, 4000));
+
+    const res = await request(app).get("/api/v1/submissions/11")
+        .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Submission accepted successfully.");
+    expect(res.body.Data.id).toBe(11);
+    expect(res.body.Data.status).toBe("ACCEPTED");
+    expect(res.body.Data.problemsId).toBe(uniquePathsIiSolution.problemsId);
+  });
+
+  it("should return 200 correct solution", async () => {
+
+    await new Promise((resolve) => setTimeout(resolve, 4000));
+
+    const res = await request(app).get("/api/v1/submissions/12")
+        .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Submission accepted successfully.");
+    expect(res.body.Data.id).toBe(12);
+    expect(res.body.Data.status).toBe("ACCEPTED");
+    expect(res.body.Data.problemsId).toBe(utf8ValidationSolution.problemsId);
+  });
+
+  it("should return 200 correct solution", async () => {
+
+    await new Promise((resolve) => setTimeout(resolve, 4000));
+
+    const res = await request(app).get("/api/v1/submissions/13")
+        .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Submission accepted successfully.");
+    expect(res.body.Data.id).toBe(13);
+    expect(res.body.Data.status).toBe("ACCEPTED");
+    expect(res.body.Data.problemsId).toBe(wildcardMatching44Solution.problemsId);
+  });
+
+  it("should return 200 correct solution", async () => {
+
+    await new Promise((resolve) => setTimeout(resolve, 4000));
+
+    const res = await request(app).get("/api/v1/submissions/14")
+        .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Submission accepted successfully.");
+    expect(res.body.Data.id).toBe(14);
+    expect(res.body.Data.status).toBe("ACCEPTED");
+    expect(res.body.Data.problemsId).toBe(wordLadder127Solution.problemsId);
+  });
+
+  it("should return 200 correct solution", async () => {
+
+    await new Promise((resolve) => setTimeout(resolve, 4000));
+
+    const res = await request(app).get("/api/v1/submissions/15")
+        .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Submission accepted successfully.");
+    expect(res.body.Data.id).toBe(15);
+    expect(res.body.Data.status).toBe("ACCEPTED");
+    expect(res.body.Data.problemsId).toBe(trappingRainWaterSolution.problemsId);
+  });
 });
