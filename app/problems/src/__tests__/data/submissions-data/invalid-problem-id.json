@@ -1,0 +1,5 @@
+{
+    "problemsId": "DeshCode",
+    "language": "javascript",
+    "code": "function fullJustify(words, maxWidth) { const result = []; let index = 0; while (index < words.length) { let totalChars = words[index].length; let last = index + 1; while ( last < words.length && totalChars + 1 + words[last].length <= maxWidth ) { totalChars += 1 + words[last].length; last++; } const lineWords = words.slice(index, last); const gaps = last - index - 1; let line = ''; if (last === words.length || gaps === 0) { line = lineWords.join(' '); line += ' '.repeat(maxWidth - line.length); } else { const totalSpaces = maxWidth - totalChars + gaps; const spaceBetween = Math.floor(totalSpaces / gaps); const extraSpaces = totalSpaces % gaps; for (let i = 0; i < gaps; i++) { line += lineWords[i]; line += ' '.repeat(spaceBetween + (i < extraSpaces ? 1 : 0)); } line += lineWords[lineWords.length - 1]; } result.push(line); index = last; } return result; }"
+}

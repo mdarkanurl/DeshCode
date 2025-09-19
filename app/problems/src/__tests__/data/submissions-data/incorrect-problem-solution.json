@@ -1,0 +1,5 @@
+{
+    "problemsId": "regular-expression-matching",
+    "language": "javascript",
+    "code": "function isMatch(s, p) { return `This is invalid solution` }"
+}

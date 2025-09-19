@@ -1,0 +1,5 @@
+{
+    "problemsId": "word-ladder-127",
+    "language": "javascript",
+    "code": "function ladderLength(beginWord, endWord, wordList) { const wordSet = new Set(wordList); if (!wordSet.has(endWord)) return 0; const queue = [[beginWord, 1]]; while (queue.length > 0) { const [word, length] = queue.shift(); for (let i = 0; i < word.length; i++) { for (let c = 97; c <= 122; c++) { const nextWord = word.slice(0, i) + String.fromCharCode(c) + word.slice(i + 1); if (nextWord === endWord) return length + 1; if (wordSet.has(nextWord)) { queue.push([nextWord, length + 1]); wordSet.delete(nextWord); } } } } return 0; }"
+}

@@ -1,0 +1,5 @@
+{
+    "problemsId": "complex-number-multiplication",
+    "language": "javascript",
+    "code": "function complexNumberMultiply(num1, num2) { const parse = (str) => { const [real, imag] = str.split('+'); return [parseInt(real), parseInt(imag.slice(0, -1))]; }; const [a, b] = parse(num1); const [c, d] = parse(num2); const realPart = a * c - b * d; const imagPart = a * d + b * c; return `${realPart}+${imagPart}i`; }"
+}

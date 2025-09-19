@@ -1,0 +1,5 @@
+{
+    "problemsId": "add-two-integers",
+    "language": "javascript",
+    "code": "function addTwoIntegers(a, b) { return a + b };"
+}
