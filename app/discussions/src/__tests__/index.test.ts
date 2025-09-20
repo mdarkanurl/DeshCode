@@ -5,7 +5,8 @@ import { discussionData } from "./data/discussions-data";
 const {
   invalidDiscussion,
   correctDiscussion,
-  correctDiscussionTwo
+  correctDiscussionTwo,
+  updatedDiscussion
 } = discussionData;
 
 // Describe block for App
@@ -38,6 +39,8 @@ describe("/api/v1/discussions", () => {
 
   let accessTokenCookie: string;
   let refreshTokenCookie: string;
+  let accessTokenCookie2: string;
+  let refreshTokenCookie2: string;
 
   beforeAll(async () => {
 
@@ -49,12 +52,22 @@ describe("/api/v1/discussions", () => {
         password: "testingPassword"
     });
 
+    const loginRes2 = await request("http://localhost:3004") // or replace with Auth service URL
+      .post("/api/v1/auth/login")
+      .send({
+        email: "user2@DeshCode.com",
+        password: "testingPassword"
+    });
+
     // loginRes.headers['set-cookie'] is an array of cookie strings
     const cookies: string[] = loginRes.headers["set-cookie"] as any;
+    const cookies2: string[] = loginRes2.headers["set-cookie"] as any;
 
     // Find the cookies by name
     accessTokenCookie = cookies.find(c => c.startsWith("accessToken="))!;
     refreshTokenCookie = cookies.find(c => c.startsWith("refreshToken="))!;
+    accessTokenCookie2 = cookies2.find(c => c.startsWith("accessToken="))!;
+    refreshTokenCookie2 = cookies2.find(c => c.startsWith("refreshToken="))!;
   });
 
   it("should return 401 unauthorized to create discussions", async () => {
@@ -86,7 +99,7 @@ describe("/api/v1/discussions", () => {
 
   it("should return 400 invalid input", async () => {
     const res = await request(app).post("/api/v1/discussions")
-        .set("Cookie", [refreshTokenCookie]) // ✅ pass admin cookies
+        .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
         .send(invalidDiscussion);
 
     expect(res.status).toBe(400);
@@ -102,7 +115,7 @@ describe("/api/v1/discussions", () => {
 
   it("should return 201 discussion created", async () => {
     const res = await request(app).post("/api/v1/discussions")
-        .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass admin cookies
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass user cookies
         .send(correctDiscussion);
 
     expect(res.status).toBe(201);
@@ -128,7 +141,7 @@ describe("/api/v1/discussions", () => {
 
   it("should return 201 discussion created", async () => {
     const res = await request(app).post("/api/v1/discussions")
-        .set("Cookie", [refreshTokenCookie]) // ✅ pass admin cookies
+        .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
         .send(correctDiscussionTwo);
 
     expect(res.status).toBe(201);
@@ -167,12 +180,79 @@ describe("/api/v1/discussions", () => {
     expect(res.body.Data.topic).toBe(correctDiscussionTwo.topic);
   });
 
-  it("should return 401 unauthorized to update discussions", async () => {
-    const res = await request(app).put(`/api/v1/discussions/${Response.body.Data.discussions[1].id}`);
+  it("should return 401 unauthorized to update discussion", async () => {
+    const res = await request(app).put(`/api/v1/discussions/${Response.body.Data.discussions[1].id}`)
+        .set("Cookie", [refreshTokenCookie2])
+        .send(updatedDiscussion);
 
     expect(res.status).toBe(401);
     expect(res.body).toHaveProperty("Success", false);
-    expect(res.body).toHaveProperty("Message", "Unauthorized");
+    expect(res.body).toHaveProperty("Message", "Unauthorized to update this discussion");
     expect(res.body).toHaveProperty("Data", null);
+  });
+
+  it("should return 400 invalid input", async () => {
+    const res = await request(app).put(`/api/v1/discussions/${Response.body.Data.discussions[1].id}`)
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass user cookies
+        .send({  });
+
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "Invalid input");
+    expect(res.body).toHaveProperty("Data", null);
+  });
+
+  it("should return 404 discussion not found", async () => {
+    const res = await request(app).put(`/api/v1/discussions/deshCode`)
+        .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
+        .send(updatedDiscussion);
+
+    expect(res.status).toBe(404);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "Discussion not found");
+    expect(res.body).toHaveProperty("Data", null);
+  });
+
+  it("should return 200 discussion updated", async () => {
+    const res = await request(app).put(`/api/v1/discussions/${Response.body.Data.discussions[1].id}`)
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass user cookies
+        .send(updatedDiscussion);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Discuss updated successfully");
+    expect(res.body.Data.topic).toBe(Response.body.Data.discussions[1].topic);
+    expect(res.body.Data.id).toBe(Response.body.Data.discussions[1].id);
+  });
+
+  it("should return 404 discussion not found", async () => {
+    const res = await request(app).delete(`/api/v1/discussions/deshcode`)
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass user cookies
+
+    expect(res.status).toBe(404);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "Discussion not found");
+    expect(res.body).toHaveProperty("Data", null);
+  });
+
+  it("should return 401 unauthorized to delete this discussion", async () => {
+    const res = await request(app).delete(`/api/v1/discussions/${Response.body.Data.discussions[0].id}`)
+        .set("Cookie", [refreshTokenCookie2]);
+
+    expect(res.status).toBe(401);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "Unauthorized to delete this discussion");
+    expect(res.body).toHaveProperty("Data", null);
+  });
+
+  it("should return 200 deleted the discussion", async () => {
+    const res = await request(app).delete(`/api/v1/discussions/${Response.body.Data.discussions[0].id}`)
+        .set("Cookie", [refreshTokenCookie]);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Discuss deleted successfully");
+    expect(res.body.Data.topic).toBe(Response.body.Data.discussions[0].topic);
+    expect(res.body.Data.id).toBe(Response.body.Data.discussions[0].id);
   });
 });
