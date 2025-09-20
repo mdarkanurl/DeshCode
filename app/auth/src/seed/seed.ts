@@ -5,7 +5,7 @@ async function main() {
     // Seed a Admin on Database for testing
     const admin = await prisma.user.create({
         data: {
-          email: 'admin@Deshcode.com',
+          email: 'admin@DeshCode.com',
           role: "ADMIN",
           isVerified: true
         },
