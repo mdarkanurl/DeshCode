@@ -23,6 +23,7 @@
     "zod": "3.25.67"
   },
   "devDependencies": {
+    "@jest/types": "^30.0.5",
     "@testcontainers/postgresql": "^11.6.0",
     "@types/cookie-parser": "^1.4.9",
     "@types/express": "^5.0.3",

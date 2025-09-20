@@ -30,6 +30,9 @@ importers:
         specifier: 3.25.67
         version: 3.25.67
     devDependencies:
+      '@jest/types':
+        specifier: ^30.0.5
+        version: 30.0.5
       '@testcontainers/postgresql':
         specifier: ^11.6.0
         version: 11.6.0
