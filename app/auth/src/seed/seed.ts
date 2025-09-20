@@ -39,6 +39,22 @@ async function main() {
             userId: user.id
         }
     });
+
+    const user2 = await prisma.user.create({
+        data: {
+          email: 'user2@DeshCode.com',
+          isVerified: true
+        },
+    });
+
+    await prisma.authProvider.create({
+        data: {
+            provider: "local",
+            email: user2.email,
+            password: hashPass,
+            userId: user2.id
+        }
+    });
 }
 
 // Call the function
