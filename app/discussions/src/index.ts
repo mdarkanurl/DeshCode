@@ -33,15 +33,13 @@ app.get('/api/health', async (req: Request, res: Response) => {
 // Root endpoint
 app.get('/', (req: Request, res: Response) => {
   res.json({ 
-    message: 'Welcome to Express problems Backend API',
+    message: 'Welcome to Express discussions Backend API',
     version: '1.0.0',
-    database: 'MySQL',
+    database: 'PostgreSQL',
     endpoints: {
       health: '/api/health',
-      auth: '/api/auth',
-      contest: '/api/contest',
-      problem: '/api/problem',
-      discuss: '/api/discuss',
+      discussions: '/api/v1/discussions',
+      comments: '/api/v1/v1/comments'
     }
   });
 });
