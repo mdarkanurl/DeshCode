@@ -194,7 +194,7 @@ async function deleteDiscussions(
 
         res.status(200).json({
             Success: true,
-            Message: 'Discuss updated successfully',
+            Message: 'Discuss deleted successfully',
             Data: responses,
             Errors: null
         });

@@ -127,7 +127,7 @@ async function deleteDiscussions(data: {
         }
 
         if(data.userId !== discussions.userId) {
-            throw new CustomError('Unauthorized to update this discussion', 401)
+            throw new CustomError('Unauthorized to delete this discussion', 401)
         }
 
         // Delete the discussion
