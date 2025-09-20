@@ -77,7 +77,7 @@ describe("/api/v1/problems", () => {
     const loginRes = await request("http://localhost:3004") // or replace with Auth service URL
       .post("/api/v1/auth/login")
       .send({
-        email: "admin@Deshcode.com",
+        email: "admin@DeshCode.com",
         password: "testingPassword"
     });
 
