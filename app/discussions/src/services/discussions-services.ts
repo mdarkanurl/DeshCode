@@ -68,12 +68,15 @@ async function getAllDiscussions(data: {
 }
 
 async function getDiscussionsById(data: {
-    id: number
+    id: string
 }) {
     try {
-        const discussions = await discussionsRepo.getById(data.id);
+        const discussions = await discussionsRepo.getByStringId(data.id);
 
-        if (!discussions) throw new CustomError('Discussion not found', 404);
+        if (!discussions) {
+            throw new CustomError('Discussion not found', 404)
+        };
+        
         return discussions;
     } catch (error) {
         if (error instanceof CustomError) throw error;

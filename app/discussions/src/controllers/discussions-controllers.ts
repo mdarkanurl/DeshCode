@@ -88,7 +88,7 @@ async function getDiscussionsById(
     try {
         const { id } = req.params;
 
-        const discussions = await discussionsServices.getDiscussionsById({ id: parseInt(id) });
+        const discussions = await discussionsServices.getDiscussionsById({ id });
 
         res.status(200).json({
             Success: true,

@@ -10,7 +10,7 @@ export const createDiscussions = z.object({
 
 export const updateDiscussions = z.object({
     userId: z.string(),
-    discussionsId: z.number(),
+    discussionsId: z.string(),
     title: z.string().min(5).optional(),
     content: z.string().min(10).optional()
 });
