@@ -9,12 +9,9 @@ class DiscussionsRepo extends CrudRepo {
 
     async getByStringId(id: string, omit?: {}) {
         try {
-            console.log("ID: ", id);
-            const x = await prisma.discussions.findFirst({
-                where: { id: id }
+            return await prisma.discussions.findFirst({
+                where: { id }
             });
-            console.log(x);
-            return x;
         } catch (error) {
             throw new CustomError('Internal Server Error', 500);
         }
