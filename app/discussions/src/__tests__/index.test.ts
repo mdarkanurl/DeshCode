@@ -29,7 +29,7 @@ describe("App", () => {
     expect(res.body).toHaveProperty("endpoints", {
       health: "/api/health",
       discussions: '/api/v1/discussions',
-      comments: '/api/v1/v1/comments'
+      comments: '/api/v1/comments'
     });
   });
 });
