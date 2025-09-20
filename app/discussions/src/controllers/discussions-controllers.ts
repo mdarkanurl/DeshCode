@@ -12,24 +12,30 @@ async function createDiscussions(
 ) {
     try {
         const userId = req.userId as string;
-        const parseData: any = discussionsSchema.createDiscussions.safeParse({
+
+        const { error, success, data } = discussionsSchema.createDiscussions.safeParse({
             userId,
             topic: req.body.topic,
             title: req.body.title,
             content: req.body.content
         });
 
-        if(!parseData.success) {
+        if(!success) {
             res.status(400).json({
                 Success: false,
                 Message: 'Invalid input',
                 Data: null,
-                Errors: parseData.error.errors
+                Errors: error.errors
             });
             return;
         }
 
-        const discussions = await discussionsServices.createDiscussions(parseData.data);
+        const discussions = await discussionsServices.createDiscussions({
+            userId: data.userId,
+            topic: data.topic as Topic,
+            title: data.title,
+            content: data.content
+        });
 
         res.status(201).json({
             Success: true,
@@ -57,7 +63,9 @@ async function getAllDiscussions(
         const skip = (pageNumber - 1) * limitNumber;
         const topicEnum = topic as Topic;
         
-        if(topic && !Object.values(Topic).includes(topicEnum)) throw new CustomError('Invalid topic', 400);
+        if(topic && !Object.values(Topic).includes(topicEnum)) {
+            throw new CustomError('Invalid topic', 400);
+        }
 
         const allDiscussions = await discussionsServices.getAllDiscussions(
             {
@@ -86,9 +94,20 @@ async function getDiscussionsById(
     next: NextFunction
 ) {
     try {
+
         const { id } = req.params;
 
-        const discussions = await discussionsServices.getDiscussionsById({ id: id.toString() });
+        if(!id || typeof id !== "string") {
+            res.status(400).json({
+                Success: false,
+                Message: 'Invalid input',
+                Data: null,
+                Errors: "Discussion ID missing or invalid type"
+            });
+            return;
+        }
+
+        const discussions = await discussionsServices.getDiscussionsById({ id });
 
         res.status(200).json({
             Success: true,
@@ -111,26 +130,30 @@ async function updateDiscussions(
     try {
         const { id } = req.params;
         const userId = req.userId as string;
-        req.body.discussId = parseInt(id);
 
-        const parseData: any = discussionsSchema.updateDiscussions.safeParse({
+        const { error, success, data } = discussionsSchema.updateDiscussions.safeParse({
             userId,
-            discussionsId: req.body.discussionsId,
+            discussionsId: id,
             title: req.body.title,
             content: req.body.content
         });
 
-        if (!parseData.success) {
+        if (!success || Object.keys(req.body).length === 0) {
             res.status(400).json({
                 Success: false,
                 Message: 'Invalid input',
                 Data: null,
-                Errors: parseData.error.errors
+                Errors: error?.errors
             });
             return;
         }
 
-        const discussions = await discussionsServices.updateDiscussions(parseData.data);
+        const discussions = await discussionsServices.updateDiscussions({
+            userId: data.userId,
+            id: data.discussionsId,
+            title: data.title,
+            content: data.content
+        });
 
         res.status(200).json({
             Success: true,
@@ -145,9 +168,47 @@ async function updateDiscussions(
     }
 }
 
+async function deleteDiscussions(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction
+) {
+    try {
+        const userId = req.userId;
+        const id = req.params.id;
+
+        if(!userId || !id || typeof id !== "string") {
+            res.status(400).json({
+                Success: false,
+                Message: 'Invalid input',
+                Data: null,
+                Errors: null
+            });
+            return;
+        }
+
+        const responses = await discussionsServices.deleteDiscussions({
+            userId: userId.toString(),
+            id
+        });
+
+        res.status(200).json({
+            Success: true,
+            Message: 'Discuss updated successfully',
+            Data: responses,
+            Errors: null
+        });
+        return;
+    } catch (error) {
+        if (error instanceof CustomError) return next(error);
+        return next(new CustomError('Internal Server Error', 500));
+    }
+}
+
 export {
     createDiscussions,
     getAllDiscussions,
     getDiscussionsById,
-    updateDiscussions
+    updateDiscussions,
+    deleteDiscussions
 }

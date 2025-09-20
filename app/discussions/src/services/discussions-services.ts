@@ -12,8 +12,7 @@ async function createDiscussions(data: {
     content: string
 }) {
     try {
-        const discussions = await discussionsRepo.create(data);
-        return discussions;
+        return await discussionsRepo.create(data);
     } catch (error) {
         if(error instanceof CustomError) throw error;
         throw new CustomError('Internal Server Error', 500);
@@ -86,23 +85,58 @@ async function getDiscussionsById(data: {
 
 async function updateDiscussions(data: {
     userId: string
-    id: number
+    id: string
     title?: string
     content?: string
 }) {
     try {
-        const discussions = await discussionsRepo.getById(data.id);
+        // Find the discussion
+        const discussions = await discussionsRepo.getByStringId(data.id);
 
-        if(!discussions || discussions.userId !== data.userId) {
-            throw new CustomError('Access denied or discussion not found', 401)
+        if(!discussions) {
+            throw new CustomError('Discussion not found', 404)
         }
 
-        await discussionsRepo.update(discussions.id, {
+        if(data.userId !== discussions.userId) {
+            throw new CustomError('Unauthorized to update this discussion', 401)
+        }
+
+        // Update the discussion
+        const updatedDiscussion = await discussionsRepo.updateById(discussions.id, {
             title: data.title,
             content: data.content
         });
         
-        return discussions;
+        return updatedDiscussion;
+    } catch (error) {
+        if (error instanceof CustomError) throw error;
+        throw new CustomError('Internal Server Error', 500);
+    }
+}
+
+async function deleteDiscussions(data: {
+    userId: string
+    id: string
+}) {
+    try {
+        // Find the discussion
+        const discussions = await discussionsRepo.getByStringId(data.id);
+
+        if(!discussions) {
+            throw new CustomError('Discussion not found', 404);
+        }
+
+        if(data.userId !== discussions.userId) {
+            throw new CustomError('Unauthorized to update this discussion', 401)
+        }
+
+        // Delete the discussion
+        const res = await discussionsRepo.destroyById(data.id);
+
+        if(!res) {
+            throw new CustomError('Failed to delete the discussion', 500);
+        }
+        return res;
     } catch (error) {
         if (error instanceof CustomError) throw error;
         throw new CustomError('Internal Server Error', 500);
@@ -113,5 +147,6 @@ export {
     createDiscussions,
     getAllDiscussions,
     getDiscussionsById,
-    updateDiscussions
+    updateDiscussions,
+    deleteDiscussions
 }

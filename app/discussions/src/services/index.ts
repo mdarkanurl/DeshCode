@@ -2,7 +2,8 @@ import {
     createDiscussions,
     getAllDiscussions,
     getDiscussionsById,
-    updateDiscussions
+    updateDiscussions,
+    deleteDiscussions
 } from "./discussions-services";
 
 import {
@@ -14,7 +15,8 @@ const discussionsServices = {
     createDiscussions,
     getAllDiscussions,
     getDiscussionsById,
-    updateDiscussions
+    updateDiscussions,
+    deleteDiscussions
 }
 
 const commentsServices = {

@@ -2,7 +2,8 @@ import {
     createDiscussions,
     getAllDiscussions,
     getDiscussionsById,
-    updateDiscussions
+    updateDiscussions,
+    deleteDiscussions
 } from "./discussions-controllers";
 
 import {
@@ -14,7 +15,8 @@ const discussionsControllers = {
     createDiscussions,
     getAllDiscussions,
     getDiscussionsById,
-    updateDiscussions
+    updateDiscussions,
+    deleteDiscussions
 };
 
 const commentsControllers = {

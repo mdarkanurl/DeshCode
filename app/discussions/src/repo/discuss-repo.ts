@@ -9,8 +9,34 @@ class DiscussionsRepo extends CrudRepo {
 
     async getByStringId(id: string, omit?: {}) {
         try {
-            return await prisma.discussions.findFirst({
-                where: { id }
+            console.log("ID: ", id);
+            const x = await prisma.discussions.findFirst({
+                where: { id: id }
+            });
+            console.log(x);
+            return x;
+        } catch (error) {
+            throw new CustomError('Internal Server Error', 500);
+        }
+    }
+
+    async updateById(id: string, data: Object, omit?: {}) {
+        try {
+            return await prisma.discussions.update({
+                where: { id },
+                data,
+                omit
+            });
+        } catch (error) {
+            throw new CustomError('Internal Server Error', 500);
+        }
+    }
+
+    async destroyById(id: string, omit?: {}) {
+        try {
+            return await prisma.discussions.delete({
+                where: { id },
+                omit
             });
         } catch (error) {
             throw new CustomError('Internal Server Error', 500);

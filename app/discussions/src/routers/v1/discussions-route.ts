@@ -9,5 +9,6 @@ router.post('/', islogin, discussionsControllers.createDiscussions);
 router.get('/', discussionsControllers.getAllDiscussions);
 router.get('/:id', discussionsControllers.getDiscussionsById);
 router.put('/:id', islogin, discussionsControllers.updateDiscussions);
+router.delete('/:id', islogin, discussionsControllers.deleteDiscussions);
 
 export default router
