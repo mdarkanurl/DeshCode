@@ -34,6 +34,8 @@ describe("App", () => {
   });
 });
 
+let Response: Response;
+
 // Describe block for /api/v1/discussions
 describe("/api/v1/discussions", () => {
 
@@ -150,7 +152,6 @@ describe("/api/v1/discussions", () => {
     expect(res.body.Data.topic).toBe(correctDiscussionTwo.topic);
   });
 
-  let Response: Response;
   it("should return 200 and all discussions", async () => {
     Response = await request(app).get("/api/v1/discussions");
 
