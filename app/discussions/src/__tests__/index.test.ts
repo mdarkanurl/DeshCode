@@ -257,3 +257,14 @@ describe("/api/v1/discussions", () => {
     expect(res.body.Data.id).toBe(Response.body.Data.discussions[0].id);
   });
 });
+
+describe("/api/v1/comments", () => {
+  it("should return 404 No comments found", async () => {
+    const res = await request(app).get(`/api/v1/comments?discussionsId=lo2582ssjckx5sa4d45a`);
+
+    expect(res.status).toBe(404);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "No comments found");
+    expect(res.body).toHaveProperty("Data", null);
+  });
+});
