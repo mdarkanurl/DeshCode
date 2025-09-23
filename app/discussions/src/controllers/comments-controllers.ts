@@ -2,26 +2,40 @@ import { Request, Response, NextFunction } from "express";
 import { commentsSchema } from "../schema";
 import { commentsServices } from "../services";
 import { CustomError } from "../utils/errors/app-error";
+import { AuthRequest } from "../types";
 
 async function createComments(
-    req: Request,
+    req: AuthRequest,
     res: Response,
     next: NextFunction
 ) {
     try {
-        const parseData = commentsSchema.createComments.safeParse(req.body);
+        const discussionsId: string = req.params.id;
+        const userId = req.userId as string;
+        const content: string = req.body.content;
 
-        if (!parseData.success) {
+        // parse data via zod
+        const { error, success, data } = commentsSchema.createComments.safeParse({
+            discussionsId,
+            userId,
+            content
+        });
+
+        if (!success) {
            res.status(400).json({
                 Success: false,
                 Message: 'Invalid input',
                 Data: null,
-                Errors: parseData.error.errors
+                Errors: error.errors
             });
             return;
         }
 
-        const comments = await commentsServices.createComments(parseData.data);
+        const comments = await commentsServices.createComments({
+            discussionsId: data.discussionsId,
+            userId: data.userId,
+            content: data.content
+        });
 
         res.status(201).json({
             Success: true,

@@ -5,7 +5,7 @@ const router = Router();
 import { authMiddlewares } from "../../middlewares";
 const { islogin } = authMiddlewares;
 
-router.post('/', islogin, commentsControllers.createComments);
+router.post('/:id', islogin, commentsControllers.createComments);
 router.get('/', commentsControllers.getAllComments);
 
 export default router

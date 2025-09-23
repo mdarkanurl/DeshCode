@@ -4,7 +4,7 @@ const commentsRepo = new CommentsRepo();
 
 async function createComments(data: {
     userId: string;
-    discussId: string;
+    discussionsId: string;
     content: string;
 }) {
     try {
