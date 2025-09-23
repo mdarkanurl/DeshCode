@@ -17,7 +17,7 @@ async function createComments(data: {
 }
 
 async function getAllComments(data: {
-    discussionsId: number;
+    discussionsId: string;
     skip: number;
     limit: number;
 }) {

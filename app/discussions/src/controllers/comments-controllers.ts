@@ -49,7 +49,7 @@ async function getAllComments(
         const skip = (pageNumber - 1) * limitNumber;
 
         const allComments = await commentsServices.getAllComments({
-            discussionsId: parseInt(discussionsId as string),
+            discussionsId: discussionsId!.toString(),
             skip: skip,
             limit: limitNumber
         });
