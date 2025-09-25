@@ -1,4 +1,5 @@
 import express, { NextFunction, Request, Response } from "express";
+import cookieParser from "cookie-parser";
 import apiRouter from "./routers";
 import { prisma } from "./prisma";
 import { CustomError } from "./utils/errors/app-error";
@@ -7,6 +8,7 @@ const app = express();
 // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // Router
 app.use('/api', apiRouter);
