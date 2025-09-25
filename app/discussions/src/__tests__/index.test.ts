@@ -1,6 +1,7 @@
 import request, { Response } from "supertest";
 import app from "../index";
 import { discussionData } from "./data/discussions-data";
+import { comments } from "./data/comments-data";
 
 const {
   invalidDiscussion,
@@ -259,6 +260,41 @@ describe("/api/v1/discussions", () => {
 });
 
 describe("/api/v1/comments", () => {
+
+  let accessTokenCookie: string;
+  let refreshTokenCookie: string;
+  let accessTokenCookie2: string;
+  let refreshTokenCookie2: string;
+
+  beforeAll(async () => {
+
+    // Call Auth service to login as user
+    const loginRes = await request("http://localhost:3004") // or replace with Auth service URL
+      .post("/api/v1/auth/login")
+      .send({
+        email: "user@DeshCode.com",
+        password: "testingPassword"
+    });
+
+    const loginRes2 = await request("http://localhost:3004") // or replace with Auth service URL
+      .post("/api/v1/auth/login")
+      .send({
+        email: "user2@DeshCode.com",
+        password: "testingPassword"
+    });
+
+    // loginRes.headers['set-cookie'] is an array of cookie strings
+    const cookies: string[] = loginRes.headers["set-cookie"] as any;
+    const cookies2: string[] = loginRes2.headers["set-cookie"] as any;
+
+    // Find the cookies by name
+    accessTokenCookie = cookies.find(c => c.startsWith("accessToken="))!;
+    refreshTokenCookie = cookies.find(c => c.startsWith("refreshToken="))!;
+    accessTokenCookie2 = cookies2.find(c => c.startsWith("accessToken="))!;
+    refreshTokenCookie2 = cookies2.find(c => c.startsWith("refreshToken="))!;
+  });
+
+
   it("should return 404 No comments found", async () => {
     const res = await request(app).get(`/api/v1/comments?discussionsId=lo2582ssjckx5sa4d45a`);
 
@@ -266,5 +302,55 @@ describe("/api/v1/comments", () => {
     expect(res.body).toHaveProperty("Success", false);
     expect(res.body).toHaveProperty("Message", "No comments found");
     expect(res.body).toHaveProperty("Data", null);
+  });
+
+  it("should return 401 unauthorized to create comments", async () => {
+    const res = await request(app).post(`/api/v1/comments/${Response.body.Data.discussions[1].id}`);
+
+    expect(res.status).toBe(401);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "Unauthorized");
+    expect(res.body).toHaveProperty("Data", null);
+  });
+
+  it("should return 400 invalid input", async () => {
+    const res = await request(app).post(`/api/v1/comments/${Response.body.Data.discussions[1].id}`)
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie])
+        .send({  });
+
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "Invalid input");
+    expect(res.body).toHaveProperty("Data", null);
+    
+
+    expect(res.body.Errors[0].code).toBe("invalid_type");
+    expect(res.body.Errors[0].expected).toBe("string");
+    expect(res.body.Errors[0].received).toBe("undefined");
+    expect(res.body.Errors[0].path[0]).toBe("content");
+    expect(res.body.Errors[0].message).toBe("Required");
+  });
+
+  it("should return 201 comment created", async () => {
+    const res = await request(app).post(`/api/v1/comments/${Response.body.Data.discussions[1].id}`)
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie])
+        .send(comments);
+    
+    expect(res.status).toBe(201);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Comment created successfully");
+    expect(res.body.Data.discussionsId).toBe(Response.body.Data.discussions[1].id);
+    expect(res.body.Data.content).toBe(comments.content);
+  });
+
+  it("should return 200 comments of a discussion", async () => {
+    const res = await request(app).get(`/api/v1/comments?discussionsId=${Response.body.Data.discussions[1].id}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Comments fetched successfully");
+    
+    expect(res.body.Data.discussions[0].discussionsId).toBe(Response.body.Data.discussions[1].id);
+    expect(res.body.Data.discussions[0].content).toBe(comments.content);
   });
 });
