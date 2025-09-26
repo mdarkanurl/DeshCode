@@ -2,6 +2,8 @@ import request, { Response } from "supertest";
 import app from "../index";
 import { contestsInput } from "./data/contest-data";
 
+let Response: Response;
+
 // Describe block for App
 describe("App", () => {
   it("should return health check with DB connected", async () => {
@@ -33,8 +35,6 @@ describe("/api/v1/contests", () => {
 
   let accessTokenCookie: string;
   let refreshTokenCookie: string;
-  let accessTokenCookie2: string;
-  let refreshTokenCookie2: string;
 
   beforeAll(async () => {
 
@@ -179,7 +179,7 @@ describe("/api/v1/contests", () => {
     const startTime = new Date(new Date().getTime() + 5 * 60 * 1000).toISOString();
     const endTime = new Date(new Date().getTime() + 20 * 60 * 1000).toISOString();
 
-    const res = await request(app).post("/api/v1/contests")
+    Response = await request(app).post("/api/v1/contests")
         .set("Cookie", [accessTokenCookie, refreshTokenCookie])
         .send({
           "name": "Weekly Contest",
@@ -188,14 +188,73 @@ describe("/api/v1/contests", () => {
           "endTime": endTime
         });
 
+    expect(Response.status).toBe(201);
+    expect(Response.body).toHaveProperty("Success", true);
+    expect(Response.body).toHaveProperty("Message", "Contest created successfully");
+
+    expect(Response.body.Data.name).toEqual(contestsInput.correctContestInput.name);
+    expect(Response.body.Data.problemsId[0]).toBe(contestsInput.correctContestInput.problemsId[0]);
+    expect(Response.body.Data.problemsId[1]).toBe(contestsInput.correctContestInput.problemsId[1]);
+    expect(Response.body.Data.startTime).toEqual(startTime);
+    expect(Response.body.Data.endTime).toEqual(endTime);
+  });
+});
+
+// Describe block for /api/v1/participants
+describe("/api/v1/participants", () => {
+  
+  let accessTokenCookie: string;
+  let refreshTokenCookie: string;
+
+  beforeAll(async () => {
+
+    // Call Auth service to login as user
+    const loginRes = await request("http://localhost:3004") // or replace with Auth service URL
+      .post("/api/v1/auth/login")
+      .send({
+        email: "user@DeshCode.com",
+        password: "testingPassword"
+    });
+
+    // loginRes.headers['set-cookie'] is an array of cookie strings
+    const cookies: string[] = loginRes.headers["set-cookie"] as any;
+
+    // Find the cookies by name
+    accessTokenCookie = cookies.find(c => c.startsWith("accessToken="))!;
+    refreshTokenCookie = cookies.find(c => c.startsWith("refreshToken="))!;
+  });
+
+  it("should return 401 unauthorized to be a participant", async () => {
+    const res = await request(app).post("/api/v1/participants/deshcode");
+
+    expect(res.status).toBe(401);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "Unauthorized");
+    expect(res.body).toHaveProperty("Data", null);
+  });
+
+  // it("should return 400 invalid input", async () => {
+  //   const res = await request(app).post(`/api/v1/participants/deshcode`)
+  //       .set("Cookie", [accessTokenCookie, refreshTokenCookie]);
+
+  //   expect(res.status).toBe(400);
+  //   expect(res.body).toHaveProperty("Success", false);
+  //   expect(res.body).toHaveProperty("Message", "Invalid input");
+
+  //   expect(res.body.Errors[0].code).toBe("invalid_type");
+  //   expect(res.body.Errors[0].expected).toBe("string");
+  //   expect(res.body.Errors[0].received).toBe("undefined");
+  //   expect(res.body.Errors[0].path[0]).toBe("contestId");
+  //   expect(res.body.Errors[0].message).toBe("Required");
+  // });
+
+  it("should return 201 invalid input", async () => {
+    const res = await request(app).post(`/api/v1/participants/${Response.body.Data.id}`)
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie]);
+
     expect(res.status).toBe(201);
     expect(res.body).toHaveProperty("Success", true);
-    expect(res.body).toHaveProperty("Message", "Contest created successfully");
-
-    expect(res.body.Data.name).toEqual(contestsInput.correctContestInput.name);
-    expect(res.body.Data.problemsId[0]).toBe(contestsInput.correctContestInput.problemsId[0]);
-    expect(res.body.Data.problemsId[1]).toBe(contestsInput.correctContestInput.problemsId[1]);
-    expect(res.body.Data.startTime).toEqual(startTime);
-    expect(res.body.Data.endTime).toEqual(endTime);
+    expect(res.body).toHaveProperty("Message", "participant created successfully");
   });
+
 });
