@@ -100,11 +100,16 @@ describe("/api/v1/contests", () => {
 
   it("should return 400 end time must be after start time", async () => {
     // Edit current UTC time
-    contestsInput.invalidEndTimeContestInput.startTime = new Date(new Date().getTime() + 5 * 60 * 1000).toISOString();
+    const startTime = new Date(new Date().getTime() + 5 * 60 * 1000).toISOString();
 
     const res = await request(app).post("/api/v1/contests")
         .set("Cookie", [accessTokenCookie, refreshTokenCookie])
-        .send(contestsInput.invalidEndTimeContestInput);
+        .send({
+          "name": "Weekly Contest",
+          "problemsId": ["text-justification", "n-queens"],
+          "startTime": startTime,
+          "endTime": "2020-08-28T05:35:55Z"
+        });
 
     expect(res.status).toBe(400);
     expect(res.body).toHaveProperty("Success", false);
@@ -148,13 +153,16 @@ describe("/api/v1/contests", () => {
 
   it("should return 400 end time must be in UTC", async () => {
     // Edit current UTC time
-    contestsInput.invalidEndTimeFormateContestInput.startTime = new Date(new Date().getTime() + 5 * 60 * 1000).toISOString();
+    const startTime = new Date(new Date().getTime() + 5 * 60 * 1000).toISOString();
 
     const res = await request(app).post("/api/v1/contests")
         .set("Cookie", [accessTokenCookie, refreshTokenCookie])
-        .send(contestsInput.invalidEndTimeFormateContestInput);
-
-    console.log(res);
+        .send({
+          "name": "Weekly Contest",
+          "problemsId": ["text-justification", "n-queens"],
+          "startTime": startTime,
+          "endTime": "endTime"
+        });
 
     expect(res.status).toBe(400);
     expect(res.body).toHaveProperty("Success", false);
@@ -164,5 +172,30 @@ describe("/api/v1/contests", () => {
     expect(res.body.Errors[0].path[0]).toBe("endTime");
     expect(res.body.Errors[0].code).toBe("custom");
     expect(res.body.Errors[0].message).toBe("End time must be in UTC");
+  });
+
+  it("should return 201 contest created", async () => {
+    // Edit current UTC time
+    const startTime = new Date(new Date().getTime() + 5 * 60 * 1000).toISOString();
+    const endTime = new Date(new Date().getTime() + 20 * 60 * 1000).toISOString();
+
+    const res = await request(app).post("/api/v1/contests")
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie])
+        .send({
+          "name": "Weekly Contest",
+          "problemsId": ["text-justification", "n-queens"],
+          "startTime": startTime,
+          "endTime": endTime
+        });
+
+    expect(res.status).toBe(201);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Contest created successfully");
+
+    expect(res.body.Data.name).toEqual(contestsInput.correctContestInput.name);
+    expect(res.body.Data.problemsId[0]).toBe(contestsInput.correctContestInput.problemsId[0]);
+    expect(res.body.Data.problemsId[1]).toBe(contestsInput.correctContestInput.problemsId[1]);
+    expect(res.body.Data.startTime).toEqual(startTime);
+    expect(res.body.Data.endTime).toEqual(endTime);
   });
 });
