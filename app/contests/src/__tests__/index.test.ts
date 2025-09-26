@@ -1,5 +1,6 @@
 import request, { Response } from "supertest";
 import app from "../index";
+import { contestsInput } from "./data/contest-data";
 
 // Describe block for App
 describe("App", () => {
@@ -97,5 +98,71 @@ describe("/api/v1/contests", () => {
     expect(res.body.Errors[3].message).toBe("Required");
   });
 
+  it("should return 400 end time must be after start time", async () => {
+    // Edit current UTC time
+    contestsInput.invalidEndTimeContestInput.startTime = new Date(new Date().getTime() + 5 * 60 * 1000).toISOString();
 
+    const res = await request(app).post("/api/v1/contests")
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie])
+        .send(contestsInput.invalidEndTimeContestInput);
+
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "Invalid input");
+    expect(res.body).toHaveProperty("Data", null);
+
+    expect(res.body.Errors[0].path[0]).toBe("endTime");
+    expect(res.body.Errors[0].code).toBe("custom");
+    expect(res.body.Errors[0].message).toBe("End time must be after start time");
+  });
+
+  it("should return 400 start time must be in the future", async () => {
+    const res = await request(app).post("/api/v1/contests")
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie])
+        .send(contestsInput.invalidStartTimeContestInput);
+
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "Invalid input");
+    expect(res.body).toHaveProperty("Data", null);
+
+    expect(res.body.Errors[0].path[0]).toBe("startTime");
+    expect(res.body.Errors[0].code).toBe("custom");
+    expect(res.body.Errors[0].message).toBe("Start time must be in the future");
+  });
+
+  it("should return 400 start time must be in UTC", async () => {
+    const res = await request(app).post("/api/v1/contests")
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie])
+        .send(contestsInput.invalidStartTimeFormateContestInput);
+
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "Invalid input");
+    expect(res.body).toHaveProperty("Data", null);
+
+    expect(res.body.Errors[0].path[0]).toBe("startTime");
+    expect(res.body.Errors[0].code).toBe("custom");
+    expect(res.body.Errors[0].message).toBe("Start time must be in UTC");
+  });
+
+  it("should return 400 end time must be in UTC", async () => {
+    // Edit current UTC time
+    contestsInput.invalidEndTimeFormateContestInput.startTime = new Date(new Date().getTime() + 5 * 60 * 1000).toISOString();
+
+    const res = await request(app).post("/api/v1/contests")
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie])
+        .send(contestsInput.invalidEndTimeFormateContestInput);
+
+    console.log(res);
+
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "Invalid input");
+    expect(res.body).toHaveProperty("Data", null);
+
+    expect(res.body.Errors[0].path[0]).toBe("endTime");
+    expect(res.body.Errors[0].code).toBe("custom");
+    expect(res.body.Errors[0].message).toBe("End time must be in UTC");
+  });
 });
