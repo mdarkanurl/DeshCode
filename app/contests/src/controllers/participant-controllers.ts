@@ -2,26 +2,33 @@ import { Request, Response, NextFunction } from "express";
 import { participantsSchema } from "../schema";
 import { participantsService } from "../services";
 import { CustomError } from "../utils/errors/app-error";
+import { AuthRequest } from "../types";
 
 async function createParticipants(
-    req: Request,
+    req: AuthRequest,
     res: Response,
     next: NextFunction
 ) {
     try {
-        const parseData: any = participantsSchema.createPaticipants.safeParse(req.body);
+        const { contestId } = req.params;
+        const userId = req.userId;
 
-        if(!parseData.success) {
+        const { success, error, data } = participantsSchema.createPaticipants.safeParse({
+            contestId,
+            userId
+        });
+
+        if(!success) {
             res.status(400).json({
                 Success: false,
                 Message: 'Invalid input',
                 Data: null,
-                Errors: parseData.error.errors
+                Errors: error.errors
             });
             return;
         }
 
-        const participants = await participantsService.createParticipants(parseData.data);
+        const participants = await participantsService.createParticipants(data);
 
         res.status(201).json({
             Success: true,

@@ -1,1 +1,1 @@
-export { UserRole } from './auth-types';
+export { UserRole, AuthRequest } from './auth-types';
