@@ -672,7 +672,7 @@ describe("/api/v1/submissions", () => {
 
   it("should return 200 correct solution", async () => {
 
-    await new Promise((resolve) => setTimeout(resolve, 4000));
+    await new Promise((resolve) => setTimeout(resolve, 9000));
 
     const res = await request(app).get("/api/v1/submissions/1")
         .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass user cookies
@@ -699,7 +699,7 @@ describe("/api/v1/submissions", () => {
 
   it("should return 200 INVALID_FUNCTION_SIGNATURE", async () => {
 
-    await new Promise((resolve) => setTimeout(resolve, 4000));
+    await new Promise((resolve) => setTimeout(resolve, 9000));
 
     const res = await request(app).get("/api/v1/submissions/2")
         .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
@@ -726,7 +726,7 @@ describe("/api/v1/submissions", () => {
 
   it("should return 200 WRONG_ANSWER", async () => {
 
-    await new Promise((resolve) => setTimeout(resolve, 4000));
+    await new Promise((resolve) => setTimeout(resolve, 9000));
 
     const res = await request(app).get("/api/v1/submissions/3")
         .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
@@ -753,7 +753,7 @@ describe("/api/v1/submissions", () => {
 
   it("should return 200 correct solution", async () => {
 
-    await new Promise((resolve) => setTimeout(resolve, 4000));
+    await new Promise((resolve) => setTimeout(resolve, 9000));
 
     const res = await request(app).get("/api/v1/submissions/4")
         .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
@@ -780,7 +780,7 @@ describe("/api/v1/submissions", () => {
 
   it("should return 200 solution failed", async () => {
 
-    await new Promise((resolve) => setTimeout(resolve, 10000));
+    await new Promise((resolve) => setTimeout(resolve, 9000));
 
     const res = await request(app).get("/api/v1/submissions/5")
         .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass user cookies
@@ -915,7 +915,7 @@ describe("/api/v1/submissions", () => {
 
   it("should return 200 correct solution", async () => {
 
-    await new Promise((resolve) => setTimeout(resolve, 4000));
+    await new Promise((resolve) => setTimeout(resolve, 9000));
 
     const res = await request(app).get("/api/v1/submissions/6")
         .set("Cookie", [accessTokenCookie, refreshTokenCookie]) // ✅ pass user cookies
@@ -930,7 +930,7 @@ describe("/api/v1/submissions", () => {
 
   it("should return 200 correct solution", async () => {
 
-    await new Promise((resolve) => setTimeout(resolve, 4000));
+    await new Promise((resolve) => setTimeout(resolve, 9000));
 
     const res = await request(app).get("/api/v1/submissions/7")
         .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
@@ -945,7 +945,7 @@ describe("/api/v1/submissions", () => {
 
   it("should return 200 correct solution", async () => {
 
-    await new Promise((resolve) => setTimeout(resolve, 4000));
+    await new Promise((resolve) => setTimeout(resolve, 9000));
 
     const res = await request(app).get("/api/v1/submissions/8")
         .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
@@ -960,7 +960,7 @@ describe("/api/v1/submissions", () => {
 
   it("should return 200 correct solution", async () => {
 
-    await new Promise((resolve) => setTimeout(resolve, 4000));
+    await new Promise((resolve) => setTimeout(resolve, 9000));
 
     const res = await request(app).get("/api/v1/submissions/9")
         .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
@@ -975,7 +975,7 @@ describe("/api/v1/submissions", () => {
 
   it("should return 200 correct solution", async () => {
 
-    await new Promise((resolve) => setTimeout(resolve, 4000));
+    await new Promise((resolve) => setTimeout(resolve, 9000));
 
     const res = await request(app).get("/api/v1/submissions/10")
         .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
@@ -990,7 +990,7 @@ describe("/api/v1/submissions", () => {
 
   it("should return 200 correct solution", async () => {
 
-    await new Promise((resolve) => setTimeout(resolve, 4000));
+    await new Promise((resolve) => setTimeout(resolve, 9000));
 
     const res = await request(app).get("/api/v1/submissions/11")
         .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
@@ -1005,7 +1005,7 @@ describe("/api/v1/submissions", () => {
 
   it("should return 200 correct solution", async () => {
 
-    await new Promise((resolve) => setTimeout(resolve, 4000));
+    await new Promise((resolve) => setTimeout(resolve, 9000));
 
     const res = await request(app).get("/api/v1/submissions/12")
         .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
@@ -1020,7 +1020,7 @@ describe("/api/v1/submissions", () => {
 
   it("should return 200 correct solution", async () => {
 
-    await new Promise((resolve) => setTimeout(resolve, 4000));
+    await new Promise((resolve) => setTimeout(resolve, 9000));
 
     const res = await request(app).get("/api/v1/submissions/13")
         .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
@@ -1035,7 +1035,7 @@ describe("/api/v1/submissions", () => {
 
   it("should return 200 correct solution", async () => {
 
-    await new Promise((resolve) => setTimeout(resolve, 4000));
+    await new Promise((resolve) => setTimeout(resolve, 9000));
 
     const res = await request(app).get("/api/v1/submissions/14")
         .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
@@ -1050,7 +1050,7 @@ describe("/api/v1/submissions", () => {
 
   it("should return 200 correct solution", async () => {
 
-    await new Promise((resolve) => setTimeout(resolve, 4000));
+    await new Promise((resolve) => setTimeout(resolve, 9000));
 
     const res = await request(app).get("/api/v1/submissions/15")
         .set("Cookie", [refreshTokenCookie]) // ✅ pass user cookies
