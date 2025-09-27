@@ -1,12 +1,25 @@
 import { consume } from "./queue/consume";
-import { ProblemsTypes } from "@prisma/client";
+import { ProblemsTypes } from "../generated/prisma";
+let ProblemType: ProblemsTypes;
 import { config } from "dotenv";
 config();
 
 let ProblemsType: ProblemsTypes;
 
-(async () => {
-  for (ProblemsType in ProblemsTypes) {
-    await consume(ProblemsType);
+const worker = async () => {
+  try {
+    console.log(`🚀 Server running on port ${3010}`);
+    for (ProblemType in ProblemsTypes) {
+      await consume(ProblemType);
+    }
+  } catch (error) {
+    console.log("Error from worker", error);
   }
-})();
+};
+
+// Call the function
+worker();
+
+export {
+  worker
+};
