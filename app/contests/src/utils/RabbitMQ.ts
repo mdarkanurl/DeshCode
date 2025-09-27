@@ -34,6 +34,9 @@ async function sendData(problemType: ProblemsTypes, data: any) {
   console.log(`✅ Sent submission ${data.submissionId} to queue "${queueName}"`);
 }
 
+// Call the function
+connect();
+
 export {
   connect,
   sendData
