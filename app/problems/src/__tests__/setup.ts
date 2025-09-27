@@ -29,25 +29,31 @@ export default async function globalSetup() {
   const amqpUrl = mqContainer.getAmqpUrl();
   process.env.RABBITMQ_URL = amqpUrl;
 
+  // Give RabbitMQ a bit more time to become fully ready
+  await new Promise((resolve) => setTimeout(resolve, 5000));
+
   // --- 3. Start workers ---
-  const worker = spawn("npm", ["run", "dev:worker"], {
+  const worker = spawn("npx", ["ts-node", "./src/worker/index.ts"], {
     env: { ...process.env },
     stdio: "inherit",
     shell: true,
+  });
+  worker.on("error", (err) => {
+    console.error("Worker process error:", err);
   });
   workerProcesses.push(worker);
 
-  const rabbitWorker = spawn("npm", ["run", "dev:rabbitmq"], {
+  const rabbitWorker = spawn("npx", ["ts-node", "./src/utils/RabbitMQ.ts"], {
     env: { ...process.env },
     stdio: "inherit",
     shell: true,
   });
+  rabbitWorker.on("error", (err) => {
+    console.error("Rabbit worker process error:", err);
+  });
   workerProcesses.push(rabbitWorker);
 
-  // --- 4. Wait for readiness ---
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-
-  // --- 5. Save handles for teardown ---
+  // --- 4. Save handles for teardown ---
   (global as any).__DB_CONTAINER__ = dbContainer;
   (global as any).__MQ_CONTAINER__ = mqContainer;
   (global as any).__WORKERS__ = workerProcesses;
