@@ -6,11 +6,9 @@
   "scripts": {
     "test": "jest",
     "dev": "ts-node src/app.ts",
-    "dev:rabbitmq": "ts-node src/utils/RabbitMQ.ts",
     "build": "tsc",
     "prisma:generate": "prisma generate",
-    "start": "node dist/app.js",
-    "start:rabbitmq": "node dist/utils/RabbitMQ.js"
+    "start": "node dist/app.js"
   },
   "keywords": [],
   "author": "",
