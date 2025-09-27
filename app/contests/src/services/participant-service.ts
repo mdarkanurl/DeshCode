@@ -10,7 +10,9 @@ async function createParticipants(data: {
     try {
         const isContestExists = await contestsRepo.getContestById(data.contestId);
 
-        if(isContestExists == null) throw new CustomError("Contest dosen't exist", 404);
+        if(isContestExists == null) {
+            throw new CustomError("Contest dosen't exist", 404);
+        };
 
         const participants = await participantsRepo.createParticipant(data);
         return participants;
