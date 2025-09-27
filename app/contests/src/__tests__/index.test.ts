@@ -1,6 +1,8 @@
 import request, { Response } from "supertest";
 import app from "../index";
 import { contestsInput } from "./data/contest-data";
+import { submissionInput } from "./data/submissions-data";
+import { boolean } from "zod";
 
 let Response: Response;
 
@@ -176,8 +178,8 @@ describe("/api/v1/contests", () => {
 
   it("should return 201 contest created", async () => {
     // Edit current UTC time
-    const startTime = new Date(new Date().getTime() + 5 * 60 * 1000).toISOString();
-    const endTime = new Date(new Date().getTime() + 20 * 60 * 1000).toISOString();
+    const startTime = new Date(new Date().getTime() + 30 * 1000).toISOString();
+    const endTime = new Date(new Date().getTime() + 1 * 60 * 1000).toISOString();
 
     Response = await request(app).post("/api/v1/contests")
         .set("Cookie", [accessTokenCookie, refreshTokenCookie])
@@ -313,4 +315,134 @@ describe("/api/v1/participants", () => {
     expect(res.body).toHaveProperty("Message", "The user not joined any contests");
     expect(res.body).toHaveProperty("Data", null);
   });
+});
+
+// Describe block for /api/v1/submissions/contests
+describe("/api/v1/submissions/contests", () => {
+
+  let accessTokenCookie: string;
+  let refreshTokenCookie: string;
+
+  beforeAll(async () => {
+
+    // Call Auth service to login as user
+    const loginRes = await request("http://localhost:3004") // or replace with Auth service URL
+      .post("/api/v1/auth/login")
+      .send({
+        email: "user@DeshCode.com",
+        password: "testingPassword"
+    });
+
+    // loginRes.headers['set-cookie'] is an array of cookie strings
+    const cookies: string[] = loginRes.headers["set-cookie"] as any;
+
+    // Find the cookies by name
+    accessTokenCookie = cookies.find(c => c.startsWith("accessToken="))!;
+    refreshTokenCookie = cookies.find(c => c.startsWith("refreshToken="))!;
+  });
+
+  it("should return 401 unauthorized to submit problems solutions", async () => {
+    const res = await request(app).post(`/api/v1/submissions/contests/${Response.body.Data.id}`);
+
+    expect(res.status).toBe(401);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "Unauthorized");
+    expect(res.body).toHaveProperty("Data", null);
+  });
+
+  it("should return 400 invalid input", async () => {
+    const res = await request(app).post(`/api/v1/submissions/contests/${Response.body.Data.id}`)
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie])
+        .send({  });
+
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "Invalid input");
+    expect(res.body).toHaveProperty("Data", null);
+
+    expect(res.body.Errors[0].code).toBe("invalid_type");
+    expect(res.body.Errors[0].expected).toBe("string");
+    expect(res.body.Errors[0].received).toBe("undefined");
+    expect(res.body.Errors[0].path[0]).toBe("problemId");
+    expect(res.body.Errors[0].message).toBe("Required");
+
+    expect(res.body.Errors[1].code).toBe("invalid_type");
+    expect(res.body.Errors[1].expected).toBe("string");
+    expect(res.body.Errors[1].received).toBe("undefined");
+    expect(res.body.Errors[1].path[0]).toBe("language");
+    expect(res.body.Errors[1].message).toBe("Required");
+
+    expect(res.body.Errors[2].code).toBe("invalid_type");
+    expect(res.body.Errors[2].expected).toBe("string");
+    expect(res.body.Errors[2].received).toBe("undefined");
+    expect(res.body.Errors[2].path[0]).toBe("code");
+    expect(res.body.Errors[2].message).toBe("Required");
+  });
+
+  it("should return 404 contest not found", async () => {
+    const res = await request(app).post("/api/v1/submissions/contests/DeshCode")
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie])
+        .send(submissionInput);
+
+    expect(res.status).toBe(404);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "Contest not found");
+    expect(res.body).toHaveProperty("Data", null);
+  });
+
+  it("should return 400 contest is not started yet", async () => {
+    const res = await request(app).post(`/api/v1/submissions/contests/${Response.body.Data.id}`)
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie])
+        .send(submissionInput);
+
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "Contest is not started yet");
+    expect(res.body).toHaveProperty("Data", null);
+  });
+
+  it("should return 404 problem doesn't exist", async () => {
+    submissionInput.problemId = "DeshCode-Problems";
+
+    // wait one min for start the contest
+    await new Promise((resolve) => setTimeout(resolve, 30001));
+
+    const res = await request(app).post(`/api/v1/submissions/contests/${Response.body.Data.id}`)
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie])
+        .send(submissionInput);
+
+    expect(res.status).toBe(404);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "Problem doesn't exist");
+    expect(res.body).toHaveProperty("Data", null);
+  })
+
+  it("should return 400 language not support", async () => {
+    submissionInput.language = "deshcode-language";
+    submissionInput.problemId = "text-justification";
+
+    const res = await request(app).post(`/api/v1/submissions/contests/${Response.body.Data.id}`)
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie])
+        .send(submissionInput);
+
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", `This problem does not support ${submissionInput.language} language`);
+    expect(res.body).toHaveProperty("Data", null);
+  });
+
+  it("should return 200 solution submitted successfully", async () => {
+    submissionInput.language = "javascript";
+    submissionInput.problemId = "text-justification";
+
+    const res = await request(app).post(`/api/v1/submissions/contests/${Response.body.Data.id}`)
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie])
+        .send(submissionInput);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", `Solution submitted successfully`);
+    expect(res.body.Data.submitId).toBe(1);
+    expect(res.body.Data.status).toBe("PENDING");
+  })
 });
