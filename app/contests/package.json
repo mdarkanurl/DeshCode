@@ -6,11 +6,9 @@
   "scripts": {
     "test": "jest",
     "dev": "ts-node src/app.ts",
-    "dev:worker": "ts-node src/worker/index.ts",
     "build": "tsc",
     "prisma:generate": "prisma generate",
-    "start:api": "node dist/app.js",
-    "start:worker": "node dist/worker/index.js"
+    "start": "node dist/app.js"
   },
   "keywords": [],
   "author": "",
