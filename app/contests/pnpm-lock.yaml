@@ -60,6 +60,9 @@ importers:
       '@babel/types':
         specifier: ^7.28.2
         version: 7.28.2
+      '@testcontainers/rabbitmq':
+        specifier: ^11.6.0
+        version: 11.6.0
       '@types/amqplib':
         specifier: ^0.10.7
         version: 0.10.7
@@ -515,6 +518,9 @@ packages:
 
   '@testcontainers/postgresql@11.6.0':
     resolution: {integrity: sha512-+JlbHfcWpxrfWG4BZeWiNKI4pjn4FPWCnKFYkUSneuYjEuYJQWSFdP38W5RB0N1rf5ce+dYzb5SXi4i2MWH3Zw==}
+
+  '@testcontainers/rabbitmq@11.6.0':
+    resolution: {integrity: sha512-pFtM5MK2dOQPf1ZC0HtmKdUear5aheqjOKW2xGpiy3CZsGErefNOTrpbZlKS+p8Co/OFRYC4xuA/u8baAN2aGw==}
 
   '@tsconfig/node10@1.0.11':
     resolution: {integrity: sha512-DcRjDCujK/kCk/cUe8Xz8ZSpm8mS3mNNpta+jGCA6USEDfktlNvm1+IuZ9eTcDbNk41BHwpHHeW+N1lKCz4zOw==}
@@ -2993,6 +2999,14 @@ snapshots:
   '@standard-schema/spec@1.0.0': {}
 
   '@testcontainers/postgresql@11.6.0':
+    dependencies:
+      testcontainers: 11.6.0
+    transitivePeerDependencies:
+      - bare-buffer
+      - react-native-b4a
+      - supports-color
+
+  '@testcontainers/rabbitmq@11.6.0':
     dependencies:
       testcontainers: 11.6.0
     transitivePeerDependencies:
