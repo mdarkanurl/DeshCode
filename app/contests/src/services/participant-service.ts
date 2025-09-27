@@ -40,7 +40,9 @@ async function getParticipantsByUserId(data: { userId: string }) {
     try {
         const participants = await participantsRepo.getParticipantsByUserId(data);
 
-        if(participants == null) throw new CustomError("No participants found", 404);
+        if(participants == null) {
+            throw new CustomError("The user not joined any contests", 404);
+        };
         return participants;
     } catch (error) {
         if (error instanceof CustomError) throw error;
