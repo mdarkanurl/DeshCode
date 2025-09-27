@@ -5,7 +5,7 @@ const router = Router();
 
 const { islogin } = authMiddlewares;
 
-router.post('/',
+router.post('/:contestId',
     islogin,
     submissionMiddlewares.CheckIsSubmissionAllow,
     submissionsControllers.submitSolution

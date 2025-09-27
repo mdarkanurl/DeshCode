@@ -2,15 +2,29 @@ import { Request, Response, NextFunction } from "express";
 import { submissionsService } from "../services";
 import { submissionsSchema } from "../schema";
 import { CustomError } from "../utils/errors/app-error";
+import { AuthRequest } from "../types";
 
 
 async function submitSolution(
-    req: Request,
+    req: AuthRequest,
     res: Response,
     next: NextFunction
 ) {
     try {
-        const parseData = submissionsSchema.submissionsSolution.safeParse(req.body);
+        // Get data
+        const userId = req.userId;
+        const { contestId } = req.params;
+        const { participantId, problemId, language, code } = req.body;
+
+        // Validate the req.body
+        const parseData = submissionsSchema.submissionsSolution.safeParse({
+            contestId,
+            participantId,
+            userId,
+            problemId,
+            language,
+            code
+        });
 
         if(!parseData.success) {
             res.status(400).json({
