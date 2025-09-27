@@ -205,6 +205,8 @@ describe("/api/v1/participants", () => {
   
   let accessTokenCookie: string;
   let refreshTokenCookie: string;
+  let accessTokenCookieAdmin: string;
+  let refreshTokenCookieAdmin: string;
 
   beforeAll(async () => {
 
@@ -216,12 +218,22 @@ describe("/api/v1/participants", () => {
         password: "testingPassword"
     });
 
+    const loginResAdmin = await request("http://localhost:3004")
+      .post("/api/v1/auth/login")
+      .send({
+        email: "admin@DeshCode.com",
+        password: "testingPassword"
+    });
+
     // loginRes.headers['set-cookie'] is an array of cookie strings
     const cookies: string[] = loginRes.headers["set-cookie"] as any;
+    const cookiesAdmin: string[] = loginResAdmin.headers["set-cookie"] as any;
 
     // Find the cookies by name
     accessTokenCookie = cookies.find(c => c.startsWith("accessToken="))!;
     refreshTokenCookie = cookies.find(c => c.startsWith("refreshToken="))!;
+    accessTokenCookieAdmin = cookiesAdmin.find(c => c.startsWith("accessToken="))!;
+    refreshTokenCookieAdmin = cookiesAdmin.find(c => c.startsWith("refreshToken="))!;
   });
 
   it("should return 401 unauthorized to be a participant", async () => {
@@ -233,22 +245,17 @@ describe("/api/v1/participants", () => {
     expect(res.body).toHaveProperty("Data", null);
   });
 
-  // it("should return 400 invalid input", async () => {
-  //   const res = await request(app).post(`/api/v1/participants/deshcode`)
-  //       .set("Cookie", [accessTokenCookie, refreshTokenCookie]);
+  it("should return 404 contest not found", async () => {
+    const res = await request(app).post(`/api/v1/participants/deshcode`)
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie]);
 
-  //   expect(res.status).toBe(400);
-  //   expect(res.body).toHaveProperty("Success", false);
-  //   expect(res.body).toHaveProperty("Message", "Invalid input");
+    expect(res.status).toBe(404);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "Contest not found");
+    expect(res.body).toHaveProperty("Data", null);
+  });
 
-  //   expect(res.body.Errors[0].code).toBe("invalid_type");
-  //   expect(res.body.Errors[0].expected).toBe("string");
-  //   expect(res.body.Errors[0].received).toBe("undefined");
-  //   expect(res.body.Errors[0].path[0]).toBe("contestId");
-  //   expect(res.body.Errors[0].message).toBe("Required");
-  // });
-
-  it("should return 201 invalid input", async () => {
+  it("should return 201 participant created", async () => {
     const res = await request(app).post(`/api/v1/participants/${Response.body.Data.id}`)
         .set("Cookie", [accessTokenCookie, refreshTokenCookie]);
 
@@ -257,4 +264,53 @@ describe("/api/v1/participants", () => {
     expect(res.body).toHaveProperty("Message", "participant created successfully");
   });
 
+  it("should return 401 unauthorized to  get participant", async () => {
+    const res = await request(app).get(`/api/v1/participants/${Response.body.Data.id}`)
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie]);
+
+    expect(res.status).toBe(401);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "Unauthorized");
+    expect(res.body).toHaveProperty("Data", null);
+  });
+
+  it("should return 404 no participants found", async () => {
+    const res = await request(app).get(`/api/v1/participants/deshcode`)
+        .set("Cookie", [accessTokenCookieAdmin, refreshTokenCookieAdmin]);
+
+    expect(res.status).toBe(404);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "No participants found");
+    expect(res.body).toHaveProperty("Data", null);
+  });
+
+  it("should return 200 all the participants", async () => {
+    const res = await request(app).get(`/api/v1/participants/${Response.body.Data.id}`)
+        .set("Cookie", [accessTokenCookieAdmin, refreshTokenCookieAdmin]);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Participants retrieved successfully");
+    expect(res.body.Data[0].contestId).toBe(Response.body.Data.id);
+  });
+
+  it("should return 401 unauthorized to get contests that user joined", async () => {
+    const res = await request(app).get(`/api/v1/participants/users/someUser`)
+        .set("Cookie", [accessTokenCookie, accessTokenCookie]);
+
+    expect(res.status).toBe(401);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "Unauthorized");
+    expect(res.body).toHaveProperty("Data", null);
+  });
+
+  it("should return 404 the user not joined any contests", async () => {
+    const res = await request(app).get(`/api/v1/participants/users/someUser`)
+        .set("Cookie", [accessTokenCookieAdmin, refreshTokenCookieAdmin]);
+
+    expect(res.status).toBe(404);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "The user not joined any contests");
+    expect(res.body).toHaveProperty("Data", null);
+  });
 });
