@@ -4,7 +4,7 @@
     "module": "commonjs",
     "rootDir": "./src",
     "outDir": "./dist",
-    "types": ["node"],
+    "types": ["node", "jest"],
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
