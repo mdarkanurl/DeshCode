@@ -1,8 +1,7 @@
 import request, { Response } from "supertest";
 import app from "../index";
 import { contestsInput } from "./data/contest-data";
-import { submissionInput } from "./data/submissions-data";
-import { boolean } from "zod";
+import { submissionInput, incorrectSubmissionSolution, invalidFunctionSubmissionInput } from "./data/submissions-data";
 
 let Response: Response;
 
@@ -404,7 +403,7 @@ describe("/api/v1/submissions/contests", () => {
   it("should return 404 problem doesn't exist", async () => {
     submissionInput.problemId = "DeshCode-Problems";
 
-    // wait one min for start the contest
+    // wait 30 sec for start the contest
     await new Promise((resolve) => setTimeout(resolve, 30001));
 
     const res = await request(app).post(`/api/v1/submissions/contests/${Response.body.Data.id}`)
@@ -444,5 +443,85 @@ describe("/api/v1/submissions/contests", () => {
     expect(res.body).toHaveProperty("Message", `Solution submitted successfully`);
     expect(res.body.Data.submitId).toBe(1);
     expect(res.body.Data.status).toBe("PENDING");
-  })
+  });
+
+  it("should return 200 solution submitted successfully", async () => {
+    submissionInput.language = "javascript";
+    submissionInput.problemId = "text-justification";
+
+    const res = await request(app).post(`/api/v1/submissions/contests/${Response.body.Data.id}`)
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie])
+        .send(incorrectSubmissionSolution);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", `Solution submitted successfully`);
+    expect(res.body.Data.submitId).toBe(2);
+    expect(res.body.Data.status).toBe("PENDING");
+  });
+
+  it("should return 200 solution submitted successfully", async () => {
+    submissionInput.language = "javascript";
+    submissionInput.problemId = "text-justification";
+
+    const res = await request(app).post(`/api/v1/submissions/contests/${Response.body.Data.id}`)
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie])
+        .send(invalidFunctionSubmissionInput);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", `Solution submitted successfully`);
+    expect(res.body.Data.submitId).toBe(3);
+    expect(res.body.Data.status).toBe("PENDING");
+  });
+
+  it("should return 400 contest is ended", async () => {
+    // wait 30 sec for end the contest
+    await new Promise((resolve) => setTimeout(resolve, 30001));
+
+    const res = await request(app).post(`/api/v1/submissions/contests/${Response.body.Data.id}`)
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie])
+        .send(submissionInput);
+
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", `Contest is ended`);
+    expect(res.body).toHaveProperty("Data", null);
+  });
+
+  it("should return 200 correct solution", async () => {
+    const res = await request(app).get("/api/v1/submissions/contests/1")
+        .set("Cookie", [refreshTokenCookie]);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Submission retrieved successfully");
+    expect(res.body.Data.id).toBe(1);
+    expect(res.body.Data.status).toBe("ACCEPTED");
+    expect(res.body.Data.contestsId).toBe(Response.body.Data.id);
+  });
+
+  it("should return 200 incorrect solution", async () => {
+    const res = await request(app).get("/api/v1/submissions/contests/2")
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie]);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Submission retrieved successfully");
+    expect(res.body.Data.id).toBe(2);
+    expect(res.body.Data.status).toBe("WRONG_ANSWER");
+    expect(res.body.Data.contestsId).toBe(Response.body.Data.id);
+  });
+
+  it("should return 200 INVALID_FUNCTION_SIGNATURE solution", async () => {
+    const res = await request(app).get("/api/v1/submissions/contests/3")
+        .set("Cookie", [accessTokenCookie, refreshTokenCookie]);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", "Submission retrieved successfully");
+    expect(res.body.Data.id).toBe(3);
+    expect(res.body.Data.status).toBe("INVALID_FUNCTION_SIGNATURE");
+    expect(res.body.Data.contestsId).toBe(Response.body.Data.id);
+  });
 });
