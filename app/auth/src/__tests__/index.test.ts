@@ -25,3 +25,44 @@ describe("App", () => {
     });
   });
 });
+
+// Describe block for /api/auth
+describe("/api/auth", () => {
+
+  it("should return 400 invaild input", async () => {
+    const res = await request(app).post("/api/v1/auth/signup")
+        .send({  });
+
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", "Invalid input");
+    expect(res.body).toHaveProperty("Data", null);
+
+    expect(res.body.Errors[0].code).toBe("invalid_type");
+    expect(res.body.Errors[0].expected).toBe("string");
+    expect(res.body.Errors[0].received).toBe("undefined");
+    expect(res.body.Errors[0].path).toEqual(["email"]);
+    expect(res.body.Errors[0].message).toBe("Required");
+
+    expect(res.body.Errors[1].code).toBe("invalid_type");
+    expect(res.body.Errors[1].expected).toBe("string");
+    expect(res.body.Errors[1].received).toBe("undefined");
+    expect(res.body.Errors[1].path).toEqual(["password"]);
+    expect(res.body.Errors[1].message).toBe("Required");
+  });
+
+  it("should return 201 user created", async () => {
+    const res = await request(app).post("/api/v1/auth/signup")
+        .send({
+          email: "mdarkanurl@gmail.com",
+          password: "thePasswordOfThisAccountIsPassword"
+        });
+      
+    console.log(res);
+
+    expect(res.status).toBe(201);
+    expect(res.body).toHaveProperty("Success", true);
+    expect(res.body).toHaveProperty("Message", `User successfully created with this email mdarkanurl@gmail.com`);
+    expect(res.body.Data.email).toBe("mdarkanurl@gmail.com");
+  });
+})
