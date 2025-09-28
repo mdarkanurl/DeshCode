@@ -17,9 +17,6 @@ importers:
       '@prisma/client':
         specifier: ^6.14.0
         version: 6.14.0(prisma@6.14.0(typescript@5.9.2))(typescript@5.9.2)
-      '@testcontainers/postgresql':
-        specifier: ^11.6.0
-        version: 11.6.0
       amqplib:
         specifier: ^0.10.8
         version: 0.10.8
@@ -63,6 +60,9 @@ importers:
       '@babel/types':
         specifier: ^7.28.2
         version: 7.28.2
+      '@testcontainers/postgresql':
+        specifier: ^11.6.0
+        version: 11.6.0
       '@testcontainers/rabbitmq':
         specifier: ^11.6.0
         version: 11.6.0
