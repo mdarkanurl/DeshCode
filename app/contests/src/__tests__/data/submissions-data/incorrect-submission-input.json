@@ -1,0 +1,5 @@
+{
+    "problemId": "text-justification",
+    "language": "javascript",
+    "code": "function fullJustify(words, maxWidth) { return null }"
+}
