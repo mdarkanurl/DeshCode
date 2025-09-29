@@ -1,6 +1,8 @@
 import amqplib from 'amqplib';
 import dotenv from 'dotenv';
 import { Resend } from 'resend';
+import { EventEmitter } from "events";
+export const consumerEvents = new EventEmitter();
 
 dotenv.config({ path: '../.env' });
 
@@ -21,14 +23,12 @@ async function connectWithRabbitMQ() {
   // Start consuming after channel is ready
   send_verification_code_queue_channel.consume(
     queueForVerification,
-    (msg: amqplib.ConsumeMessage | null) => {
+    async (msg: amqplib.ConsumeMessage | null) => {
       if (msg) {
         const { email, code } = JSON.parse(msg.content.toString());
-        console.log(`Received message from ${queueForVerification}:`, email, code);
 
         const resend = new Resend(process.env.RESEND_API_KEY || 're_xxxxxxxxx');
 
-        (async function () {
           const { data, error } = await resend.emails.send({
             from: 'DeshCode <onboarding@resend.dev>',
             to: [email],
@@ -36,14 +36,20 @@ async function connectWithRabbitMQ() {
             html: `<strong>Your verification code is: ${code}</strong>`,
           });
 
-          if (error) {
-            return console.error({ error });
+          if(error != null) {
+            console.error({ error });
+            send_verification_code_queue_channel.nack(msg);
+
+            // ✅ failure event
+            consumerEvents.emit("error", { status: "failure", error: error });
+            return;
           }
 
           console.log({ data });
-        })();
+          send_verification_code_queue_channel.ack(msg);
 
-        send_verification_code_queue_channel.ack(msg);
+          // ✅ success event
+          consumerEvents.emit("done", { status: "success", data });
       }
     }
   );
@@ -53,7 +59,6 @@ async function connectWithRabbitMQ() {
     (msg: amqplib.ConsumeMessage | null) => {
       if (msg) {
         const { email, code } = JSON.parse(msg.content.toString());
-        console.log(`Received message from ${queueForForgetPassword}:`, email, code);
 
         const resend = new Resend(process.env.RESEND_API_KEY || 're_xxxxxxxxx');
 
@@ -90,6 +95,9 @@ async function sendForgetPasswordCodeQueue(email: string, code: string) {
   const channel = await conn.createChannel();
   channel.sendToQueue(queueForForgetPassword, Buffer.from(JSON.stringify({ email, code })));
 }
+
+// Call the function for test
+connectWithRabbitMQ();
 
 export {
   connectWithRabbitMQ,
