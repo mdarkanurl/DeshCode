@@ -1,5 +1,9 @@
 import request, { Response } from "supertest";
 import app from "../index";
+import dotenv from "dotenv";
+dotenv.config({ path: '../../.env' });
+import { consumerEvents } from "../RabbitMQ";
+import { CreateEmailResponseSuccess } from "resend";
 
 // Describe block for App
 describe("App", () => {
@@ -52,17 +56,29 @@ describe("/api/auth", () => {
   });
 
   it("should return 201 user created", async () => {
-    const res = await request(app).post("/api/v1/auth/signup")
-        .send({
-          email: "mdarkanurl@gmail.com",
-          password: "thePasswordOfThisAccountIsPassword"
-        });
-      
-    console.log(res);
+    const waitForConsumer = new Promise<{
+      status: string,
+      data: CreateEmailResponseSuccess | null,
+      error: unknown
+    }>((resolve) => {
+      consumerEvents.once("done", (result) => resolve(result));
+      consumerEvents.once("error", (result) => resolve(result));
+    });
+
+    const res = await request(app).post("/api/v1/auth/signup").send({
+      email: "mdarkanurl@gmail.com",
+      password: "thePasswordOfThisAccountIsPassword",
+    });
 
     expect(res.status).toBe(201);
     expect(res.body).toHaveProperty("Success", true);
     expect(res.body).toHaveProperty("Message", `User successfully created with this email mdarkanurl@gmail.com`);
     expect(res.body.Data.email).toBe("mdarkanurl@gmail.com");
+
+    // Wait until consumer is done or errored
+    const consumerResult = await waitForConsumer;
+
+    if (consumerResult.status === "failure") return;
+    console.log("Consumer succeeded:", consumerResult.data);
   });
-})
+});
