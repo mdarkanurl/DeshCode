@@ -49,7 +49,7 @@ This service powers the problem-solving core of the platform.
    pnpm install --frozen-lockfile
    ```
 4. Add environment variable
-   Create a `.env` file. Use `.env.example` for guidance.
+   create a `.env` file and add the variable. Use `.env.example` for guidance.
 
 5. Setup database
    ```bash
