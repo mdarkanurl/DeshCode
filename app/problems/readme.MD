@@ -28,8 +28,34 @@ This service powers the problem-solving core of the platform.
 - Testing: Jest, Supertest, Testcontainers Postman
 
 ## ⚙️ Setup Instructions
-You can follow Docs [here](docs) to set up the project locally.
-Inside the `docs` folder, you will find various documentation files to help you understand and work with the project.
+### Prerequisites  
+- Node.js (v18+)  
+- Docker  
+- PostgreSQL  
+- RabbitMQ  
+- pnpm package manager  
+
+### Steps  
+1. Clone the repository and navigate to `app/problems`  
+   ```bash
+   git clone <repo-url>
+   cd app/problems
+   pnpm install
+   pnpm prisma:generate
+   npx prisma migrate deploy
+   # RabbitMQ
+docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management  
+
+# PostgreSQL
+docker run -d --name postgres -p 5432:5432 \
+  -e POSTGRES_DB=problems_db \
+  -e POSTGRES_USER=username \
+  -e POSTGRES_PASSWORD=password postgres:15
+
+pnpm dev   # development
+pnpm build && pnpm start  # production
+
+
 
 ## 📌 API Endpoints  
 
