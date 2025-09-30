@@ -37,7 +37,7 @@ This service powers the problem-solving core of the platform.
 ### Steps  
 1. Clone the repository  
    ```bash
-   git clone <https://github.com/mdarkanurl/DeshCode.git>
+   git clone https://github.com/mdarkanurl/DeshCode.git
    ```
 2. And navigate to `app/problems`
    ```bash
