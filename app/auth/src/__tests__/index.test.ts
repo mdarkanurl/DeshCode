@@ -81,4 +81,16 @@ describe("/api/auth", () => {
     if (consumerResult.status === "failure") return;
     console.log("Consumer succeeded:", consumerResult.data);
   });
+
+  it("should return 400 user already exist under this email", async () => {
+    const res = await request(app).post("/api/v1/auth/signup").send({
+      email: "mdarkanurl@gmail.com",
+      password: "thePasswordOfThisAccountIsPassword",
+    });
+
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("Success", false);
+    expect(res.body).toHaveProperty("Message", `User already exist under this email`);
+    expect(res.body).toHaveProperty("Data", null);
+  });
 });
