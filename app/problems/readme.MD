@@ -85,7 +85,7 @@ GET    /             # Service info
 ## 🧪 Testing
 This service has full integration tests using Jest, Supertest, and Testcontainers.
 
-**note** Auth service must up and running in order to test Problems service.
+***note*** Auth service must up and running in order to test Problems service.
 
 ### Run Test
 ```bash
