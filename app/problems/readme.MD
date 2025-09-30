@@ -39,10 +39,13 @@ The Problems Service is a comprehensive coding platform backend that manages pro
   - `INVALID_FUNCTION_SIGNATURE` - Incorrect function signature
   - `LANGUAGE_NOT_SUPPORTED` - Unsupported language
 
-#### 3. **Asynchronous Processing**
+#### 3. **Asynchronous Processing & Code Execution**
 - **RabbitMQ Integration**: Uses message queues for scalable code execution
 - **Worker System**: Separate worker processes handle code execution
 - **Queue-based Architecture**: Different queues for different problem types
+- **Docker-based Execution**: Secure code execution in isolated containers
+- **Language Support**: JavaScript with Babel transpilation
+- **Problem Type Handlers**: Specialized runners for different problem categories
 
 #### 4. **Authentication & Authorization**
 - **JWT-based Authentication**: Secure user authentication
@@ -60,7 +63,7 @@ The Problems Service is a comprehensive coding platform backend that manages pro
 - Node.js (v18+)
 - PostgreSQL database
 - RabbitMQ message broker
-- Docker for running code
+- Docker for secure code execution
 - pnpm package manager
 
 ### **Environment Setup**
@@ -89,6 +92,9 @@ The Problems Service is a comprehensive coding platform backend that manages pro
    
    # Start PostgreSQL (Docker)
    docker run -d --name postgres -p 5432:5432 -e POSTGRES_DB=problems_db -e POSTGRES_USER=username -e POSTGRES_PASSWORD=password postgres:15
+   
+   # Pull Node.js Docker image for code execution
+   docker pull thearkan/node.js
    ```
 
 5. **Run the Application**:
@@ -196,6 +202,79 @@ pnpm test
 - **Scalability**: Queue-based worker system
 - **Security**: JWT authentication and role-based access
 
+## ⚙️ **Worker System & Code Execution**
+
+### **Worker Architecture**
+The Problems Service implements a sophisticated worker system for secure code execution:
+
+#### **Core Components**
+
+1. **Message Queue Consumer** (`src/worker/queue/consume.ts`)
+   - Listens to RabbitMQ queues for each problem type
+   - Processes submission messages asynchronously
+   - Routes submissions to appropriate language executors
+   - Handles error cases and updates submission status
+
+2. **Language Executors** (`src/worker/language/`)
+   - **JavaScript Executor**: Main code execution engine
+   - **Babel Integration**: Transpiles and validates user code
+   - **Function Signature Validation**: Ensures correct function definitions
+   - **Extensible Design**: Easy to add new programming languages
+
+3. **Docker Integration** (`src/worker/utils/`)
+   - **Secure Execution**: Code runs in isolated Docker containers
+   - **Resource Limits**: Memory (100MB) and CPU (0.5 cores) constraints
+   - **Timeout Protection**: 8-second execution timeout
+   - **Queue Management**: Concurrency control (max 5 containers)
+
+#### **Code Execution Flow**
+
+1. **Submission Processing**:
+   ```
+   User Submission → RabbitMQ Queue → Worker Consumer → Language Executor
+   ```
+
+2. **Code Preparation**:
+   - **Babel Transpilation**: Converts user code to executable format
+   - **Function Extraction**: Validates and exposes target function globally
+   - **Syntax Validation**: Ensures code is syntactically correct
+
+3. **Test Execution**:
+   - **Parallel Processing**: All test cases run concurrently
+   - **Docker Containers**: Each test runs in isolated environment
+   - **Input Processing**: Handles various input formats (arrays, objects)
+   - **Output Comparison**: Deep equality checking for results
+
+4. **Result Evaluation**:
+   - **Status Determination**: ACCEPTED, WRONG_ANSWER, EXECUTION_ERROR, etc.
+   - **Error Handling**: Captures runtime errors and timeouts
+   - **Database Update**: Stores final results and status
+
+#### **Problem Type Specialization**
+
+The system supports different problem categories with specialized runners:
+
+- **Normal Problems**: Standard algorithmic problems
+- **Linked Lists**: Specialized handling for linked list structures
+- **Trees and Graphs**: Custom runners for tree/graph algorithms
+- **Arrays and Strings**: Optimized for array/string manipulation
+- **Dynamic Programming**: Specialized for DP problems
+
+#### **Security Features**
+
+- **Sandboxed Execution**: Docker containers prevent system access
+- **Resource Isolation**: Memory and CPU limits prevent resource abuse
+- **Timeout Protection**: Prevents infinite loops and hanging processes
+- **Code Validation**: Babel ensures code structure is valid
+- **Function Signature Checking**: Validates required function exists
+
+#### **Performance Optimizations**
+
+- **Concurrent Execution**: Multiple test cases run in parallel
+- **Queue Management**: Limits concurrent Docker containers
+- **Temporary File Cleanup**: Automatic cleanup of execution artifacts
+- **Connection Pooling**: Efficient RabbitMQ connection management
+
 ## 📁 **Project Structure**
 
 ```
@@ -208,8 +287,11 @@ app/problems/
 │   ├── routers/            # Express route definitions
 │   ├── schema/             # Zod validation schemas
 │   ├── middlewares/        # Authentication & authorization
-│   ├── utils/              # Utility functions
-│   ├── worker/             # Code execution workers
+│   ├── utils/              # Utility functions (RabbitMQ, JWT)
+│   ├── worker/             # Code execution system
+│   │   ├── queue/          # RabbitMQ message consumers
+│   │   ├── language/       # Language executors (JS, C++, etc.)
+│   │   └── utils/          # Docker integration & queue management
 │   ├── types/              # TypeScript type definitions
 │   ├── app.ts              # Express app configuration
 │   └── index.ts            # Main application entry
