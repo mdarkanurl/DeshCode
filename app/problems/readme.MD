@@ -83,15 +83,43 @@ GET    /api/health   # Service health check
 GET    /             # Service info
 ```
 
-## 📌 Roadmap / Future Improvements
-- Support multiple languages with sandboxed execution
-- Add user profiles and badges
-- Implement CI/CD pipeline
-- Deploy to cloud (AWS/Azure/GCP)
+## 🧪 Testing
+This service has full integration tests using Jest, Supertest, and Testcontainers.
+
+**note** Auth service must up and running in order to test Problems service.
+
+### Run Test
+```bash
+   pnpm test
+```
+### Test Coverage
+- ✅ Application tests (health, root, DB)
+- ✅ Problem management (CRUD, filters, validation, auth)
+- ✅ Submissions (workflow, status tracking, error handling)
+- ✅ Worker system (RabbitMQ + Docker execution)
+- ✅ Error scenarios (invalid inputs, unsupported languages)
+
+### Test Flow
+1. Start containers (Postgres, RabbitMQ, workers)
+2. Login as admin/user
+3. Create test problems
+4. Submit solutions
+5. Verify status/results
+6. Cleanup
+
+## 🏗 App Architecture
+The Problems Service follows a microservice architecture with clear separation of concerns:
+- API Layer – Express routes with authentication & authorization middleware
+- Business Layer – Services handle problem management & submissions
+- Data Layer – PostgreSQL + Prisma ORM for persistence
+- Messaging Layer – RabbitMQ for asynchronous job processing
+- Worker System – Dedicated workers execute user code inside Docker containers
+- Security – JWT authentication, role-based access, resource isolation for execution
+- Scalability – Queue-based execution allows horizontal scaling of workers
 
 ## 🤝 Contributing
 Contributions, issues, and feature requests are welcome!
-If you want to contribute to DeshCode, please follow the guidelines outlined in the [contributing.md](contributing.md) file.
+If you want to contribute to DeshCode, please follow the guidelines outlined in the [contributing.md](../../contributing.md) file.
 
 ## 📄 License
 MIT License
