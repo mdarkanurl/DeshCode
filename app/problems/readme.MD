@@ -36,26 +36,31 @@ This service powers the problem-solving core of the platform.
 - pnpm package manager  
 
 ### Steps  
-1. Clone the repository and navigate to `app/problems`  
+1. Clone the repository  
    ```bash
-   git clone <repo-url>
+   git clone <https://github.com/mdarkanurl/DeshCode.git>
+   ```
+2. And navigate to `app/problems`
+   ```bash
    cd app/problems
-   pnpm install
+   ```
+3. Install necessary dependency
+    ```bash
+   pnpm install --frozen-lockfile
+   ```
+4. Add environment variable
+   Create a `.env` file. Use `.env.example` for guidance.
+
+5. Setup database
+   ```bash
    pnpm prisma:generate
    npx prisma migrate deploy
-   # RabbitMQ
-docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management  
-
-# PostgreSQL
-docker run -d --name postgres -p 5432:5432 \
-  -e POSTGRES_DB=problems_db \
-  -e POSTGRES_USER=username \
-  -e POSTGRES_PASSWORD=password postgres:15
-
-pnpm dev   # development
-pnpm build && pnpm start  # production
-
-
+   ```
+6. Run the app
+   ```bash
+   pnpm dev   # development
+   pnpm build && pnpm start  # production
+   ```
 
 ## 📌 API Endpoints  
 
