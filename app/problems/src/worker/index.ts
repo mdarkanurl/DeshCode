@@ -4,11 +4,8 @@ let ProblemType: ProblemsTypes;
 import { config } from "dotenv";
 config();
 
-let ProblemsType: ProblemsTypes;
-
 const worker = async () => {
   try {
-    console.log(`🚀 Server running on port ${3010}`);
     for (ProblemType in ProblemsTypes) {
       await consume(ProblemType);
     }
