@@ -103,6 +103,4 @@ passport.use(
   )
 );
 
-export {
-  passport
-};
+export default passport;

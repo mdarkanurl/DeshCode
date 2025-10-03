@@ -80,6 +80,4 @@ passport.use(new GoogleStrategy({
   }
 ));
 
-export {
-  passport
-};
+export default passport;
