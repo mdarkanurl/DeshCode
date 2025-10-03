@@ -8,7 +8,7 @@
     "prisma-seed": "ts-node src/seed/seed.ts",
     "build": "tsc",
     "prisma:generate": "prisma generate",
-    "start": "node dist app.js"
+    "start": "node dist/app.js"
   },
   "keywords": [],
   "author": "",
