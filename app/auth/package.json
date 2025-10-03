@@ -6,7 +6,9 @@
     "test": "jest",
     "dev": "ts-node src/app.ts",
     "prisma-seed": "ts-node src/seed/seed.ts",
-    "prisma:generate": "prisma generate"
+    "build": "tsc",
+    "prisma:generate": "prisma generate",
+    "start": "node dist app.js"
   },
   "keywords": [],
   "author": "",
