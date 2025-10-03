@@ -2,7 +2,7 @@ import app from "./index";
 import dotenv from "dotenv";
 import { connect } from "./utils/RabbitMQ";
 import { worker } from "./worker";
-dotenv.config({ path: '.env' });
+dotenv.config();
 
 const PORT = process.env.PROBLEMS_PORT || 3000;
 app.listen(PORT, async () => {

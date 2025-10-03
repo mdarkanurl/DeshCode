@@ -4,7 +4,7 @@ import { Resend } from 'resend';
 import { EventEmitter } from "events";
 export const consumerEvents = new EventEmitter();
 
-dotenv.config({ path: '../.env' });
+dotenv.config();
 
 let send_verification_code_queue_channel: amqplib.Channel;
 let send_forget_password_code_queue_channel: amqplib.Channel;

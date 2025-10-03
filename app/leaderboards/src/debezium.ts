@@ -3,7 +3,7 @@ import axios from 'axios';
 import dotenv from "dotenv";
 import { redis } from './redis';
 
-dotenv.config({ path: "./.env" });
+dotenv.config();
 
 (async () => {
   try {

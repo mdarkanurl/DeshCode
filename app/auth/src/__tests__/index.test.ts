@@ -1,7 +1,7 @@
 import request, { Response } from "supertest";
 import app from "../index";
 import dotenv from "dotenv";
-dotenv.config({ path: '../../.env' });
+dotenv.config();
 import { consumerEvents } from "../RabbitMQ";
 import { CreateEmailResponseSuccess } from "resend";
 

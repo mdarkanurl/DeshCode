@@ -7,7 +7,7 @@ import { CustomError } from "../utils/errors/app-error";
 import bcrypt from "bcryptjs";
 import dotenv from "dotenv";
 import { UserRole } from "@prisma/client";
-dotenv.config({ path: '../../.env' });
+dotenv.config();
 
 const userRepo = new UserRepo();
 const authProviderRepo = new AuthProviderRepo();

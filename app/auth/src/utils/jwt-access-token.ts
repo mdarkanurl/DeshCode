@@ -3,7 +3,7 @@ import { Response } from "express";
 import dotenv from "dotenv";
 import { CustomError } from "./errors/app-error";
 import { UserRole } from "@prisma/client";
-dotenv.config({ path: '../.env' });
+dotenv.config();
 
 function generateJwtAccessToken(res: Response, data: { userId: string, role: UserRole }) {
     try {

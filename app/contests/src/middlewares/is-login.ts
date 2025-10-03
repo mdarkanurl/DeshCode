@@ -5,7 +5,7 @@ import { CustomError } from "../utils/errors/app-error";
 import dotenv from "dotenv";
 import { UserRole } from "../types";
 
-dotenv.config({ path: '../.env' });
+dotenv.config();
 
 const islogin = async (
     req: Request,

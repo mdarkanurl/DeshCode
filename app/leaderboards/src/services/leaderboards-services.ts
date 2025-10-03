@@ -1,9 +1,7 @@
 import { redis } from "../redis";
 import dotenv from "dotenv";
 import { CustomError } from "../utils/errors/app-error";
-dotenv.config({
-    path: "../.env"
-});
+dotenv.config();
 
 async function getLeaderboardResultsByContestId(data: {
     contestId: string;

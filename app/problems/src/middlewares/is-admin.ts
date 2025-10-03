@@ -5,7 +5,7 @@ import { CustomError } from "../utils/errors/app-error";
 import dotenv from "dotenv";
 import { UserRole } from "../types";
 
-dotenv.config({ path: '../.env' });
+dotenv.config();
 
 const isAdmin = async (
     req: Request,
@@ -28,6 +28,9 @@ const isAdmin = async (
             await handleRefreshToken(req, res, next);
             return;
         };
+
+        const decodedSecret = jwt.decode(accessToken, { complete: true });
+        console.log(JSON.stringify(decodedSecret, null, 2));
 
         let decoded;
         try {
