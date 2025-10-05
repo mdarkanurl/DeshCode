@@ -1,113 +1,100 @@
-version: "3.8"
-
 services:
-  problems-api:
-    build:
-      context: ../app/problems
-      dockerfile: Dockerfile
-    container_name: problems-api
-    environment:
-      - NODE_ENV=development
-      - PROBLEMS_DATABASE_URL=postgresql://postgres:postgres@postgres:5432/problems_db
-      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
-    command: pnpm run start:api
+  zookeeper:
+    image: quay.io/debezium/zookeeper:3.2
+    container_name: zookeeper
     ports:
-      - "3000:3000"
+      - "2181:2181"
     networks:
       - devohh-network
+    volumes:
+      - zookeeper-data:/var/lib/zookeeper
 
-  # problems-worker:
-  #   build:
-  #     context: ../app/problems
-  #     dockerfile: Dockerfile
-  #   container_name: problems-worker
-  #   privileged: true
-  #   environment:
-  #     - NODE_ENV=development
-  #     - PROBLEMS_DATABASE_URL=postgresql://postgres:postgres@postgres:5432/problems_db
-  #     - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
-  #   command: sh -c "dockerd-entrypoint.sh & sleep 5 && pnpm run start:worker"
-  #   ports:
-  #     - "4000:4000"
-  #   networks:
-  #     - devohh-network
-
-  # discussions-api:
-  #   build:
-  #     context: ../app/discussions
-  #     dockerfile: Dockerfile
-  #   container_name: discussions-api
-  #   environment:
-  #     - NODE_ENV=development
-  #     - DISCUSSIONS_DATABASE_URL=postgresql://postgres:postgres@postgres:5432/discussions_db
-  #   command: pnpm run start:api
-  #   ports:
-  #     - "3001:3001"
-  #   networks:
-  #     - devohh-network
-
-  contests-api:
-    build:
-      context: ../app/contests
-      dockerfile: Dockerfile
-    container_name: contests-api
-    environment:
-      - NODE_ENV=development
-      - CONTESTS_DATABASE_URL=postgresql://postgres:postgres@postgres:5432/contests_db
-      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
-      - PROBLEM_SERVICE_URL=http://problems-api:3000
-    command: pnpm run start:api
-    ports:
-      - "3002:3002"
-    networks:
-      - devohh-network
-
-  contests-worker:
-    build:
-      context: ../app/contests
-      dockerfile: Dockerfile
-    container_name: contests-worker
-    privileged: true
-    environment:
-      - NODE_ENV=development
-      - CONTESTS_DATABASE_URL=postgresql://postgres:postgres@postgres:5432/contests_db
-      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
-    command: sh -c "dockerd-entrypoint.sh & sleep 5 && pnpm run start:worker"
-    ports:
-      - "3010:3010"
-    networks:
-      - devohh-network
-
-  leaderboards-debezium:
-    build:
-      context: ../app/leaderboards
-      dockerfile: Dockerfile
-    container_name: leaderboards-debezium
-    environment:
-      - NODE_ENV=development
-      - KAFKA_BROKER_URL=kafka:9092
-      - REDIS_HOST=redis
-      - DEBEZIUM_CONNECTOR_URL=http://connect:8083
-    command: pnpm run start:debezium
+  kafka:
+    image: quay.io/debezium/kafka:3.2
+    container_name: kafka
     depends_on:
-      - leaderboards-api
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://kafka:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+    networks:
+      - devohh-network
+    volumes:
+      - kafka-data:/var/lib/kafka/data
+
+  connect:
+    image: quay.io/debezium/connect:3.2
+    container_name: connect
+    depends_on:
+      - kafka
+    ports:
+      - "8083:8083"
+    environment:
+      BOOTSTRAP_SERVERS: kafka:9092
+      GROUP_ID: 1
+      CONFIG_STORAGE_TOPIC: connect_configs
+      OFFSET_STORAGE_TOPIC: connect_offsets
+      STATUS_STORAGE_TOPIC: connect_statuses
+      KEY_CONVERTER_SCHEMAS_ENABLE: "false"
+      VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
+    networks:
+      - devohh-network
+    volumes:
+      - connect-data:/kafka/connect
+
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    command: postgres -c wal_level=logical -c max_wal_senders=10 -c max_replication_slots=10
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: contests_db
+    networks:
+      - devohh-network
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  redis:
+    image: redis/redis-stack:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
     networks:
       - devohh-network
 
-  leaderboards-api:
-    build:
-      context: ../app/leaderboards
-      dockerfile: Dockerfile
-    container_name: leaderboards-api
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
     environment:
-      - NODE_ENV=development
-      - PORT=3003
-      - REDIS_HOST=redis
-      - REDIS_PORT=6379
-      - REDIS_DB=0
-    command: sh -c "pnpm run migrate && pnpm run start"
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
     networks:
       - devohh-network
+
+volumes:
+  db-data:
+  rabbitmq-data:
+  zookeeper-data:
+  kafka-data:
+  connect-data:
+  redis-data:
 
 networks:
   devohh-network:
