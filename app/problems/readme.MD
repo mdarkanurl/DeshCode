@@ -18,6 +18,7 @@ This service powers the problem-solving core of the platform.
 - 🐇 Asynchronous Execution – RabbitMQ workers for scalable processing
 - 🔒 Authentication & Roles – Admin vs. user permissions via JWT
 - 🗄 Database – PostgreSQL + Prisma ORM for persistence
+- 🐳 Docker Execution – Isolated sandbox environment for secure code execution
 
 ## 🛠 Tech Stack
 - Backend: Node.js, TypeScript, Express
