@@ -34,6 +34,8 @@ This service powers the ranking system and ensures contest results are always up
 - Kafka
 - pnpm package manager  
 
+**note:-** You can use docker-compose for external services (PostgreSQL, RabbitMQ, Redis).
+
 ### Steps  
 1. Clone the repository  
    ```bash
