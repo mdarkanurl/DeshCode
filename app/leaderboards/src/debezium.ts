@@ -9,17 +9,19 @@ dotenv.config();
   try {
     // Fetch existing connectors
     const { data } = await axios.get(`${process.env.DEBEZIUM_CONNECTOR_URL}/connectors`);
+    console.log("Existing connectors:", data);
 
     // Register Connector if none exists
     if (data.length === 0) {
+      console.log("Registering new Debezium connector...");
       await axios.post(`${process.env.DEBEZIUM_CONNECTOR_URL}/connectors`, {
         "name": "submissions-debezium-connector",
         "config": {
           "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
           "database.hostname": "postgres",
           "database.port": "5432",
-          "database.user": "debezium",
-          "database.password": "debezium",
+          "database.user": "postgres",
+          "database.password": "postgres",
           "database.dbname": "contests_db",
           "max.batch.size": 2048,
           "max.queue.size": 8192,
@@ -37,7 +39,7 @@ dotenv.config();
         }
       });
     } else {
-      console.log("Get error from Debezium.ts");
+      console.log("Debezium connector already exists.");
     }
   } catch (err) {
     console.error("Error fetching or registering connectors:", err);
