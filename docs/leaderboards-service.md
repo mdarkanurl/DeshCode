@@ -1,38 +1,102 @@
-## Description
-The Leaderboards Service is responsible for managing user rankings and scores within the DeshCode platform. It tracks user performance across various coding challenges and contests, providing real-time updates to the leaderboard standings. The service ensures that users can view their rankings and compare their performance with others, fostering a competitive coding environment.
+# 🏆 Leaderboards Service
 
-## Features
-- Real-time leaderboard updates based on user performance
-- Used Debezium to capture real-time data changes in the database and stream them to Kafka topics
-- Used Redis to sorting and ranking users efficiently
-- stores user scores and rankings in a PostgreSQL database
+## 📖 Description
+The Leaderboards Service is a microservice in the DeshCode platform responsible for managing real-time contest leaderboards.
 
-## Local setup
-1. Clone the repository:
+It provides:
+- Live leaderboard updates from user submissions
+- High-performance caching using Redis
+- Real-time event-driven updates via Kafka & Debezium
+- Secure access with JWT authentication and role-based permissions
+
+This service powers the ranking system and ensures contest results are always up to date.
+
+## ✨ Features
+- ⚡ Real-time Leaderboards – Kafka + Debezium for live updates
+- 🗃 Redis Caching – Fast leaderboard storage and retrieval
+- 📑 Pagination Support – Efficient queries for large leaderboards
+- 🔒 Authentication & Roles – JWT tokens with admin/user roles
+- 🔒 Authentication & Roles – Admin vs. user permissions via JWT
+- 🛡 Error Handling – Custom error classes and structured responses
+
+## 🛠 Tech Stack
+- Backend: Node.js, TypeScript, Express
+- Cache: Redis (sorted sets for ranking)
+- Messaging : Kafka + Debezium (CDC from PostgreSQL)
+- Auth: JWT (Access & Refresh tokens, role-based access)
+- Testing: Jest, Supertest, Testcontainers, Postman
+
+## ⚙️ Setup Instructions
+### Prerequisites  
+- Node.js (v18+)  
+- Redis  
+- PostgreSQL + Debezium
+- Kafka
+- pnpm package manager  
+
+**note:-** You can use docker-compose for external services (PostgreSQL, RabbitMQ, Redis).
+
+### Steps  
+1. Clone the repository  
    ```bash
    git clone https://github.com/mdarkanurl/DeshCode.git
-   cd DeshCode
    ```
-2. Go to the `leaderboards` directory:
+2. And navigate to `.Docker`
    ```bash
-   cd app/leaderboards
+   cd .Docker
    ```
-3. Install dependencies:
+3. Run docker-compose-leaderboards.yml to start leaderboard service
    ```bash
-   pnpm install --frozen-lockfile
-   ```
-4. Set up environment variables:
-   Create a `.env` file in the `app/leaderboards` directory and add the necessary environment variables. You can use the provided `.env.example` as a reference.
-
-5. Start the Leaderboards Service API:
-   ```bash
-   npm run dev
-   ```
-6. Start the Debezium Connector:
-   Open a new terminal, navigate to the `app/leaderboards` directory, and run:
-   **Note:** Make sure you follow [Debizium-setup.md](Debizium-setup.md) file which is in the docs folder before running the worker service.
-   ```bash
-   npm run dev:debezium
+   docker-compose -f docker-compose-leaderboards.yml up -d
    ```
 
-**Note:** Ensure that you have necessary tools installed and running on your machine, follow the docker-compose-external-services.yml file in the .Docker directory to set up the required services like PostgreSQL, Redis, Kafka, and RabbitMQ.
+## 📌 API Endpoints  
+
+### leaderboard  
+```http
+GET    /api/v1/leaderboards/:contestId      # Get all rankings for a contest (pagination: page, limit)
+```
+### Health
+```http
+GET    /api/health   # Service health check
+GET    /             # Service info
+```
+
+## 🧪 Testing
+This service has full integration tests using Jest, Supertest, and Testcontainers.
+
+***note:-*** Contests service must be up and running in order to test Leaderboards service.
+
+### Run Test
+```bash
+   pnpm test
+```
+### Test Coverage
+- ✅ Leaderboard retrieval (pagination, formatting)
+- ✅ Real-time Kafka & Debezium event processing
+- ✅ Redis ranking operations
+- ✅ Authentication & role-based access
+- ✅ Error handling & edge cases
+
+### Test Flow
+1. Start containers
+3. Create test leaderboards
+4. Submit solutions
+5. Verify status/results
+6. Cleanup
+
+## 🏗 App Architecture
+- The Leaderboards Service follows a clean microservice architecture:
+- API Layer – Express routes with JWT auth & role-based middleware
+- Business Layer – Services handle leaderboard logic & formatting
+- Cache Layer – Redis sorted sets for ranking and pagination
+- Event Layer – Kafka consumer with Debezium for real-time updates
+- Security – JWT tokens, role-based access, HTTP-only cookies
+- Scalability – Event-driven processing with Kafka consumer groups
+
+## 🤝 Contributing
+Contributions, issues, and feature requests are welcome!
+If you want to contribute to DeshCode, please follow the guidelines outlined in the [contributing.md](../../contributing.md) file.
+
+## 📄 License
+MIT License

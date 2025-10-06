@@ -6,7 +6,4 @@
    cd DeshCode
    ```
 
-- Run `docker-compose -f docker-compose-external-services.yml up` to start the external services.
-- Run `docker-compose up` to start the main application services.
-
-**Note**: If you want to run the application without Docker, follow the documentation in the `docs` folder.
+**Follow the documentation in the `docs` folder.**
