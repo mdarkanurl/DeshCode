@@ -58,40 +58,8 @@ This service powers the authentication core of the platform, ensuring secure acc
    ```bash
    pnpm install --frozen-lockfile
    ```
-4. Add environment variables
-   Create a `.env` file and add the required variables:
-   ```env
-   # Database
-   DATABASE_URL="postgresql://username:password@localhost:5432/auth_db"
-   
-   # JWT Secrets
-   ACCESS_TOKEN_SECRET="your-access-token-secret"
-   REFRESH_TOKEN_SECRET="your-refresh-token-secret"
-   TEMP_JWT_TOKEN="your-temp-token-secret"
-   
-   # OAuth - Google
-   GOOGLE_CLIENT_ID="your-google-client-id"
-   GOOGLE_CLIENT_SECRET="your-google-client-secret"
-   GOOGLE_CALL_BACK_URL="http://localhost:3004/api/v1/oauth/google/callback"
-   
-   # OAuth - GitHub
-   GITHUB_CLIENT_ID="your-github-client-id"
-   GITHUB_CLIENT_SECRET="your-github-client-secret"
-   GITHUB_CALL_BACK_URL="http://localhost:3004/api/v1/oauth/github/callback"
-   
-   # Email Service
-   RESEND_API_KEY="your-resend-api-key"
-   
-   # RabbitMQ
-   RABBITMQ_URL="amqp://localhost"
-   
-   # Admin Configuration
-   ADMIN_EMAIL="admin@example.com"
-   
-   # Server
-   PORT=3004
-   NODE_ENV="development"
-   ```
+4. Add environment variable
+   create a `.env` file and add the variable. Use `.env.example` for guidance.
 
 5. Setup database
    ```bash
