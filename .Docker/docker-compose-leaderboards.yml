@@ -1,0 +1,39 @@
+version: "3.8"
+
+services:
+  leaderboards-api:
+    build:
+      context: ../app/leaderboards
+      dockerfile: Dockerfile
+    container_name: leaderboards-api
+    environment:
+      - NODE_ENV=development
+      - PORT=3003
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - REDIS_DB=0
+    ports:
+    - "3003:3003"
+    command: sh -c "pnpm run start"
+    networks:
+      - devohh-network
+
+  leaderboards-debezium:
+    build:
+      context: ../app/leaderboards
+      dockerfile: Dockerfile
+    container_name: leaderboards-debezium
+    environment:
+      - NODE_ENV=development
+      - KAFKA_BROKER_URL=kafka:9092
+      - REDIS_HOST=redis
+      - DEBEZIUM_CONNECTOR_URL=http://connect:8083
+    command: pnpm run start:debezium
+    depends_on:
+      - leaderboards-api
+    networks:
+      - devohh-network
+
+networks:
+  devohh-network:
+    external: true
