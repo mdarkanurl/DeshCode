@@ -1,6 +1,6 @@
-# 🚀 LeetCode-Style Online Judge
+# LeetCode-Style Online Judge
 
-## 📖 Description
+## Description
 A LeetCode-style online coding platform implemented with Node.js, TypeScript, and Docker. DeshCode provides a secure environment to submit and execute code, run timed contests, and collaborate through discussions — all built as small, focused microservices.
 
 Key capabilities:
@@ -12,15 +12,15 @@ Key capabilities:
 
 The system leverages event-driven architecture with RabbitMQ, CDC with Debezium, Redis for real-time ranking, and PostgreSQL for persistence.
 
-## ✨ Features
-- 🔹 Code Execution – Run user-submitted code inside isolated Docker sandboxes with automated tests and timeouts.
-- 🔹 Contests & Leaderboards – Real-time scoring and leaderboards powered by Debezium + Redis sorted sets.
-- 🔹 Event-Driven Processing – Scalable background processing with RabbitMQ workers.
-- 🔹 Microservices — Clear separation: Auth, Problems, Contests, Leaderboards, Discussions, Workers.
-- 🔹 Security — JWT-based auth, role-based access, sandboxed execution, and input validation.
-- 🔹 Observability — Health endpoints, structured logs, and integration tests with Testcontainers.
+## Features
+- Code Execution – Run user-submitted code inside isolated Docker sandboxes with automated tests and timeouts.
+- Contests & Leaderboards – Real-time scoring and leaderboards powered by Debezium + Redis sorted sets.
+- Event-Driven Processing – Scalable background processing with RabbitMQ workers.
+- Microservices — Clear separation: Auth, Problems, Contests, Leaderboards, Discussions, Workers.
+- Security — JWT-based auth, role-based access, sandboxed execution, and input validation.
+- Observability — Health endpoints, structured logs, and integration tests with Testcontainers.
 
-## 🛠 Tech Stack
+## Tech Stack
 - Backend: Node.js, TypeScript, Express
 - Database: PostgreSQL, Prisma ORM
 - Messaging & Streaming: RabbitMQ, Kafka, Debezium
@@ -29,7 +29,7 @@ The system leverages event-driven architecture with RabbitMQ, CDC with Debezium,
 - Package Manager: pnpm
 - Testing: Jest / Supertest, Testcontainers, Postman
 
-## 🏗 Architecture & Services
+## Architecture & Services
 The platform is implemented as independent microservices. Each service has its own README and runs independently.
 
 Core services:
@@ -42,13 +42,13 @@ Core services:
 
 Each service exposes a minimal public API surface and health endpoints for orchestration.
 
-## ⚙️ Setup Instructions
+## Setup Instructions
 You can follow Docs [here](docs) to set up the project locally.
 Inside the `docs` folder, you will find various documentation files to help you understand and work with the project.
 
-## 🤝 Contributing
+## Contributing
 Contributions, issues, and feature requests are welcome!
 If you want to contribute to DeshCode, please follow the guidelines outlined in the [contributing.md](contributing.md) file.
 
-## 📄 License
+## License
 MIT License
