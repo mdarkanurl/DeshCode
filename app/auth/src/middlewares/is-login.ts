@@ -2,10 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import jwt, { JsonWebTokenError, NotBeforeError, TokenExpiredError } from "jsonwebtoken";
 import { jwtToken } from "../utils";
 import { CustomError } from "../utils/errors/app-error";
-import dotenv from "dotenv";
 import { UserRole } from "@prisma/client";
 
-dotenv.config();
 
 const islogin = async (
     req: Request,

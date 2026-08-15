@@ -1,7 +1,5 @@
 import { z } from "zod";
 import { UserRole } from "@prisma/client";
-import dotenv from "dotenv";
-dotenv.config();
 
 const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'mdarkanurl@gmail.com';
 const userRoleEnum = z.enum([...(Object.values(UserRole) as [string, ...string[]])]);

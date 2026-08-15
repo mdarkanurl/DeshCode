@@ -5,18 +5,17 @@ import jwt from "jsonwebtoken";
 import { jwtToken } from "../utils";
 import { CustomError } from "../utils/errors/app-error";
 import bcrypt from "bcryptjs";
-import dotenv from "dotenv";
 import { UserRole } from "@prisma/client";
-dotenv.config();
 
 const userRepo = new UserRepo();
 const authProviderRepo = new AuthProviderRepo();
 
 const signUp = async ( data: { email: string, password: string, role?: UserRole }) => {
     try {
-        const isUsersAlreadyExist = await userRepo.getByEmail(data.email, true);
+        const isVerifiedUserExists = await userRepo.getByEmail(data.email, true);
+        const isUnverifiedUserExists = await userRepo.getByEmail(data.email, false);
 
-        if(isUsersAlreadyExist) {
+        if(isVerifiedUserExists || isUnverifiedUserExists) {
             throw new CustomError('User already exist under this email', 400);
         }
 
@@ -268,7 +267,7 @@ const forgetPassword = async (data: { email: string }) => {
         await authProviderRepo.updateByUserId(
             users.id,
             {
-                forgotPasswordCode: forgotPasswordCode
+                forgotPasswordCode,
             }
         );
 
