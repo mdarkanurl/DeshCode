@@ -2,9 +2,7 @@
 
 import { Request, Response, NextFunction } from "express";
 import jwt, { JsonWebTokenError, TokenExpiredError } from "jsonwebtoken";
-import dotenv from "dotenv";
 import { CustomError } from "../utils/errors/app-error";
-dotenv.config();
 
 
 async function isTempJwtTokenExists(

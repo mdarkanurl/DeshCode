@@ -1,10 +1,8 @@
 import passport from "passport";
 import { Strategy as GitHubStrategy, Profile } from "passport-github2";
 import { prisma } from "../prisma";
-import dotenv from 'dotenv';
 import { Provider } from "@prisma/client";
 import axios from "axios";
-dotenv.config();
 
 passport.use(
   new GitHubStrategy(

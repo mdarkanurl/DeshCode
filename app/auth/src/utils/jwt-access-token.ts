@@ -1,9 +1,7 @@
 import jwt from "jsonwebtoken";
 import { Response } from "express";
-import dotenv from "dotenv";
 import { CustomError } from "./errors/app-error";
 import { UserRole } from "@prisma/client";
-dotenv.config();
 
 function generateJwtAccessToken(res: Response, data: { userId: string, role: UserRole }) {
     try {
@@ -26,7 +24,7 @@ function generateJwtAccessToken(res: Response, data: { userId: string, role: Use
             httpOnly: true,
             secure: true,
             sameSite: 'strict',
-            maxAge: 3600000
+            maxAge: 5 * 60 * 1000
         });
         return;
     } catch (error) {
